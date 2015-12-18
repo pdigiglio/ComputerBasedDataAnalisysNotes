@@ -1,0 +1,172 @@
+
+
+\usepackage{tikz}
+\usepackage{tikz-3dplot,ifthen}
+\usetikzlibrary{
+	arrows,%
+	patterns,%
+	calc,%
+	mindmap,%
+	backgrounds,%
+	intersections,%
+	shapes
+}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat = 1.12}
+
+
+\tikzset{
+	>=stealth,
+	spin_up/.append style= {
+		circle,%
+		inner sep=2pt,
+		shading=ball,%
+		ball color=black!80,%
+	},
+	spin_down/.append style= {
+		circle,%
+		inner sep=2pt,
+		shading=ball,%
+		ball color=black!20,%
+	},
+}
+
+
+\usepgfplotslibrary{
+	units,%
+	dateplot,%
+	external, % "esternalizzo" i grafici per evitare errori memoria
+	fillbetween
+} 
+%\tikzexternaldisable
+%\tikzexternalize
+%	external/named only=true,
+%	external/prefix=tikz/,
+\pgfplotsset{
+%	log basis y=10, % specifica la base con cui calcolare il logaritmo (lasciato vuoto -> $\eu$)
+%	log base 10 number format code/.code={\ensuremath{\eu^{\pgfmathprintnumber{#1}}}},
+	every axis/.append style={
+		width = .77\columnwidth,
+		error bars/y dir=both,
+		error bars/y explicit,
+		error bars/x dir=both,
+		error bars/x explicit,
+%		samples =100,
+%		axis lines = middle, % sistema i grafici 3d prima di decommentare 
+		axis line style={
+			color = black!50,
+		},
+		every axis label/.append style ={
+			color = black!80,
+		},
+		ylabel style = {
+			sloped,
+%			rotate=90,
+%			anchor=near ticklabel,
+		},
+		xlabel style = {sloped},
+		zlabel style = {sloped},
+		every tick label/.append style={
+			color = black!60,
+		},
+		mark size=.3pt,
+%		scaled ticks=base 10:-11, %mette * 10 ^{-11} agli assi
+		grid = major,
+		grid style = {
+			dotted,
+			color = gray!40
+		},
+		legend style = {
+			shade,
+%			draw = none,
+			bottom color = gray!10,
+			top color = white,
+			anchor = north % west
+		},
+		enlargelimits = .05
+	},
+	% imposto delle opzioni per i grafici
+	cycle list={
+		{%
+			solid, line width=.8pt,
+			color=blue!70,
+			opacity=.8,
+			mark=*,
+			mark options={%
+				scale=3,
+				fill=yellow!80!blue,
+				draw=blue!60
+			},
+			error bars/error bar style={
+				blue!100,
+				opacity = .85,
+			}
+		},
+		{%
+			line width=.8pt,
+			color=orange!100,
+			opacity=.8,
+			mark=square*,
+			mark options={%
+				scale=3,
+				fill=gray!80!orange,
+				draw=red!100
+			},
+			error bars/error bar style={
+				red!100,
+				solid,
+				opacity = .85
+			}
+		},
+		{%
+			line width=.8pt,
+			color=green!60,
+			opacity=.8,
+			mark=triangle*,
+			mark options={%
+				scale=3,
+				fill=green!30!blue,
+				opacity=.2,
+				draw=green!100
+			},
+			error bars/error bar style={
+				PineGreen!100,
+				solid,
+				opacity = .85
+			}
+		},
+	},
+%	every pin/.append style={
+%		font=\footnotesize
+%	},
+}
+% tabelle 
+\usepackage{pgfplotstable}
+\usepackage{longtable,rotating}
+\usepgflibrary{fpu}
+\usepackage{array,colortbl} % raccomandati per pgfplotstable
+\pgfplotstableset{
+%	col sep=tab, % le colonne sono separate da una tabulazione
+	trim cells=true, % toglie eventuali spazi bianchi
+	row sep=newline, % separatore per le righe
+	header=false, % le colonne non hanno header
+	format=file, % l'argomento è sempre un file di testo
+	1000 sep in fractionals=true, % raggruppa le cifre decimali in gruppi da tre
+	numeric type,
+%	font={\small},
+	empty cells with={--}, % replace empty cells with '--'
+	every even row/.style={
+		before row={\rowcolor[gray]{0.92}}
+	},
+	every head row/.style={
+		before row=\toprule,
+		after row=\midrule
+	},
+	every last row/.style={
+		after row=\bottomrule
+	},
+	set decimal separator={,},
+	set thousands separator={\,}
+}
+
