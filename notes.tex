@@ -1,0 +1,2592 @@
+\documentclass[
+	10pt,
+	draft
+]{scrreprt}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[german,english]{babel}
+\usepackage{enumerate}
+
+\usepackage[separate-uncertainty]{siunitx}
+\usepackage{makeidx}
+\makeindex
+
+\usepackage[usenames,dvipsnames]{xcolor}
+
+\usepackage{MyMathDef}
+\DeclareMathOperator\erf{erf}
+\newcommand{\lkhd}{\ensuremath{\mathcal{L}}}
+
+\usepackage{epigraph}
+
+\input{tikzSettings.tex}
+
+\newcommand{\transpose}[1]{\ensuremath{#1}^{\mathrm{ \mathsmaller T}}}
+\usepackage{booktabs}
+
+\usepackage{subfig}
+
+
+
+\usepackage{venndiagram}
+
+\usepackage[%
+	autostyle,
+	italian=guillemets,%
+]{csquotes}
+\usepackage[%
+	style=numeric-comp,%
+	useprefix,%
+	hyperref,%
+	backref,%
+	backend=bibtex%
+]{biblatex}
+\addbibresource{bibliografia.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% ACRONYMS
+%=============
+%
+\usepackage[%
+	smaller,%
+	printonlyused%
+]{acronym}
+\makeatletter
+\AtBeginDocument{%
+  \renewcommand*{\AC@hyperlink}[2]{%
+    \begingroup
+      \hypersetup{hidelinks}%
+      \hyperlink{#1}{#2}%
+    \endgroup
+  }%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\eu}{\ensuremath{\mathrm{e}}}
+\DeclareMathOperator{\cov}{cov}
+
+\areaset[current]{\textwidth}{691pt}
+
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+\definecolor{Maroon}{cmyk}{0, 0.87, 0.68, 0.32}
+\definecolor{RoyalBlue}{cmyk}{1, 0.50, 0, 0}
+\usepackage{hyperref}
+\hypersetup{
+%	draft,
+	final,
+	colorlinks=true,
+	linktocpage=true,
+	pdfstartpage=3,
+	pdfstartview=FitV,
+	breaklinks=true,
+	pdfpagemode=UseNone,
+	pageanchor=true,
+	pdfpagemode=UseOutlines,%
+	plainpages=false,
+	bookmarksnumbered,
+	bookmarksopen=true,
+	bookmarksopenlevel=1,%
+	hypertexnames=true,
+	pdfhighlight=/O,
+	urlcolor=webbrown,
+	linkcolor=RoyalBlue,
+	citecolor=webgreen,
+%	pagecolor=RoyalBlue,%
+}
+
+\newcommand{\deriv}[3][]{\dfrac{\ud^{#1}#2}{\ud #3^{#1}}}% derivata totale - notazione leibniz
+\newcommand{\pderiv}[3][]{\dfrac{{\de^{#1}}#2}{\de #3^{#1}}}% derivata parziale - notazione 
+\newcommand{\fderiv}[3][]{\dfrac{\delta^{#1}#2}{\delta #3^{#1}}}% derivata funzionale - notazione leibniz
+\newcommand{\mean}[1]{\ensuremath{\langle#1\rangle}}
+
+
+\begin{document}
+
+\begin{acronym}[FWHM]
+	\acro{rv}[RV]{Random Variable}
+	\acro{pdf}[PDF]{Probability Density Function}
+	\acro{cdf}[CDF]{Cumulative Distribution Function}
+	\acro{sd}[SD]{Standard Deviation}
+	\acro{pdg}[PDG]{Particle Data Group}
+	\acro{clt}[CLT]{Central Limit Theorem}
+	\acro{dof}[DOF]{Degree of Freedom}
+	\acro{fwhm}[FWHM]{Full Width of Half Maximum}
+	\acro{ls}[LS]{Least Squares}
+	\acro{ml}[ML]{Maximum Likelihood}
+	\acro{gof}[GoF]{Goodness of Fit}
+	\acro{hep}[HEP]{High Energy Physics}
+\end{acronym}
+
+\tableofcontents
+
+	\chapter{Lecture 2}
+		\section{What is statistics?}
+
+Statistics can be defined in several ways:
+\begin{itemize}
+	\item
+ The science of learning from or making sense out of data;
+	\item
+The science of uncertainty;
+	\item
+The language of experimental sciences.
+\end{itemize}
+The founding work was by Jakob Bernoulli~\cite{bernoulli}.
+
+		\subsection{Randomness}
+Many processes have a random nature as, for example, a coin toss.
+Although Classical Physics is in principle capable of predicting the outcome of the toss, the randomness lies in the initial condition which are not known with infinite precision. 
+
+
+Similarly in the classical description of a gas it's impossible to know the initial conditions for all the particles so a statistical description has to be used.
+
+
+In Quantum Mechanics, physical laws are \emph{intrinsically} probabilistic thus the randomness is not only due to our lack of knowledge.
+Both our ``ignorance'' and the intrinsic randomness lead to uncertainty in the measurement.
+What we need is a way to quantify uncertainties using probability concepts.
+
+
+	\section{Some basics concepts}
+
+An \emph{outcome}\index{outcome} is one of the possible result of an experiment and it's unique.
+Each trial of an experiment gives exactly one outcome.
+
+
+The \emph{sample space}\index{sample space} is the set of \emph{all} the possible outcomes.
+
+\Ex{
+We'll now list some sample spaces:
+\begin{itemize}
+	\item
+For a coin toss $S=\Set{\text{Head},\text{Tail}}$;
+	\item
+For a 6-faces rolling dice $S=\Set{\text{digits on upper surface}} = \Set{1,2,\dots,6}$;
+	\item
+For a calorimeter $S=\Set{\text{energy of measured particle}} = [E_\textup{min}, E_\textup{max}] \s\R$.
+\end{itemize}}
+
+
+An \emph{event}\index{event} is a set of outcomes which satisfies certain conditions and for which the probability is assigned: it's a subset of the sample space $S$.
+An event happened when the outcome of an experiment is an element of the element.
+
+
+\Ex{Let's say that the outcome of rolling a dice is $X=2$, then all the events $\Set{2}$, $\Set{X \text{ even}}$, $\Set{X > 1 }$ and so on happened.}
+
+
+The \emph{event space}\index{event!space} is the set of all the subsets of the sample space.
+For a coin toss, for example $\Sigma = \Set{\0,\Set{\text{H}},\Set{\text{T}}, S}$ where $\0$ is the null set corresponding to the \emph{impossible event}\index{event!impossible} and $S$ is the whole sample space i.e.~the \emph{sure event}\index{event!sure}.
+
+	\section{Definition of probability}
+
+Here the Kolmogorov axioms (1933) follow.
+
+Consider an event space $\Sigma$ and two element $A,B\in\Sigma$ with underlying sample space $S$, then
+\begin{enumerate}
+	\item
+$P(A) \in \R$ and $P(A) \ge 0$ for each $A\in\Sigma$ i.e.~for each $A\seq S$;
+	\item
+To fix the normalization, the probability of the sure event is $P(S) = 1$;
+	\item
+If $A$ and $B$ are \emph{disjoint}\index{disjoint events}, namely $A\cap B = \0$, then $P(A\cup B) = P(A) + P(B)$ is the probability for either $A$ \emph{or} $B$ to happen.
+\end{enumerate}
+From these axioms, the probability of an event can be interpreted as its area normalized to the area of the whole sample space
+\begin{equation}\label{eq:interpretationProbabilityArea}
+P(A) = \frac{\abs{A}}{\abs{S}}.
+\end{equation}
+Moreover it follows that:
+\begin{enumerate}
+	\item
+Since $S = S\cup\0$ and $S\cap\0 = \0$ we have $P(\0) + P(S) = P(\0)  +1 = 1$ so $P(\0) = 0$; 
+	\item\label{point:two}
+For each $A\in\Sigma$ the space $S$ can be built up as $S = A \cup \bar{A}$ where $\bar{A}$ is $A$'s complement into $S$ and $ A \cap \bar{A} = \0$ so $P(\bar{A}) = 1 - P(A)$.
+	\item
+From the point~\ref{point:two}, since every probability is greater or equal to zero, it follows that for each $A\in\Sigma$ we have $0\le P(A) \le 1$;
+	\item
+If $A \seq B$ then $B = A\cup (B\sm A)$ and $A\cap (B\sm A)=\0$ so $P(A)\le P(A) + P(B\sm A) = P(B)$;
+	\item
+If $A\cap B \neq \0$ then $A\cup B$ can be written as $A \cup(B\sm A)$.
+In this way the sets $A$ and $B\sm A$ are disjoint and their union gives $A\cup B$ so
+\begin{equation}\label{eq:sumProbNotDisjointIntermediate}
+P(A\cup B) = P(A) + P(B\sm A).
+\end{equation}
+Now $B\sm A = B \sm(A\cap B)$ thus $B = (B\sm A) \cup (A\cap B)$ where again $(B\sm A) \cap (A\cap B) = \0$ and 
+$P(B) = P(B\sm A) + P(A\cap B)$.
+We can use this last relation and perform a substitution in the~\eqref{eq:sumProbNotDisjointIntermediate} to obtain
+\begin{equation}
+P(A\cup B) = P(A) + P(B) - P(A\cap B).
+\end{equation}
+Subtracting the probability (i.e.~the area) of $A\cap B$ avoids double-counting the area of the intersection.
+\end{enumerate}
+
+		\subsection{Conditional probability}
+		\label{sec:condProb}
+
+We call $P(A\mid B)$ the probability for the event $A\in\Sigma$ to happen \emph{given that} another event $B\in\Sigma$ happened.
+This is like constraining the sample space to the event $B$, in fact $P(B\mid B) = 1$ so $B$ now is the sure event
+\begin{equation}\label{eq:cond_prob}
+P(A\mid B) =\frac{P(A\cap B)}{P(B)}\quad\text{if } B\neq \0
+\end{equation}
+if $B = \0$ then $P(A\mid B) = 0$.
+\begin{figure}
+	\centering
+\begin{venndiagram2sets}[%
+	labelNotAB={$S$}
+]
+\fillACapB
+\end{venndiagram2sets}
+	\caption{If the probability on $S$ is uniform, the conditional probability~\eqref{eq:cond_prob} is the ratio between the area of the intersection $A\cap B$ and the area of $B$.}
+	\label{fig:cond_prob}
+\end{figure}
+To understand this formula we can refer to figure~\ref{fig:cond_prob}, where all the outcomes of the sample space have the same (uniform) probability, and to the interpretation given by equation~\eqref{eq:interpretationProbabilityArea}.
+The probability of $A \cap B$ is the ratio between the area of the gray set and the whole sample space $S$, which is normalized to \num{1}.
+To restrict the sample space to the event $B$ we must divide by its relative area with respect to $S$, namely $P(B)$.
+
+
+From this it follows that $P(A\mid S) = P(A)$ and $P(A\mid B) \ge P(A\cap B)$.
+
+
+
+
+Two events are said to be \emph{statistically independent} if their joint probability can be written as the product of their single probabilities, namely
+\begin{equation}
+P(A\cap B) = P(A)\,P(B)
+\end{equation}
+ i.e.~if and only if $P(A\mid B) = P(A)$.
+This means that the occurrence of $B$ does not effect the probability of the event $A$ but it \emph{does not} mean the event are disjoint.
+However, if $A$ and $B$ are disjoint events their conditional probability vanishes since $A\cap B = \0$.
+\Ex{%
+Let us consider $A\coloneqq\Set{6 \text{ in first trial}}$, $B\coloneqq\Set{6 \text{ in second trial}}$ and 
+$C\coloneqq\Set{\text{sum of first and second trial is }8}$ in rolling twice a dice.
+Then the events $A$ and $B$ are independent among each other but $A$ and $C$ are not.%
+}
+
+	\section{Interpretation of probability}
+
+The previous axiomatic definition of probability gives a mathematical framework but it does not say what these probabilities mean and how to assign them.
+
+		\subsection{Frequentist interpretation}
+
+This is an empirical interpretation: the most common.
+Given $N$ identical trials of an experiment, be $N_A$ the number of occurrences of the event $A$, then $P(A)$ is defined in terms of the \emph{relative frequency}\index{relative freq.~of occurrence} of occurrence as
+\begin{equation}\label{eq:freq_prob}
+P(A)\coloneqq \lim_{N\to\infty}\frac{N_A(N)}{N},
+\end{equation}
+where the dependence of $N_A$ on $N$ has been explicitly indicated.
+In this way, the probability is defined \emph{after} the outcomes for the experiment are known so we can talk about \emph{objective posterior probability}\index{objective posterior probability}.
+
+			\subsubsection{Issues}
+
+\begin{itemize}
+	\item
+The $\lim_{N\to\infty}$ is mathematically not well-defined: in practice only a finite number of experiments can be performed so the question is how fast the sequence~\eqref{eq:freq_prob} converges?
+	\item
+This procedure does \emph{not} define how to assign probabilities to events which are intrinsically not repeatable.
+For instance the probability that the Higgs boson exists or that $\SI{510.997}{\kilo\electronvolt\per \ensuremath{c}\squared}\le m_e \le\SI{510.999}{\kilo\electronvolt\per \ensuremath{c}\squared}$ are not known.
+The probabilities for these events are either \num{1} or \num{0} and they do not depend on  repetition of experiments.
+\end{itemize}
+
+Thus in the frequentist approach probabilities are associated only with data, i.e.~repeatable experiments.
+So in this framework only statements about data can be made and questions like <<how probable is the theory given the data?>> cannot be answered.
+
+		\section{Bayes' theorem}
+
+This theorem relates the conditional probabilities $P(A\mid B)$ and $P(B\mid A)$.
+Since $P(A\mid B)\,P(B) = P(A\cap B) = P(B\cap A) = P(B\mid A)\,P(A)$ one gets
+\begin{equation}\label{eq:bayes_theorem}
+P(A\mid B) = \frac{P(B\mid A)\,P(A)}{P(B)}.
+\end{equation}
+The quantity $P(A)$ is called \emph{prior probability}\index{prior probability}.
+
+		\subsection{Law of total probability}
+
+Let's partition the sample space $S$ into pairwise disjoint subset (i.e.~events) $A_i$ such that $\cup_{i=1} A_i = S$ and $A_i\cap A_j = \0$ when $i\neq j$.
+Then, given $B\in\Sigma$ (i.e.~$B\seq S$)
+\begin{equation}
+\begin{aligned}
+P(B)
+&= P(B\cap S) = P(B\cap (\cup_{i=1} A_i) )= P( \cup_{i=1}[B\cap A_i] )\\
+&=\sum_iP(B\cap A_i) - \sum_{i\neq j} P([B\cap A_i]\cap[B\cap A_j])\\
+&=\sum_iP(B\cap A_i) - \sum_{i\neq j} P(B\cap [A_i\cap A_j])\\
+&=\sum_iP(B\cap A_i) - \sum_{i\neq j} P(B\cap \0)\\
+&=\sum_iP(B\cap A_i) =\sum_iP(B\mid A_i)\,P(A_i).
+\end{aligned}
+\end{equation}
+So the Bayes' theorem~\eqref{eq:bayes_theorem} can be written as 
+\begin{equation}
+P(A\mid B) = \frac{P(B\mid A)\,P(A)}{\sum_iP(B\mid A_i)\,P(A_i)}.
+\end{equation}
+With the simplest partition of $S$, which is $S=A\cup\bar A$, the previous formula reads
+\begin{equation}
+P(A\mid B) = \frac{P(B\mid A)\,P(A)}{P(B\mid A)\,P(A) + P(B\mid \bar A)\,P(\bar A)}.
+\end{equation}
+\Ex{%
+In rolling a dice
+\begin{equation}
+P(3\mid\text{num.~is odd}) = \frac{1/6}{1/2} = \frac{1}{3},
+\end{equation}
+while
+\begin{equation}
+\begin{aligned}
+P(\text{odd}\mid 3)
+&\overset{\text{\eqref{eq:cond_prob}}}{=} \frac{1/6}{1/6} = 1 \\
+&\overset{\text{\eqref{eq:bayes_theorem}}}{=} \frac{P(3\mid \text{odd})\,P(\text{odd})}{P(3)} = \frac{(1/3)(1/2)}{1/6} = 1.
+\end{aligned}
+\end{equation}%
+}
+
+\Ex{%
+In virology we need a test for some virus and we know that
+\begin{itemize}
+	\item
+The false negative rate is \SI{2}{\percent}, i.e.~the specificity is \SI{98}{\percent};
+	\item
+The false positive rate is \SI{5}{\percent}, i.e.~the sensitivity is \SI{95}{\percent};
+	\item
+The population $A$ has \num{e4} people and \SI{40}{\percent} of them are infected.
+\end{itemize}
+Let's call $h$ the healthy people and $\bar h$ the  infected ones.
+
+\begin{figure}[]
+	\centering
+\subfloat[][Population $A$.]{%
+	\input{images/infected_pop_A.pgf}
+}\qquad
+\subfloat[][Population $B$.]{%
+	\input{images/infected_pop_B.pgf}
+}
+	\caption{}
+
+\end{figure}
+
+
+(finish example)
+}
+
+
+\chapter{Lecture 4}
+
+			\subsection{Common fallacies}
+
+\begin{itemize}
+	\item
+Confusion of inverses, i.e.~$P(A\mid B) \simeq P(B\mid A)$, in general is \emph{not} true.
+Since $P(A\mid B)\,P(B) = P(B\mid A)\,P(A)$, the previous relation is \emph{only} true if $P(A)\simeq P(B)$.
+	\item
+Assuming that $P(A)\simeq P(A\mid B)$.
+From the law of total probability $P(A) = P(A\mid B)\,P(B) + P(A\mid \bar B)\,P(\bar B)$.
+For instance, if a doctor estimates the probability for a person of having a flue $P(\text{flue})$ by counting how many of his patients have it, he actually estimates $P(\text{flue}\mid\text{sees doctor})$: this is an example of selection bias.
+	\item
+Base rate neglect: not taking into account the prior $P(A)$.
+\end{itemize}
+
+
+		\section{Bayesian interpretation: subjective probability}
+
+Unlike the frequentist interpretation of probability, the Bayesian one provides a more natural treatment of non-repeatable phenomena.
+
+The probability is the state of knowledge assigned to the hypothesis, i.e.~the statement that they are true or false.
+So let's call $P(A)$ the degree of belief that $A$ is true.
+Bayes' theorem is a \emph{learning rule}: it expresses how the subjective degree of belief has to be updated in view of new data (or \emph{evidence}).
+
+
+Typically, one says $A = \text{theory}$ and $B = \text{data}$ so that~\eqref{eq:bayes_theorem} reads
+\begin{equation}
+P(\text{theory}\mid\text{data}) = \frac{P(\text{data}\mid \text{theory})\,P(\text{theory})}{P(\text{data})}.
+\end{equation}
+The probability for the theory of being true \emph{after} seeing the data $P(\text{theory}\mid\text{data})$ is called \emph{posterior probability}\index{probability!posterior}\index{posterior}.
+The probability that the theory is true \emph{before} seeing the data $P(\text{theory})$ is called \emph{prior probability}\index{probability!prior}\index{prior}.
+The probability of observing certain data given that the theory is true $P(\text{data}\mid \text{theory})$ is called \emph{likelihood of hypothesis}\index{likelihood!of hypothesis}.
+The probability of observing the data assuming that \emph{every} theory is true $P(\text{data})$ is called \emph{evidence}\index{evidence}.
+
+
+If the theory predicts data with high probability (i.e.~hypothesis likelihood is high) and the data are not likely (i.e.~evidence is small) than the observation will straighten the belief in the theory.
+On the other hand, the observation of data which are forbidden by the theory will disprove the theory itself since $P(\text{data}\mid \text{theory}) = 0$ and so will be $P(\text{theory}\mid\text{data})$.
+
+
+Using now a continuous form of the law of total probability we can introduce an integration over all possible hypothesis
+\begin{equation}
+P(t\mid d) = \frac{P(d\mid t)\,P(t)}{\int P(d\mid t')\,P(t')\ud t'}.
+\end{equation}
+So we have a clear separation between the prior belief and the outcome of the measurement.
+Moreover the posterior probability is proportional to the prior probability.
+
+
+Bayes' theorem is a powerful tool but it does not say how to assign probabilities, i.e.~how to choose priors, hence it reflect a subjective belief.
+It is just an ``if-then'' statement:
+\begin{description}
+\item[if]
+I choose $P(\text{theory})$ and perform an experiment which gives a certain set of data;
+\item[then]
+I can update my degree of belief in the theory in the light of the new collected data.
+\end{description}
+
+
+When I collect more data, I can sequentially apply the Bayes' theorem.
+The previous posterior $P(t\mid d_1)$ becomes the new prior $P(t)$ for the next knowledge update with $d_2$.
+
+
+		\section{Frequentist vs.~Bayesian}
+
+{\setlength{\epigraphwidth}{%
+\widthof{\epigraphsize%
+Bayesians address the questions everyone is interested%
+}%
+}
+\epigraph{%
+Bayesians address the questions everyone is interested in by using assumptions that no one believes.
+Frequentist use impeccable logic  to deal with an issue that is of no interest to anyone.
+}{\footnotesize%
+%\textsl{Another Brick in the Wall, pt.~2}\\%
+\textsc{louis lyons}%
+}
+}
+
+%\epigraph{}{%
+%\textsc{}%
+%}
+
+\begin{description}
+	\item[Frequentist]
+\begin{itemize}
+	\item
+The hypothesis are states of nature: they can be either true or false;
+	\item
+The prior belief is often hidden: it does not appear explicitly.
+\end{itemize}
+	\item[Bayesian]
+\begin{itemize}
+	\item
+Probabilities are state of knowledge which are assigned to hypothesis;
+	\item
+Prior beliefs enter explicitly but there is usually no consensus on priors;
+	\item
+Different priors result in different posteriors;
+	\item
+It is a more natural treatment of non-repeatable phenomena e.g.~systematic uncertainties, hypothesis testing and so forth;
+	\item
+The posterior probability converges to about the same value after several experiments, irrespective of choice of priors.
+\end{itemize}
+\end{description}
+
+	\section{\aclp{rv}}
+
+\acp{rv} are variables whose values vary due to some source of randomness---be it our ``ignorance'' on the system or a randomness which lies in the laws of Physics.
+They are a numerical characteristics assigned to each element of the sample space (i.e.~functions on $S$) and represent the outcomes of the experiment.
+They are a set of possible different values, each associated with a probability.
+
+There are two kinds of \acp{rv}:
+\begin{description}
+	\item[Discrete] e.g.~the outcomes of throwing a dice;
+	\item[Continuous] e.g.~the energy of a particle. In this case, a single value has \emph{null} probability and non-zero probabilities are given only for \emph{ranges} of values.
+\end{description}
+
+		\section{Probability distributions}
+
+They assign a probability to each possible value of a \ac{rv}, namely to each possible outcome of an experiment.
+
+
+
+
+
+To a continuous \ac{rv} $X$ with value $x$ is associated a \ac{pdf} $f(x)$ such that
+\begin{equation}
+P(X\in[x,x+\ud x]) = f(x)\ud x.
+\end{equation}
+From here we see that $P(X=x) = 0$ since $\ud x = 0$.
+This means that probabilities are non vanishing only for events which involve a range of outcomes, namely probability that the outcome of the experiment is \emph{exactly} $\pi$ is zero but probability that it lies in the range $[\pi,\pi+\epsilon]$ for each (positive) value of $\epsilon = \num{4345}, \num{e-39}$ and so on is not.
+
+
+Moreover, the probability $P$ is ``just a number'': it's dimensionless.
+Thus it's clear that $f(x)$ is a \emph{density} and it has the dimension $1/x$ so it is \emph{not} a probability.
+
+
+From axioms of probability it follows that $P(x\in\R)$, the sure event, must be equal to \num{1}.
+Now, since the probability for the \ac{rv} to lie in finite intervals is obtained just by integrating over the interval, namely
+\begin{equation}
+P( X \in [a,b] ) = \int_a^b f(x)\ud x,
+\end{equation}
+the normalization condition reads
+\begin{equation}
+\int_\R f(x)\ud x = 1.
+\end{equation}
+
+
+For a discrete \ac{rv} things are a little different.
+First of all, discrete doesn't mean \emph{finite}, e.g.~the harmonic oscillator energies are a discrete and infinite set $\Set{\hbar\omega(n+1/2)}$.
+Probability for the outcomes of a discrete \ac{rv} $X$ with values $x$ are described by a \emph{probability mass function}\index{probability!mass function} $\phi(x)$ such that
+\begin{equation}
+P(X=x_i) = \phi(x_i),
+\end{equation}
+namely $\phi$ \emph{is} a probability so it must be non negative.
+\begin{figure}
+	\centering
+	\input{images/dice_pmd.pgf}
+\caption{Probability mass function for a rolling dice: every outcome in $\Set{1,\dots,6}$ as $1/6$ probability.}
+	\label{fig:dicePMD}
+\end{figure}
+Figure~\ref{fig:dicePMD} a flat probability distribution for a rolling dice is shown.
+The normalization condition reads in this case
+\begin{equation}
+1 = \sum_i \phi(x_i).
+\end{equation}
+
+
+A probability mass distribution can be represented in terms of a \ac{pdf} using the Dirac $\delta$-distribution
+\begin{equation}\label{eq:ProbMassWithDeltaDirac}
+f(x) = \sum_i \phi(x_i)\,\delta(x-x_i).
+\end{equation}
+Since the $\delta$-distribution has dimension $1/x$, the function $f$ is indeed a \ac{pdf} and satisfies all the properties above.
+
+\Ex{%
+The \emph{normal} (or \emph{Gau\ss{}ian}) distribution is
+\begin{equation}
+f(x) = \frac{\eu^{-x^2\!/2}}{\sqrt{2\pi}}.
+\end{equation}
+}
+
+\Ex{%
+A physical \ac{pdf} is the angular distribution in Bhabha scattering
+\begin{equation}
+f(\cos\theta) = \frac{1}{\sigma_\textup{tot}}\deriv{\sigma}{\cos\theta} = \frac{3}{8} (1+\cos^2\!\theta).
+\end{equation}}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\draw [shorten >= 2pt, ->] (180:3) node [above] {$e^+$} -- (0:0) coordinate (boom);
+\draw[shorten <= 2pt, <-] (boom) -- +(0:3) node [above] {$e^-$};
+
+\begin{scope}[shorten <= 5pt, ->, line width=1pt] 
+\draw (boom) -- +(30:3) node [below] {$\mu^-$};
+\draw (boom) -- +(210:3) node [above] {$\mu^+$};
+\end{scope}
+
+\begin{scope}[color=gray]
+\draw (1,0) arc (0:30:1);
+\draw (1.1,0) arc (0:30:1.1) node at (15:1.3) {$\theta$};
+
+\draw (-1,0) arc (180:210:1);
+\draw (-1.1,0) arc (180:210:1.1);
+
+\end{scope}
+
+\end{tikzpicture}
+	\caption{Bhabha scattering}
+
+\end{figure}
+	
+\begin{figure}
+\centering
+
+\subfloat[][As a function of $\cos\theta$.]{%
+	\input{images/bhabha_cross_section_cosinus.pgf}
+}
+
+\subfloat[][As a function of the angle.]{%
+	\input{images/bhabha_cross_section_angle.pgf}
+}
+	\caption{Bhabha scattering cross section.}
+
+\end{figure}
+
+
+
+	\chapter{Lecture 5}
+
+		\section{\acl{cdf}}
+
+A \ac{cdf}, be it $F(x)$, describes the probability that the value of the \ac{rv} $X$ with associated \ac{pdf} $f_X(x)$ lies in the range $(-\infty,x]$, namely
+\begin{equation}\label{eq:cdf}
+F(x) = P(X\le x) = \int_{-\infty}^x f_X(t)\ud t.
+\end{equation}
+From the Fundamental Theorem of Integral Calculus, any \ac{cdf} is continuous and non-decreasing.
+The equation~\eqref{eq:cdf} allows to give an alternative definition of \ac{pdf} as
+\begin{equation}
+f_X(x)\coloneqq \deriv{}{x}F(x).
+\end{equation}
+Moreover, since it is a probability, it has to be normalized in such a way that
+\begin{equation}
+\lim_{x\to\infty}F(x) = 1.
+\end{equation}
+From the equation~\eqref{eq:cdf} is also clear that $\lim_{x\to-\infty}F(x) = 0$.
+Lastly, let's notice that
+\begin{equation}
+P(X\in[a,b]) = \int_a^b f_X(t)\ud t = \biggl(\int_{-\infty}^b - \int_{-\infty}^a\biggr) f_X(t)\ud t = F(b) - F(a).
+\end{equation}
+
+		\section{Basic terms to characterize \acsp{pdf}}
+			\subsection{Mode}
+
+The \emph{mode}\index{mode} is the most probable value among the ones the \ac{rv} can assume, i.e.~it's the maximum of its \ac{pdf}.
+The mode is not unique, e.g.~as an extreme case one can think at the constant distribution.
+
+
+Sometimes \acp{pdf} have more than one maximum so the mode in a narrow sense is the global maximum; the mode in the wider sense is a local maximum.
+\begin{figure}
+	\centering
+\input{images/multi_modal_PDF.pgf}
+	\caption{Example of bimodal distribution.}
+	\label{fig:multiModalPDF}
+\end{figure}
+In the latter case the \ac{pdf} is said to be \emph{multimodal}, like the one shown in figure~\ref{fig:multiModalPDF}.
+
+
+			\subsection{Expectation value}
+
+The expectation value (or \emph{mean}\index{mean}) of a distribution is defined (for continuous \acp{pdf}) as
+\begin{equation}
+\mu\coloneqq E[x]\coloneqq \int_\R t\,f_X(t)\ud t.
+\end{equation}
+In the discrete case, using the equation~\eqref{eq:ProbMassWithDeltaDirac}, the integral just becomes a summation with the index labeling all the possible outcomes
+\begin{equation}
+E[x] \coloneqq \sum_j x_j\phi_X(x_j).
+\end{equation}
+In a certain sense, evaluating the mean of a distribution looks like evaluating its ``center of mass''.
+
+
+It's worth remarking the fact that $E$ is a \emph{functional}: it takes a function $g\colon\R\to\R$ as input and gives back a real number $E[g]$.
+Thus $E[x]$ is \emph{not} a function of $x$ but an operator applied to the function $g(x) \coloneqq x$.
+
+
+The expectation value is a linear operator since it is defined in terms of an integral, which is linear itself.
+Hence, given two functions $f,g\colon \R\to\R$ and two constants $a,b\in\R$ one has that 
+\begin{equation}
+E[af + b g] = aE[f] + bE[g]
+\end{equation}
+but in general
+\begin{equation}
+E[fg]\neq E[f]\,E[g],
+\end{equation}
+since, as we saw in section~\ref{sec:condProb}, the equality holds only if the \acp{rv} $f$ and $g$ are independent among each other.
+If this is the case, their joint \ac{pdf} can be factorized in a product of two functions depending on a single argument and the integral can be split in the product of integrals, namely
+\begin{equation}
+\begin{aligned}
+E[fg]
+&= \int_\R f(t)\,g(k)\,\psi_{fg}(t,k)\ud t\ud k\\
+& \overset{\text{indep.}}{=} \int_\R f(t)\,g(k)\,\phi_{f}(t)\,\gamma_g(k)\ud t\ud k\\
+&= \int_\R f(t)\,\phi_{f}(t)\ud t\int_\R g(k)\,\gamma_g(k)\ud k\\
+&= E[f]\,E[g].
+\end{aligned}
+\end{equation}
+Anyway, \emph{this is not always the case!}
+
+
+			\subsection{Median}
+
+	The \emph{median}\index{median} it's the value that separates the lower and higher halves of the \ac{pdf}, i.e.~is defined as the value of the \ac{rv} such that
+\begin{equation}
+F(m) = \int_{-\infty}^m f_X(t)\ud t \coloneqq \frac{1}{2}.
+\end{equation}
+The median is not always uniquely defined.
+\begin{figure}
+	\centering
+
+\subfloat[][\ac{pdf}.]{%
+	\input{images/probabilityNotMedian.pgf}%
+}
+
+\subfloat[][\acs{cdf}.]{%
+	\input{images/cumulativeNotMedian.pgf}%
+}
+
+	\caption{Example of \ac{pdf} where the median is not uniquely defined.}
+	\label{fig:exampleNotMedian}
+\end{figure}
+In figure~\ref{fig:exampleNotMedian} a function non negative whose integral is normalized to $1$ is shown: it's formally a \ac{pdf}.
+Its median is not defined since $F(x) = 1/2$ for all values of $x\in[-3/2,3/2]$.
+
+
+
+
+For a \ac{pdf} which is symmetric about its mean $\mu$, median and mean coincide since
+\begin{equation}
+F(m) = \int_{-\infty}^m f_X(x)\ud x = \frac{1}{2} = \frac{1}{2}\int_\R f_X(x)\ud x = \frac{2}{2}\int_{-\infty}^\mu f_X(x)\ud x = F(\mu).
+\end{equation}
+If the \ac{cdf} is invertible (namely, the values of $x$ such that $f_X(x) = 0$ are a discrete set) then $m=\mu$.\footnote{In the case of the figure~\ref{fig:exampleNotMedian} the set of points in which the \ac{pdf} vanishes are not a discrete set but $[-3,-5/2]\cup[-3/2,3/2]\cup[5/2,3]$.}
+
+
+			\subsection{Variance}
+
+The \emph{variance}\index{variance} is defined as the expectation value of the function $g(x) \coloneqq (x-E[x])^2$ so
+\begin{equation}
+\begin{aligned}
+V[x] \coloneqq E[(x-E[x])^2] &= E[x^2 - 2E[x]\,x - (E[x])^2 ] \\
+&= E[x^2] - 2(E[x])^2 + (E[x])^2\\
+&= E[x^2] - (E[x])^2,
+\end{aligned}
+\end{equation}
+where the linearity property of the operator $E$ and the fact that $E[x]$ is constant have been used to work out the final result.
+
+
+The variance represents a sort of ``variation'' of the \ac{rv} around the mean.
+As a matter of facts, one can define the \ac{sd}\index{standard deviation} $\sigma$ of the distribution which measures the width or the spread of the \ac{pdf}.
+
+There are other measures for the \ac{pdf} spread such as the \ac{fwhm} which is the width of the distribution at half of its maximum value.
+
+\Ex{%
+The Gau\ss{}ian distribution with \ac{sd} $\sigma$ is
+\begin{equation}
+f(x) = \frac{\eu^{-(x-\mu)^2\!/2\sigma^2}}{\sqrt{2\pi}\,\sigma}.
+\end{equation}
+Its maximum is located at $x=\mu$ and $f(\mu) = 1/\sqrt{2\pi}\,\sigma$.
+One can check that $f(x) = f(\mu)/2$ when $x=\mu\pm\sigma\sqrt{2\log 2}$ so its \ac{fwhm} is $2\sigma\sqrt{2\log 2}\simeq \SI{2.354820045}{\ensuremath{\sigma}}$.
+}
+
+
+\begin{figure}
+	\centering
+\begin{tikzpicture}
+\begin{axis}[
+	samples=70,
+	xlabel=$z\coloneqq(x-\mu)/\sigma$,
+	ylabel={$\sqrt{2\pi}\,f(z) = \eu^{-z^2\!/2}$},
+	smooth,
+	axis x line=middle,
+	axis y line=left
+]
+\addplot+[%
+	name path global=one,
+	mark=none,%
+	domain={-4:4}%
+] {exp( - .5 * x * x ) };
+
+\addplot+[%
+	name path global=two,%
+	mark=none,%
+	domain={-2.5:2.5},%
+	opacity=.4
+] { .5 };% \addlegendentry{ $f(0)/2$}
+
+
+%	\path [%
+%		draw,%
+%		name intersections={%
+%			of=one and two,%
+%			by={A,B}%
+%		}%
+%	];
+\end{axis}
+% draw projections
+%\coordinate (O); % set (O)=(0,0)
+%\foreach \p in {A,B} {
+%	\path[draw=black, dashed] (\p) -- (\p|-O);
+%}
+\end{tikzpicture}
+	\caption{Gau\ss{}ian \ac{fwhm}.}
+
+\end{figure}
+
+			\subsection{Higher momenta}
+
+The mean and the variance are the lowest terms in the series of \emph{momenta}\index{momentum}
+\begin{equation}\label{eq:momenta}
+m_n \coloneqq \int_\R (t-c)^n f_X(t)\ud t.
+\end{equation}
+
+If $c=0$ the quantities~\eqref{eq:momenta} are called \emph{algebraic momenta}\index{algebraic momentum} and $m_n = E[x^n]$, e.g.~for $n = 1$ one recovers the mean $m_1 = E[x] = \mu$.
+
+If $c = E[x]$, then the $m_n$ are said \emph{central momenta}\index{central momentum}  and $m_n = E[(x-E[x])^n]$.
+By definition, for $n=1$ the central momentum \emph{always} vanishes since
+\begin{equation}
+m_1 = E[(x-E[x])] = E[x]-E[x] \equiv 0.
+\end{equation}
+Then, for $n=2$, one recovers the variance $m_2 = E[(x-E[x])^2] = V[x]$ and the third central momentum $m_3 = E[(x-E[x])^3]$ is called \emph{skewness}\index{skewness}.
+The skewness is a measure of the \ac{pdf} asymmetry: it is zero for a distribution which is symmetric around the mean $E[x]$ (e.g.~the Gau\ss{}ian one).
+Lastly, the fourth central momentum $m_4 = E[(x-E[x])^4]$ is called \emph{kurtosis}\index{kurtosis} and it's a measure for the ``peakness'' of the \ac{pdf}.
+
+
+As a remark, it's worth saying that each \ac{pdf} is \emph{uniquely} determined by its momenta.
+
+		\section{Estimators}
+
+In general the true momenta of a \ac{pdf} are not known and have to be estimate from the set of observed data.
+For this reason, certain rules to obtain such estimate have to be defined: such rules are called \emph{estimators}\index{estimator}.
+Since an estimator is a function of data, it is itself a \ac{rv}.
+
+
+What one wants to obtain at the end is a meaningful estimate for the true values of momenta thus a set of criteria have to be satisfied by a good estimator.
+Be $\hat a$ the estimator and $a$ the true value for the momentum.
+Given a certain set of $N$ data, $\hat a$ has to satisfy the following requirements:
+\begin{description}
+	\item[Consistency] The estimator has to be \emph{consistent}\index{consistency}, i.e.~when the sample grows its value should get closer and closer to the true value:
+\begin{equation}
+\lim_{N\to\infty}\hat{a} = a;
+\end{equation}
+
+	\item[Unbiasness\index{unbiasness}] The expectation value for the estimator should be the true value of the momentum, i.e.~$E[\hat a] = a$;
+
+	\item[Efficiency] The estimator has to be \emph{efficient}\index{efficiency}, i.e.~its \ac{pdf} should have a ``small'' variance;
+
+	\item[Robustness] Also, the estimator should be insensitive to tails in the data distributions of false data, i.e.~it should be \emph{robust}\index{robustness}.
+
+\end{description}
+
+
+An unbiased estimator for the true mean $\mu$ is the \emph{sample mean}\index{sample mean} defined as
+\begin{equation}\label{eq:SV}
+\mean{x} \coloneqq \frac{1}{N}\sum_{i=1}^N x_j.
+\end{equation}
+To estimate the variance, one can use the \emph{sample variance}\index{sample variance}
+\begin{equation}
+\hat \sigma^2 \coloneqq \frac{1}{N}\sum_{j=1}^N(x_j - \mu)^2,
+\end{equation}
+which holds only if the true value of the mean is known.
+If this is not the case, \emph{unbiased sample variance}\index{unbiased!sample variance} has to be used:
+\begin{equation}\label{eq:SVbessel}
+\hat\sigma^2 \coloneqq \frac{1}{N-1}\sum_{j=1}^N(x_j - \mean{x})^2.
+\end{equation}
+The $N-1$ in the denominator is called \emph{Bessel correction} and accounts for the fact that there are only $N-1$ independent \acsp{dof} since \mean{x} has been estimated from data.
+Moreover, the~\eqref{eq:SVbessel} when only one measure is given is an undetermined form $0/0$ and this reflects the fact that the variance cannot be known with only one data point; the~\eqref{eq:SV} for one measure would give a null variance, which is absurd.
+
+		\section{Functions of \acsp{rv}}
+
+We now consider a function $y(x)$ of a \ac{rv} $X$ with associated \ac{pdf} $f_X(x)$.
+The function $y(x)$ is itself a \ac{rv} $Y$ thus it has an associated \ac{pdf} as well.
+How to determine $f_Y(y)$?
+Let's consider the simplest case in which an unique inverse function for $y$ exists.
+
+
+What one should impose is the conservation of probability
+\begin{equation}
+f_Y(y)\abs{\ud y} = P(Y\in[y,y+\ud y]) = P( X\in[x,x+\ud x]) = f_X(x)\abs{\ud x}.
+\end{equation}
+The absolute values for $\ud x$ and $\ud y$ account for the fact that an increase in $x$ may result in a decrease in $y$ and the probability must be non-negative.
+Also, since by hypothesis the inverse function of $y$ is unique, one can express $x$ as $x(y)$ so
+\begin{equation}
+f_Y(y) = f_X(x(y))\abs[\bigg]{\deriv{}{y}x(y)}.
+\end{equation}
+The expectation value for $Y$ is 
+\begin{equation}
+E[y] =
+\int_\R y\,f_Y(y)\ud y =
+\int_\R y\,f_X(x(y))\,\abs[\bigg]{\deriv{x}{y}}\ud y
+= \int_\R y(x)\,f_X(x)\ud x
+= E[y(x)]
+\end{equation}
+and its variance is
+\begin{equation}
+V[y] %= E[(y -E[y])^2] 
+= \int_\R (y-E[y])^2 f_Y(y)\ud y
+=\int_\R (y(x)-E[y(x)])^2 f_X(x)\ud x
+= V[y(x)].
+\end{equation}
+
+		\section{Multivariate distributions}
+
+The multivariate distributions are $2$-dimensional \acp{pdf} which describe the outcomes of experiments characterized by two \acp{rv} $X$ and $Y$.
+
+Let's call $A$ the event $X\in[x,x + \ud x]$, $B$ the event $Y \in [y,y+\ud y]$ and $f(x,y)$ the \emph{joint \ac{pdf}}\index{joint \acs{pdf}} for $X$ and $Y$ so that
+\begin{equation}
+P(A\cap B) = f(x,y)\ud x\ud y
+\end{equation}
+is the probability for the event $A$ and the event $B$ to occur.
+If one wants to evaluate the probability for $X$ and $Y$ to lie in finite intervals
+\begin{equation}
+\int_a^b\ud x\int_c^d\ud y\,f(x,y) = P(X\in[a,b]\text{ and }Y \in [c,d]).
+\end{equation}
+The normalization is again such that
+\begin{equation}
+\int_\R\ud x\int_\R\ud y\,f(x,y) = 1.
+\end{equation}
+The expectation value for $X$ is defined as
+\begin{equation}
+E[x] \coloneqq \int_\R\ud x\int_\R x\,f(x,y)\ud y
+\end{equation}
+and its variance as
+\begin{equation}
+V[x]\coloneqq \int_\R\ud x\int_\R (x-E[x])\,f(x,y)\ud y.
+\end{equation}
+Analogous formulas hold for $Y$.
+
+			\subsection{Marginal \acs{pdf}}
+
+The marginal \ac{pdf} is a \ac{pdf} for a  subset of \acs{rv}.
+
+
+The ansatz is that
+\begin{equation}
+P(A) = \sum_i P(A\cap B_i)
+= \sum_i f(x,y_i) \ud x \ud y\to
+\ud x\int f(x,y)\ud y.
+\end{equation}
+So the marginal \ac{pdf} $f_X(x)$ for the \ac{rv} $X$ is
+\begin{equation}
+f_X(x) \coloneqq \int f(x,y)\ud y.
+\end{equation}•
+
+
+	\chapter{Lecture 7}
+\section{}
+
+You cannot prove any causal relation between \acp{rv} with a non vanishing correlation coefficient $\rho$.
+Moreover, in general, the value of $\rho$ depends on your sample selection.
+
+If there is a linear correlation in your data and you take a wider range of values you in general get a higher value for $\rho$.
+This may lead to mistakes if you consider a too narrow range.
+
+\section{Some \acsp{pdf}}
+
+Let's start with discrete distributions.
+
+	\subsection{Discrete \acsp{pdf}}
+
+\paragraph{Combinatory}
+It's about sequences of objects.
+There are two general cases or flavors of sequences:
+\begin{itemize}
+	\item
+Order matters: permutations
+	\item
+Order doesn't matter: combinations
+\end{itemize}
+
+Example: Sequences of letters $\Set{a,b,c}$ and $\Set{c,b,a}$ are same combinations but distinct permutations.
+
+We have four cases
+\begin{description}
+	\item[Permutations with repetitions]
+Pick $k$ objects from a set of $n$ and put the objects back (such that you can again pick them in the next step).
+The number of permutations is $n^k$.
+
+Example: Consider \SI{1}{byte} = \SI{8}{bits} and you get $2^8 = 256$ permutations.
+
+	\item[Permutations without repetitions]
+
+
+Pick again $k$ objects out of $n$ and do \emph{not} put them back.
+The number of permutations without repetitions must be smaller than the number of permutations with repetitions.
+
+Example: Pick \num{4} cards out of a deck of \num{52}.
+At the first try you can choose between \num{52} cards; at the second try you have only \num{51} cards left and so on.
+In this case you have $52\cdot51\cdot50\cdot49 = 52!/48! = \num{6797400}$ different permutations.
+
+This can be generalized to get that the number of permutations in this case is $n!/(n-k)!$.
+
+	\item[Combination without repetitions]
+
+Pick $k$ objects out of $n$ and do \emph{not} put them back (remember that in this case the order is irrelevant).
+Using the previous results, one gets that the number of combinations is
+\begin{equation}
+\frac{n!}{(n-k)!}\frac{1}{k!} \eqqcolon {n \choose k }.
+\end{equation}
+This can be easily understood as the number of permutations without repetitions with a correction which takes into account the number of possible permutations of $k$ elements.
+Dividing by $k!$ all the different permutations (which in this case are regarded as degeneracies) are counted only once, as it should be.
+
+	\item[Combinations with repetitions]
+
+Pick $k$ objects out of $n$ and put them back.
+The number of combinations is
+\begin{equation}
+\frac{(n+k+1)!}{(n-1)!}\frac{1}{k!} ={ n + k + 1 \choose k}
+\end{equation}
+(Interpretation)
+\end{description}
+
+	\subsection{Binomial distribution}
+
+Consider and experiment with only two possible outcomes (like yes or not). 
+
+Quality control: success/failure
+
+Coin Toss: head/tail
+
+Particle detector: hit/no hit
+
+Particle decays: particle decays into a particular final state/all the rest
+
+
+In any of these cases, the outcome is a \emph{Bernoulli \ac{rv}}\index{Bernoulli RV} that takes only two values which can be identified by $\Set{0,1}$.
+Moreover, the following two assumptions have to be satisfied
+\begin{itemize}
+	\item
+The probability for the outcomes are constant: $p(x) \equiv p = 1-p(\bar{x})$.
+	\item
+Perform our experiment $n$ times and all tries are independent.
+\end{itemize}
+The question is: what is the probability to observe $k$ successes (with $k\le n$)?
+Two terms contribute in the probability:
+\begin{enumerate}
+	\item
+The probability for specific outcome with $k$ successes is $p^k(1-p)^{n-k}$;
+	\item
+A normalization factor taking into account the combinations without repetitions. %$( n k )$
+\end{enumerate}
+At the end one gets the \emph{binomial distribution}
+\begin{equation}\label{eq:BinomDistribution}
+B(k;n,p) = {n\choose k}p^k(1-p)^{n-k},
+\end{equation}
+where $n$ and $0 \le p\le 1$ are parameters.
+
+\paragraph{Normalization}
+The normalization of the~\eqref{eq:BinomDistribution} comes from the Newton's formula
+\begin{equation}
+(a+b)^n = \sum_{k=0}^n {n\choose k} a^k b^{n-k}.
+\end{equation}
+Applying this relation to the equation~\eqref{eq:BinomDistribution} we obtain
+\begin{equation}
+\sum_{k=0}^n B(k;n,p) =
+\sum_{k=0}^n {n\choose k}p^k(1-p)^{n-k}
+= (p + (1-p))^n = 1.
+\end{equation}
+
+
+About the parameter $p$, let's notice that
+\begin{equation*}
+\begin{aligned}
+\int_0^1 (1-x)^{n-k}x^k\!\ud x 
+&= \frac{(1-x)^{n-k} x^{k+1}}{k}\bigg\rvert_0^1 +\frac{n-k}{k}\int_0^1 x^{k+1}(1-x)^{n-k-1}\!\ud x\\
+&=\frac{n-k}{k}\int_0^1 x^{k+1}(1-x)^{n-k-1}\!\ud x\\
+&=\dots\\
+&= \frac{(n-k)!}{(n-1)(n-2)\dots(k+1)k}\int_0^1 x^n\!\ud x\\
+&=\frac{n-k}{n(n-1)\dots k} \\
+&= \frac{(n-k)!\,k!}{n!}.
+\end{aligned}
+\end{equation*}
+So integrating the distribution~\eqref{eq:BinomDistribution} with respect to the probability we get again that it's normalized, namely
+\begin{equation}
+\int_0^1B(k;n,p)\ud p = 1.
+\end{equation}
+
+
+\paragraph{Mean} The expectation value of the \ac{rv} $k$ is given by
+\begin{equation}
+\begin{aligned}
+E[k] &= \sum_{k=0}^n k\,P(k;n,p) = \sum_{k=0}^n k \frac{n!}{(n-k)!k!}p^k(1-p)^{n-k} \\
+&= 0 + \sum_{k=1}^n k \,\frac{n!}{(n-k)!k!}\,p^k(1-p)^{n-k} \\
+&= np\sum_{k=1}^n \frac{(n-1)!}{(n-k)!(k-1)!}\,p^{k-1}(1-p)^{n-k} \\
+&= np\sum_{k=0}^{n-1} \frac{(n-1)!}{(n-k - 1)!k!}\,p^{k}(1-p)^{n-k - 1} \\
+&= np\sum_{k=0}^{n-1} P(k, n-1,p) = np
+\end{aligned}
+\end{equation}
+where the last step is justified by the normalization.
+
+\paragraph{Variance}
+The variance is defined as $V[k] = E[k^2] - (E[k])^2$.
+Since the second term is already known from the mean, the problem is just evaluating the first one:
+\begin{equation}
+\begin{aligned}
+E[k^2] &= np\sum_{k=1}^n k \,\frac{(n-1)!}{(n-k)! (k-1)!}\,p^{k-1}(1-p) ^{n - k}\\
+&= np\sum_{k=0}^{n-1} (k + 1) \,\frac{(n-1)!}{(n-k - 1)! k!}\,p^{k}(1-p) ^{n - k-1}\\
+&= np\sum_{k=0}^{n-1} (k + 1) \,P(k;n-1,p)\\
+&= np  + np \sum_{k=1}^{n-1} k\, P(k;n-1,p)\\
+&=np[( n - 1 )p + 1 ]
+\end{aligned}
+\end{equation}
+Substituting the result one gets $V[k] = np(1-p) = \sigma_k^2$.
+
+
+
+Remark: if $p=1/2$ then you get a symmetric distribution when plotted, for $n$ constant.
+
+
+Remark: if I fix $p \equiv 1/2$, the more $n$ grows, the more the distribution resembles a Gaussian one.
+
+	\subsection{Multi-binomial distribution}
+
+It's just an extension when the experiments has $m\ge2$ outcomes with probabilities ${p_1,\dots,p_m}$ such that $p_1 + \dots + p_m = 1$.
+One wonders the probability to get after $n$ trials $k_i$ outcomes of the $i$-th value.
+
+\begin{equation}
+P(k_1,\dots,k_m; n, p_1,\dots,p_m) = n! \prod_i\frac{p_i^{k_i}}{k_i!}
+\end{equation}
+As in the Binomial distribution case, one gets $E[k_i] = np_i$ and $V[k_i] = np_i(1-p_i)$.
+In this case it's possible to evaluate
+\begin{equation}
+\cov[k_i,k_j] \underset{i\neq j}{=} - n p_ip_j.
+\end{equation}
+The minus sign does have a meaning: it arises because as $k_i$ increases, $k_j$ must decrease since the sum of all the $k_p$ values is bounded to be the number of tries $n$.
+
+
+Now, let's assume $p_i + p_j = 1$ for index $i$ and $j$ given.
+We can evaluate the (linear) correlation  coefficient
+\begin{equation}
+\rho_{ij} = \frac{\cov[k_i,k_j]}{\sqrt{V[k_i]\,V[k_j]}} =
+\frac{-n p_ip_j}{\sqrt{n^2p_ip_j(1-p_i)(1-p_j)}}.
+\end{equation}
+Using the relation $p_i = 1-p_j$ the expression reads
+\begin{equation}
+\rho_{ij} = \frac{-n p_j(1-p_j)}{\sqrt{n^2 p_j^2(1-p_j)^2} }\equiv -1.
+\end{equation}
+This means that the \acp{rv} $k_i$ and $k_j$ are perfectly anti-correlated; as a matter of fact in this case the relation $k_i + k_j = n$ holds.
+
+Remark: a negative sign in the covariance means that an increasing of $k_i$ requires $k_j$ to decrease since $k_1+\dots+k_m= n$.
+
+Example: The $k_i$'s can represent a histogram with $m$ bins and $n$ total entries where all entries are independent.
+
+
+	\subsection{Poisson distribution}
+
+The Poisson distribution is one of the most important in Particle Physics (at least in the discrete sector).
+It represents the probability of observing $k$ events in a fixed time (or space or whatever; that's just a rate) interval, provided that ``there is no memory'': events occur independently of the time since last event with average rate $\lambda$.
+
+The expression is
+\begin{equation}
+P(k;\lambda) = \frac{\lambda^k \eu^{-\lambda}}{k!}.
+\end{equation}
+
+\paragraph{Derivation} We'll see that this is a special case of the Binomial distribution.
+
+On average $\lambda$ events in a time interval $t$ are expected.
+Let's divide the time interval $t$ into $n$ intervals $\delta t = t/n$ so that the probability for one event in $\delta t$ shrinks as well to $\delta p = \lambda \,\delta t/t = \lambda/n$.
+
+If the event rate is low, the probability for more than one event in $\delta t$ is negligible.
+With this assumption we are turning the problem into a binary one: $n$ trials each with two discrete case (event or not).
+So we can describe our experiment using the Binomial distribution
+\begin{equation}
+P(k;\lambda) = \lim_{n\to\infty} {n\choose k} \delta p^k( 1  - \delta p)^{n - k}
+= \lim_{n\to \infty} \frac{n!}{(n-k)!}\frac{1}{k!}\biggr(\frac{\lambda}{n}\biggl)^k\biggr(1-\frac{\lambda}{n}\biggl)^{n-k}
+\end{equation}
+To evaluate this limit one can can calculate it step by step.
+The first term is
+\begin{equation}
+\frac{n!}{(n-k)!} = n(n-1)\dots(n-k+1) \thicksim n^k.
+\end{equation}
+The last term can be expressed as a power of the Euler number
+\begin{equation}
+\biggr(1-\frac{\lambda}{n}\biggl)^{n-k} = \biggr(1-\frac{\lambda}{n}\biggl)^{\lambda n/\lambda} \biggr(1-\frac{\lambda}{n}\biggl)^{-k} \thicksim \eu^{-\lambda} 1^{-k} = \eu^{-\lambda}.
+\end{equation}
+
+
+Putting together all the terms, one obtains the desired result
+\begin{equation}
+P(k;\lambda) = \frac{\lambda^k \eu^{-\lambda}}{k!}.
+\end{equation}
+
+Basically this means that the Poisson distribution is the Binomial distribution in the limit in which $n\to\infty$ and at \emph{same} time $\delta p \to 0$ while the product $\lambda = n\,\delta p$ remains finite and constant.
+
+
+Example: 
+%Poisson distribution is one of the most important distributions in Particle Physics
+Let's look at the particle detected by a detector in a finite time interval~$t$.
+I have a constant particle flux $\phi$ (otherwise $\lambda$ changes), a constant efficiency of the detector $\epsilon$ and a dead time $\tau$ sufficiently small, i.e.~$\phi\tau\ll1$.\footnote{The dead time is?}
+
+Example:
+Poisson distribution describes the number of interactions of a particle beam in a thin foil.
+
+Example:
+Number of entries in a histogram if data are taken over a fixed time interval.
+
+Example:
+Poisson distribution is \emph{not} applicable to describe the decay of  a small amount of radioactive material in a time interval $t \gtrsim \tau$.
+This is because the event rate is no more constant since the sample is changing remarkably.
+
+Example:
+Poisson distribution is \emph{not} applicable to describe the number of interactions of a low-intensity beam in a thick foil.
+The rareness of events is violated here since the probability of interaction with the foil gets large and the rate depends on the position in the foil.
+
+Example:
+Poisson distribution is \emph{not} applicable when the dead time is high because the assumption of independence between events is violated.
+The second event is not independent from the first if it falls into dead time.
+
+	\chapter{Lecture 10}
+
+We start from the general expression for a two-variables $x$ and $y$, correlated, Gau\ss{}ian distribution
+\begin{equation}
+f(x,y) = \frac{1}{2\pi\sqrt{1-\rho^2}\,\sigma_x\sigma_y}\exp\gp*{-\frac{1}{2(1-\rho^2)}
+\qp*{\left(\frac{x-\mu_x}{\sigma_x}\right)^2+
+\left(\frac{y-\mu_y}{\sigma_y}\right)^2
+-2\rho\,\frac{x-\mu_x}{\sigma_x}\,\frac{x-\mu_x}{\sigma_x}}}
+\end{equation}
+The exponent defines an error ellipse.
+
+
+We want to prepare to the generalization to an $n$-variables distribution so we switch to using matrix.
+Let's define a \emph{covariance} (or \emph{error}) matrix
+\begin{equation}
+V\coloneqq 
+\begin{pmatrix}
+E(x-\mu_x)^2	&E(x-\mu_x)(y-\mu_y)\\
+E(y-\mu_y)(x-\mu_x) & E(y-\mu_y)^2
+\end{pmatrix}
+=
+\begin{pmatrix}
+\sigma_x^2	&\rho_{xy}\sigma_x\sigma_y\\
+\rho_{xy}\sigma_x\sigma_y &\sigma_y^2
+\end{pmatrix}.
+\end{equation}
+This is a positive-semidefinite matrix and it's symmetric.\footnote{When one diagonalizes it, he obtains a matrix with variances (which are non-negative) on the diagonal.}
+
+What we actually need is the inverse of this matrix.
+We know $\det V  = \sigma_x^2\sigma_y^2(1-\rho_{xy }^2)$ and this is good because something similar appears in the Gau\ss{}ian distribution.
+\begin{equation}
+\frac{1}{\det V}
+\begin{pmatrix}
+\sigma_y^2	&-\rho_{xy}\sigma_x\sigma_y\\
+-\rho_{xy}\sigma_x\sigma_y &\sigma_x^2
+\end{pmatrix}
+=
+\frac{1}{1-\rho_{xy}^2}
+\begin{pmatrix}
+1/\sigma_x^2	&-\rho_{xy}/\sigma_x\sigma_y\\
+-\rho_{xy}/\sigma_x\sigma_y &1/\sigma_y^2
+\end{pmatrix}
+\end{equation}
+Since we have got a matrix, we need a vector so we define the \emph{discrepancy} vector $\vec{x'}^t = (x-\mu_x,y-\mu_y)$.
+Thus
+\begin{equation}
+\vec{x'}^tV^{-1}\vec{x'} = 
+\frac{\vec{x'}^t}{1-\rho_{xy}^2}
+\begin{pmatrix}
+x'/\sigma_x^2-\rho_{xy}y'/\sigma_x\sigma_y\\
+-\rho_{xy}x'/\sigma_x\sigma_y + y'/\sigma_y^2
+\end{pmatrix}
+=
+\frac{1}{1-\rho_{xy}^2}
+\left(
+\frac{x'^2}{\sigma_x^2} + \frac{y'^2}{\sigma_y^2} - 2 \frac{\rho_{xy}y'x'}{\sigma_x\sigma_y}
+\right).
+\end{equation}
+So we come to an expression
+\begin{equation}
+f(x,y) = \frac{\eu^{-\vec{x'}^tV^{-1}\vec{x'}\!/2}}{2\pi\sqrt{\det V}}.
+\end{equation}
+
+
+\section{Generalization to arbitrarily many (finite) variables}
+
+We are now ready to extend our results from the two-dimensional case to $n$ dimensions.
+We have $n$ correlated, Gau\ss{}ian distributed \acp{rv} $\vec{x}^t \coloneqq(x_1,\dots,x_n)$. with means $\vec{\mu}^t\coloneqq (\mu_1,\dots,\mu_n)$ and \acp{sd} $\sigma^t \coloneqq (\sigma_1,\dots,\sigma_n)$.
+The Gau\ss{}ian distribution becomes
+\begin{equation}
+f(\vec{x}) = \frac{\eu^{(\vec{x}-\vec{\mu})^tV^{-1}(\vec{x}-\vec{\mu})/2}}{\sqrt{(2\pi)^n\det V}},
+\end{equation}
+where now the covariance $(n\x n)$-matrix is defined as
+\begin{equation}
+V = \Set{E[x_i'x_j']} = \Set{\cov[x_i,x_j]}=
+\begin{pmatrix}
+\sigma_1^2	&\dots 	&\rho_{1n}\sigma_1\sigma_n\\
+			&\ddots		&\vdots \\
+& &\sigma_n^2
+\end{pmatrix}.
+\end{equation}
+this is again a symmetric, positive semi-definite matrix.
+
+
+Now we can define the \emph{correlation} matrix\index{correlation matrix}\index{correlation!matrix}
+\begin{equation}
+\rho\coloneqq 
+\begin{pmatrix}
+1/\sigma_1 & &0\\
+ &\ddots & \\
+0 & &1/\sigma_n
+\end{pmatrix}
+V
+\begin{pmatrix}
+1/\sigma_1 & &0\\
+ &\ddots & \\
+0 & &1/\sigma_n
+\end{pmatrix}
+= \sqrt{\diag (V^{-1}) }\, V \sqrt{\diag (V^{-1})}.
+\end{equation}
+This matrix can be seen as a covariance matrix referred to the standardized variables $x_i/\sigma_i$.
+To see this, let's call $\vec{z} \coloneqq \sqrt{\diag V^{-1}}\,(\vec{x}-\vec{\mu})$ and let's observe that
+\begin{equation}
+\ud\vec{z} = \det(\sqrt{\diag V^{-1} })\ud\vec{x} = \sqrt{(\det V)^{-1}}\ud \vec{x}.
+\end{equation}
+So
+\begin{equation}
+f_z(\vec{z}) = \frac{\eu^{-\transpose{\vec{z}} \rho ^{-1} \vec{z}/2}}{\sqrt{(2\pi)^n}},
+\end{equation}
+where
+\begin{equation}
+\rho =
+\begin{pmatrix}
+1	& 	&\rho_{1n} \\
+	&\ddots{} 	 & \\
+\rho_{1n}	&  &1
+\end{pmatrix}•
+\end{equation}•
+
+
+
+Now define again $\chi^2 \coloneqq\vec{x'}^tV^{-1}\vec{x'}$ so that $f(\vec{x}) = f_0\,\eu^{-\chi^2\!/2}$.
+The equation $\chi^2 = \textup{constant}$ defines hyper-ellipses contours of $f(\vec{x})$ such that $\chi = 1,4,\dots$ corresponds to $\SI{1}{\sigma},\SI{2}{\sigma},\dots$ contours.
+We can use a coordinate transformation to the principal axis of the hyper-ellipsoid, i.e.~diagonalize $V$ and hence $V^{-1}$ and obtain uncorrelated variables.
+
+	\section{Error propagation for $n$-dim.~functions}
+
+We have again $n$ correlated, Gau\ss{}ian distributed \acp{rv} $\vec{x}^t \coloneqq(x_1,\dots,x_n)$. with means $\vec{\mu}^t\coloneqq (\mu_1,\dots,\mu_n)$ and \acp{sd} $\sigma^t \coloneqq (\sigma_1,\dots,\sigma_n)$.
+
+
+We want to evaluate the uncertainty that affect a function $\vec{y}\colon \R^n\to\R^m$ such that $\vec{y}(\vec{x})^t = (y_1(\vec{x}),\dots,y_m(\vec{x}))$.
+The argument is still based on a Taylor expansion of the function $\vec{y}(\vec{x})$ around the mean $\vec{\mu} = E[\vec{x}]$: we just have to consider all the possible derivatives of $y_i$ with respect to $x_j$.
+This is done using the Jacobian matrix of the function
+\begin{equation}
+\vec{y}(\vec{x}) = \vec{y}(\vec{\mu}) + J|_{\vec{\mu}}\vec{x'} + \dots{}
+\quad
+\text{with }
+J\coloneqq
+\begin{pmatrix}
+\pderiv{y_1}{x_1} &\dots &\pderiv{y_1}{x_n}\\
+\vdots &\ddots &\\
+\pderiv{y_m}{x_1} & &\pderiv{y_m}{x_n}\\
+\end{pmatrix}.
+\end{equation}
+If we neglect terms of order $\abs{\vec{x'}}^2$ and higher then $E[\vec{y}(\vec{x})] = \vec{y}(E[\vec{x}])$ since $E[\vec{x'}] = 0$ and $J$ is evaluated in the point $\vec{\mu}$ (hence constant).
+In terms of indexes
+\begin{equation}
+y_i - E[y_i] = \sum_{k=1}^n\pderiv{y_i}{x_k}(x_k - \mu_k).
+\end{equation}
+
+
+We want to know $\cov[y_i,y_j]$ (which includes also $\sigma_{y_k}^2$ when $y_i = y_j \eqqcolon y_k$)
+\begin{equation}
+\begin{aligned}
+\cov[y_i,y_j]
+&= E[(y_i - E[y_i])(y_j - E[y_j])] \\
+&= E\left[ \sum_{k=1}^n\pderiv{y_i}{x_k}(x_k - \mu_k) \sum_{n=1}^n\pderiv{y_j}{x_n}(x_n - \mu_n)\right] \\
+&= \sum_{k=1}^n\sum_{n=1}^n\pderiv{y_i}{x_k}\pderiv{y_j}{x_n} E[(x_k - \mu_k)(x_n - \mu_n)]\\
+&= \sum_{k=1}^n\sum_{n=1}^n\pderiv{y_i}{x_k}\pderiv{y_j}{x_n} \cov[x_k,x_n]\\
+&= (J\rvert_\mu) V_x \transpose{(J\rvert_\mu)}.
+\end{aligned}
+\end{equation}
+
+The $J$ matrix is not squared: in general it's rectangular.
+By doing $V_y = JV_xJ^t$ we switch from an $n\x n$ matrix to an $m\x m$ one.
+
+Caveat:
+\begin{description}
+\item[Truncation of Taylor expansion] leads to a Bias estimate of errors: non linearity is difficult to handle.
+The extent of the bias depends on the nature of the function.
+Typically one can use a Monte Carlo simulation (or other uncertainty-propagation methods) to estimate errors for highly non-linear functions.
+\end{description}
+
+Anyway, the first thing we should pay attention is correlation before minding non-linear correlations.
+
+	\section{Statistical and systematic uncertainties}
+
+Till now we had the assumption that repeated measurements under the same conditions give identical and independent results.
+In the ``real word'' repeated measurement lead to slightly different results which vary randomly.
+This is due to slightly changing in experimental initial condition (in most of the cases, you don't know them).
+Moreover, imprecise measurement can be due to resolution issues.
+
+
+From the \ac{clt} we know that the statistical uncertainty decreases with the number of experiments as $1/\sqrt{n}$ so the precision increases with $n$.
+
+
+Systematic uncertainties are uncertainties in estimating systematic effects or caused by neglecting them: they are \emph{not} the systematic effects themselves!
+
+
+Example: Systematic uncertainty are mostly given by
+
+\begin{itemize}
+	\item
+Calibrations and corrections;
+	\item
+Detector efficiency and resolution are estimated by Monte Carlo simulations so you have to know how much you have to trust the model in your simulation and anyway you'll always have a statistical uncertainty;
+	\item
+Typically you use histograms and the way you choose binning may influence your results (even if this should not);
+	\item
+Theoretical inputs: particle masses, widths, branching ratios, model functions, parametrization and so on.
+\end{itemize}
+
+These are just examples for \emph{known} source of systematic uncertainties so there should be also some \emph{unknown} (and unsuspected) sources.
+To find the latter you repeat analysis in different form (even the way in which you analyze data can affect your results).
+
+Example:
+\begin{itemize}
+	\item
+Analysis of subsets of data;
+	\item
+Change event selection (this may be used to evaluate the effect of the background noise), fit ranges,\dots{}
+	\item
+change analysis methods and see if you obtain the same results with different parametrization,  fittings\dots
+\end{itemize}
+There is no general recipe: look for impossibilities.
+
+
+
+Typical strategies to estimate systematic uncertainties from sources $s_i$ on a quantity $x$:
+\begin{itemize}
+	\item
+Either you take two extreme assumptions for the value of $s_i$ (this depends on the experiment: i.e.~particle masses).
+Then you assume your true value lies between these values and use a uniform distribution $\sigma_{s_i} = \Delta s_i/\sqrt{12}$.
+	\item
+Or you take several (many) assumptions for $s_i$ and repeat the calculations of $x$ then you evaluate $\sigma_x$ from the spread of the $x$ values.
+\end{itemize}
+Of course these are not exclusive approaches!
+
+
+
+		\subsection{Combination of uncertainty}
+
+Typically, statistical and systematical uncertainties are independent among each other.
+If it is the case, $x$ can be written as a two-component $x_\sigma + x_s$ where $x_\sigma$ fluctuates with statistical uncertainty and  $x_s$ fluctuates with systematic uncertainty.
+\begin{equation}
+V[x] = V[x_\sigma] + V[x_s] + 2 \cov[x_\sigma,x_s] = \sigma^2 + s^2.
+\end{equation}
+This is valid \emph{only} if $E[x_\sigma x_s] = E[x_\sigma]\,E[x_s]$.
+
+So uncertainties from independent sources add up quadratically and this also holds for different independent sources of systematical errors.
+
+	\chapter{Lecture 11}
+
+The general rule is \emph{not} to sum quadratically all systematic uncertainties otherwise one would get a larger error the more experiment performs.
+If you find deviations in systematic studies first try to understand the reason for that, then correct for the effect: including deviations into the systematical error is the last resort!
+Moreover one should add only significant deviations which correspond to independent calls.\footnote{A good reference is \cite{barlow:syst_err}.}
+
+
+The systematical uncertainty is a statement by experimenters about how well they understood their apparatus.
+It will decrease in some cases with more data, e.g.~more precise calibration, but it \emph{cannot} shrink below a minimum uncertainty which is inherent to apparatus or method.
+
+
+Once the systematical uncertainty is greater than the statistical one, acquiring more data \emph{will not} reduce the uncertainty anymore: only a better understanding of the experimental setup can improve the uncertainty.
+When this is not possible, the experiment is over.
+
+
+		\section{Quoting results}
+When you give a certain result, quote  both the systematic and statistical uncertainty separately:
+\begin{equation}
+L = \SI[parse-numbers=false]{1.0 \pm 0.3 (sys) \pm 0.1 (stat)}{\meter}.
+\end{equation}
+The number of significant digits depends on the uncertainty.
+
+
+The prescription of the \ac{pdg} are the following.
+Let's consider the three highest order digit of a measurement $xyz$.
+\begin{itemize}
+	\item
+If $\num{100}\le xyz \le \num{354}$ then round to two significant digits, e.g.~\num{.827 \pm .119} becomes \num{.83 \pm .12};
+	\item
+If $\num{355}\le xyz \le \num{949}$ then retain only one significant digit, e.g.~\num{.827 \pm .367} becomes \num{.8 \pm .4};
+	\item
+If $\num{950}\le xyz \le \num{999}$ then round up to \num{1000} and keep two digits, e.g.~\num{.827 \pm .955} becomes \num{.8 \pm 1.0}.
+\end{itemize}
+
+		\section{Statistical inference}
+
+In the theory of probability, given certain \emph{known} \acp{pdf} one can obtain the probabilities for the outcomes.
+The statistics deals with the inverse problem: given a data set which samples an \emph{unknown} parent \ac{pdf}, one wants to infer the parent \ac{pdf}.
+
+
+Statistics can essentially be divided in two branches:
+\begin{description}
+	\item[Parameter estimation]
+Assume that data follow some parent \ac{pdf} (e.g.~a theoretical model), hence you can estimate its parameter by fitting;
+\Ex{Assume a Gau\ss{}ian \ac{pdf} and estimate mean and width.}
+
+	\item[Hypothesis testing]
+Test whether data are distributed according to some parent \ac{pdf}, i.e.~in this case a theoretical model can be considered the hypothesis under test.
+ \Ex{Accept of reject the hypothesis that data are Gau\ss{}ian distributed, or that an event is a signal (it may be a background noise).}
+\end{description}
+These branches are connected:
+parameter estimation makes no sense without hypothesis on parent \ac{pdf} and often acceptance or rejection of an hypothesis on a parent \ac{pdf} requires a parameter estimation.
+
+
+Sometimes ``statistics'' is referred to any function of data, namely a function of \acp{rv}, so statistic itself \emph{is} a \ac{rv} and follows a sampling \ac{pdf}.
+As an example, we know from the \ac{clt} that the sampling \ac{pdf} of the sample mean is Gau\ss{}ian.
+
+	\section{Parameter estimation}
+
+The goal is to estimate the value of a parameter $\theta$ of a parent \ac{pdf} (i.e.~a theoretical model).
+The procedure will give a result in the form $\theta = \hat\theta \pm \sigma_\theta$ where $\hat\theta$ is the best estimate\index{best estimate} and $\sigma_\theta$ is the uncertainty.
+
+
+		\subsection{Estimators}
+
+We call \emph{estimators}\index{estimator} a statistics that gives the best estimate of the parameters for the parent \ac{pdf}.
+The general criteria required for estimators that give a parameter estimate $\hat\theta$ for the true value $\theta$ are
+\begin{description}
+	\item[Consistency]
+\begin{equation}
+\lim_{N\to\infty}\hat\theta = \theta
+\end{equation}
+	\item[Unbiasedness]
+\begin{equation}
+E[\hat\theta] = \theta
+\end{equation}•
+	\item[Efficiency]
+\begin{equation}
+V[\hat\theta]
+\end{equation}
+is small;
+	\item[Robustness] Insensitivity to false data or assumptions.
+\end{description}
+
+
+
+Sample $N$ events following the \ac{pdf} $f(x;\theta)$, with $\theta$ unknown.
+Then the estimator $\hat\theta$ gives an estimate for the true value $\theta$: this is a \emph{point estimate}\index{point estimate}.
+The choice of an estimator requires judgment: there is \emph{no} ideal estimator!
+
+	\section{The $\chi^2$-statistics}
+
+We need a measure of the consistence between data and predictions.
+Here we will argue about Gau\ss{}ian-distributed measured values $x_\textup{obs}$ with uncertainty $\sigma$.
+
+
+The theoretical model predicts the \emph{true value} $\mu$.
+We define the \emph{likelihood}\index{likelihood} function
+\begin{equation}
+G(x; \mu, \sigma) = \frac{\eu^{-(x-\mu)^2\!/2\sigma^2} }{\sqrt{2\pi}\,\sigma} \eqqcolon P( \text{data}\mid\text{model}).
+\end{equation}
+This has to be interpreted as a conditional probability that we obtain our data given that the model is correct.
+
+
+Now we check the consistency of $x_\textup{obs}$ with the expected value $\mu$: if the model is correct, what is the probability of observing a result farther away from $\mu$ than $x_\textup{obs}$?
+$P( \,\abs{x - \mu} > \abs{x_\textup{obs}-\mu} \, )$ is a fraction of area under Gau\ss{}ian, e.g.~if $\abs{x_\textup{obs} - \mu} = \sigma$, the probability is about \SI{32}{\percent}.
+We don't care about the sign of the deviation but just about the magnitude.
+
+
+An equivalent formulation can be given defining $\chi^2(x)\coloneqq (x-\mu)^2\!/\sigma^2$ and looking for $P(\chi^2 > \chi^2_\textup{obs})$.
+The $\chi^2$ is the basis of consistency tests!
+
+
+Let's start from a \ac{pdf} in $x$ of the form
+\begin{equation}
+f_x(x;\mu,\sigma) = \frac{\eu^{-(x-\mu)^2\!/2\sigma^2} }{\sqrt{2\pi}\,\sigma}.
+\end{equation}
+Now perform a variable transformation from $x$ to $\chi^2$ using the probability conservation $f_{\chi^2}(\chi^2)\,\abs{\ud(\chi^2)} = f(x) \,\abs{\ud x}$.
+We get
+\begin{equation}
+f_{\chi^2}(\chi^2) %= f_x(x) \abs*{\deriv{}{(\chi^2)}x(\chi^2)}
+= f_x(x(\chi^2)) \abs*{\deriv{\chi^2(x)}{x}}^{-1}
+= \frac{\eu^{-\chi^2\!/2} }{\sqrt{2\pi}\,\sigma} \abs*{\frac{2\sqrt{\chi^2}}{\sigma}}^{-1}.
+\end{equation}
+Actually, this differs from the true result by a factor $2$ coming from taking into account the ranges of $x\in\R$ and $\chi^2 \in\R^+$ so
+\begin{equation}
+f_{\chi^2}(\chi^2) = 2 \frac{\eu^{-\chi^2\!/2} }{2\sqrt{2\pi\,\chi^2}} = \frac{\eu^{-\chi^2\!/2} }{\sqrt{2\pi\,\chi^2}}.
+\end{equation}
+We got an expression for the distribution of the $\chi^2$ \ac{rv}.
+\begin{figure}
+	\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=.9\columnwidth,
+xlabel=$\chi^2$,
+ylabel=$f_{\chi^2}(\chi^2)$]
+	\addplot+[domain={.5:10}] { exp( - .5 * x) / sqrt(2 * pi * x ) }; \addlegendentry{\SI{1}{\acs{dof}}}
+	\addplot+[domain={.5:10}] { .5 * exp( - .5 * x ) }; \addlegendentry{\SI{2}{\acsp{dof}}}
+	\addplot+[domain={.5:10}] { (x^(1.5)) * exp( - .5 * x )/ ( 3 * sqrt( 2 * pi ) ) }; \addlegendentry{\SI{5}{\acsp{dof}}}
+	\addplot+[domain={.5:10}] { (x^(3)) * exp( - .5 * x )/ ( 96 ) }; \addlegendentry{\SI{8}{\acsp{dof}}}
+\end{axis}
+\end{tikzpicture}
+	\caption{The $\chi^2$-distribution plot.}
+	\label{fig:chi2distro}
+\end{figure}
+In figure~\ref{fig:chi2distro} is shown the plot of the $\chi^2$-distribution with only one \ac{dof}.
+In this way
+\begin{equation}
+P(\chi^2 > \chi^2_\textup{obs})
+= 
+\int_{\chi^2_\textup{obs}}^\infty f_{\chi^2}(\chi^2)\ud (\chi^2).
+\end{equation}
+
+
+		\subsection{Generalization to two independent variables}
+
+The joint \ac{pdf} is (no correlation terms appears because \acp{rv} are independent)
+\begin{equation}
+f_x(x_1,x_2) = \frac{1}{2\pi\,\sigma_1\sigma_2}\exp\qp*{
+-\frac{(x_1-\mu_1)^2}{2\sigma_1^2}
+-\frac{(x_2-\mu_2)^2}{2\sigma_2^2}
+}.
+\end{equation}
+Now, define $\chi^2_i(x_i)\coloneqq (x_i-\mu_i)^2\!/\sigma_i^2$ for $i=1,2$ and hence the quantity $\chi^2(x_1,x_2) \coloneqq \chi^2_1(x_1) + \chi^2_2(x_2)$, which is a measure of the distance between the observed values $(x_1^\textup{obs},x_2^\textup{obs})$ and the means $(\mu_1,\mu_2)$.
+Again, the equation $\chi^2 = \text{const.}$~defines contour lines in the $(x_1,x_2)$ planes which correspond to ellipses.
+
+
+If the model is correct, what is the probability of obtaining measure result which corresponds to distances $\chi^2 > \chi^2_\textup{obs}$?
+The answer is the integral of $f(x_1,x_2)$ over the region defined as the set $\Set{(x_1,x_2)\in\R^2|\chi^2 > \chi^2_\textup{obs}}$.
+%\begin{equation}
+%P( \chi^2 > \chi^2_\textup{obs} )  =
+%\int_{\chi^2 > \chi^2_\textup{obs}}  f_{\chi^2}(\chi^2)\ud (\chi^2).
+%\end{equation}•
+
+
+\paragraph{Variables transformation}
+Let's switch to using the $\chi^2$-variables from the $x$-variables using $f_{\chi^2}(\chi^2_1,\chi^2_2) = f_x(x_1,x_2)\,\abs{\det J}$.
+Since each $\chi^2_i$ depends only on $x_i$, the partial derivatives become total derivatives and the Jacobian matrix is diagonal.
+
+
+First let's switch to $(\chi_1,\chi_2)$ so
+\begin{equation}\label{eq:chiIplane}
+f_{\chi_i}(\chi_1,\chi_2) = f_x(x_1,x_2)\,\abs{\det J} = f_x(x_1,x_2)\,\abs*{\deriv{\chi_1}{x_1}\,\deriv{\chi_2}{x_2}}^{-1} = \sigma_1\sigma_2 \frac{\eu^{-\chi^2_1/2 - \chi^2_2/2 }}{2\pi\,\sigma_1\sigma_2}.
+\end{equation}
+This distribution only depends on the radius $\chi^2  = \chi_1^2 + \chi_2^2$ hence $\chi^2 = \text{const.}$~defines circles in the $(\chi_1,\chi_2)$ space.
+
+
+Let's express the~\eqref{eq:chiIplane} into polar coordinates $(\chi,\phi)$.
+Since $\ud\chi_1\ud\chi_2 = \chi\ud\chi\ud\phi$ we have that
+\begin{equation}
+f_\chi(\chi,\phi) = \frac{\chi\,\eu^{-\chi^2\!/2}}{2\pi}.
+\end{equation}
+As we already noticed, this is independent on the angle $\phi$ and therefore the marginalization is quite trivial:
+\begin{equation}
+f_\chi(\chi) = \chi\,\eu^{-\chi^2\!/2}.
+\end{equation}
+
+
+In the last step we switch to $\chi^2$ as \ac{rv} using the fact that $2\chi\ud\chi = \ud(\chi^2)$ so
+\begin{equation}
+f_{\chi^2}(\chi^2) = \frac{1}{2}\,\eu^{-\chi^2\!/2}.
+\end{equation}
+Now we can again evaluate
+\begin{equation}
+P(\chi^2>\chi^2_\textup{obs}) = \int_{\chi^2_\textup{obs}}^\infty f_{\chi^2}(\chi^2)\ud(\chi^2).
+\end{equation}
+
+		\subsection{Generalization to arbitrarily many \acsp{dof}}
+
+Let's consider an array of $n$ independent \acp{rv} $\transpose{\vec{x}}\coloneqq(x_1,\dots,x_n)$.
+\begin{equation}\label{eq:manyChi}
+f_x(\vec{x}) = \prod_{i=1}^n \frac{\eu^{-(x_i-\mu_i)^2\!/2\sigma_i^2}}{\sqrt{2\pi}\,\sigma_i}.
+\end{equation}
+Let's as before define $\chi^2_i(x_i) \coloneqq (x_i-\mu_i)^2\!/\sigma_i^2$ and $\chi^2 \coloneqq \chi^2_1+\dots+\chi^2_n$.
+Now the equation $\chi^2\equiv\text{constant}$ will implicitly define hyper-ellipsoids in a $n$-dimensional euclidean space.
+
+
+Switching to hyper-spherical coordinates the $\chi^2$-distribution~\eqref{eq:manyChi} reads
+\begin{equation}\label{eq:manyChiSphere}
+f_{\chi^2}(\chi^2;n) = \frac{(\chi^2)^{(n-2)/2}\,\eu^{-\chi^2\!/2}}{2^{n/2}\,\Gamma(n/2)},
+\end{equation}
+where the number of independent \acp{dof} is indicated as a function parameter.
+
+
+Now, for any value of $n$, the $\chi^2$ can be evaluated just by integrating over the upper tail distribution
+\begin{equation}
+P(\chi^2>\chi^2_\textup{obs}) = \int_{\chi^2_\textup{obs}}^\infty f_{\chi^2}(\chi^2;n)\ud(\chi^2).
+\end{equation}
+
+\paragraph{Properties}
+\begin{itemize}
+	\item
+$E[\chi^2] = n$ i.e.~on average each data point (namely a \ac{dof}) contributes with one unit of $\chi^2$
+	\item
+$V[\chi^2] = 2n$
+	\item
+For large enough $n$, typically $n\gtrsim \num{40}$, the distribution $f_{\chi^2}$ tends to a Gau\ss{}ian one.
+\end{itemize}
+
+\Ex{%
+Suppose an absolute prediction for a distribution of some \ac{rv} $X$ is given, e.g.~a cross section---neglecting effects like efficiency, resolution, background and so on.
+We measure the number $n_i$ of events which lie in the $i$-th bin of $X$ and compare it with the predicted value $\mu_i$.
+If the prediction is correct, then $n_i$ should follow a Poisson distribution with mean $\mu_i$.
+For large enough $n_i$ the Poisson \ac{pdf} is well-approximated by a Gau\ss{}ian one with mean $\mu_i$ and variance $\mu_i$.
+
+Now we can utilize the $\chi^2$ statistic to check for consistency between data and prediction (i.e.~consistency of hypothesis).
+The $\chi^2$ reads
+\begin{equation}
+\chi_i^2 =\frac{(x_i -\mu_i)^2}{\mu_i},
+\end{equation}
+where in the denominator the \emph{expected} fluctuation from mean has been used.
+
+Let's consider $n=\num{20}$ and assume that the predicted \ac{pdf} is uniform $f(x)\equiv \num{500}$ for $x\in[0,1]$.
+So now we check the consistency of $n$ Gau\ss{}ian distributed \acp{rv} with the prediction by evaluating
+\begin{equation}
+\chi^2 = \sum_{i=1}^n \chi_i^2.
+\end{equation}
+If the hypothesis is correct, then $\chi^2$ should follow the~\eqref{eq:manyChiSphere} with $E[\chi^2] = \num{20}$ and $\sigma_{\chi^2} = \sqrt{\num{40}} \simeq \num{6.3}$.
+
+{\color{red} Copy plots}
+
+\begin{itemize}
+	\item
+In the first case, we have $\chi^2_\textup{obs} = \num{16.2}$ with $P(\chi^2>\chi^2_\textup{obs}) \simeq \SI{70}{\percent}$: this is perfectly consistent with prediction;
+	\item
+The second case, with $\chi^2_\textup{obs}=\num{41.5}$ and $P(\chi^2>\chi^2_\textup{obs}) = \SI{.3}{\percent}$, is a bit questionable;
+	\item
+In the third case the agreement is ``too good to be real'' since $\chi^2_\textup{obs} = \num{3.3}\ll \num{20}$ and $P(\chi^2>\chi^2_\textup{obs}) = \SI{99.9992}{\percent}$.
+This looks like error bars have been overestimated since data-points fluctuation is too small compared to the uncertainties.
+
+\end{itemize}
+}
+
+	\section{The $\chi^2$-fitting}
+
+The $\chi^2$-fitting, or \ac{ls} method\index{least squares}, is a standard approach to approximate solution of overdetermined systems.
+As its name suggest, the method consists in minimizing the sum of square \emph{residuals}\index{residual} i.e.~the $\chi^2$ function.\footnote{Residuals are defined as the difference between observed values and the one predicted by the model.}
+
+
+This method is particularly useful for fitting of data since it determines the best estimate for parameters of model function.
+Moreover it provides a \ac{gof} criterion.
+
+
+Some assumptions have to be fulfilled:
+\begin{itemize}
+	\item
+The model has to describe data;
+	\item
+Residuals have to be Gau\ss{}ian distributed.
+\end{itemize}
+
+		\subsection{Combining measurements using \acs{ls}}
+
+Let's consider a \ac{rv} $X$ with unknown true value $\mu$ measured $n$ times.
+Thus we are dealing with $n$ independent values $\transpose{\vec{x} } \coloneqq (x_1,\dots,x_n)$ with uncorrelated Gau\ss{}ian uncertainties $\transpose{\vec{\sigma}} \coloneqq (\sigma_1,\dots,\sigma_n)$.
+
+
+The \emph{residuals}\index{residuals} are defined as
+\begin{equation}
+r_i \coloneqq x_i-\mu.
+\end{equation}
+We can weight them according to their uncertainties $\sigma_i$ and then minimize
+\begin{equation}\label{eq:ChiSquareMuDummy}
+\chi^2(\mu) \coloneqq \sum_{i=1}^n \biggl(\frac{x_i - \mu}{\sigma_i}\biggr)^2
+\end{equation}
+with respect to its only argument $\mu$, since the $x_i$ are fixed.
+Let $\hat \mu$ value of $\mu$ that minimizes the expression~\eqref{eq:ChiSquareMuDummy}, namely
+\begin{equation}
+\deriv{}{\mu}\chi^2(\mu)\bigg\rvert_{\hat\mu} = 0 = -2\sum_{i=1}^n \frac{x_i-\hat\mu}{\sigma_i^2}.
+\end{equation}
+So the best estimate for the true value $\mu$ is
+\begin{equation}
+\hat\mu = \frac{\sum_{i=1}^n x_i/\sigma_i^2}{\sum_{j=1}^n 1/\sigma_j^2}
+\end{equation}
+which is a \emph{weighted mean}\index{weighted!mean} i.e.~has the form
+\begin{equation}
+\hat\mu = \sum_{i=1}^n w_ix_i
+\quad
+\text{with \emph{weights}\index{weight} }
+w_i \coloneqq \frac{1/\sigma_i^2}{\sum_{j}1/\sigma_j^2}.
+\end{equation}
+
+\paragraph{Variance of $\hat\mu$ from error propagation}
+
+The best estimate $\hat\mu$ for the true value $\mu$ is itself a \ac{rv} and a function of $\vec{x}$ so
+\begin{equation}
+V_{\hat\mu} = JV_X\transpose{J},
+\end{equation}
+where the Jacobian matrix is just a row matrix $J = \V \hat\mu = (w_1,\dots,w_n)$ and $V_X = \Set{\sigma_i^2\delta_{ij}}$ since the single $x_i$ measures are independent.
+Thus
+\begin{equation}
+V_{\hat\mu} = \sum_{i=1}^n w_i^2\sigma_i^2 = \frac{1}{\sum_j 1/\sigma_j^2}.
+\end{equation}
+\Ex{%
+Two values for a certain mass are measured $(x_1,x_2) = (\num{5.1},\num{6.0})$ with uncertainties $(\sigma_1,\sigma_2) = (\num{.5},\num{.3})$.
+The best estimate for the mean is then $\hat\mu = \num{5.76 +- .26}$.
+}
+
+
+\paragraph{Variance of $\hat\mu$ via Taylor expansion}
+Let's expand $\chi^2(\mu)$ around its minimum $\hat\mu$ using the fact that $\ud\chi^2(\hat\mu)/\!\ud\mu = 0$ and all derivatives with order greater than two vanish:
+\begin{equation}
+\chi^2(\mu) = \chi^2(\hat\mu) +\frac{1}{2} \deriv[2]{}{\mu}\chi^2\bigg\rvert_{\hat\mu}(\mu-\hat\mu)^2.
+\end{equation}\label{eq:chiSquareExpansion}
+Substituting this expression in the joint \ac{pdf}~\eqref{eq:manyChi} one has
+\begin{equation}
+f_{\chi^2} \propto \eu^{-\chi^2_{\textup{min}}/2}\exp\biggl\{ -\frac{1}{2} \biggl[\frac{1}{2} \deriv[2]{}{\mu}\chi^2\bigg\rvert_{\hat\mu}(\mu-\hat\mu)^2\biggr]\biggr\},
+\end{equation}
+which is again a Gau\ss{}ian in $\mu$ with variance
+\begin{equation}
+\sigma^2_{\hat\mu} = \frac{1}{\dfrac{1}{2} \deriv[2]{}{\mu}\chi^2\bigg\rvert_{\hat\mu}} = \frac{1}{\sum_j 1/\sigma_j^2}   = V_{\hat\mu}.
+\end{equation}
+Both approaches are equivalent!
+
+
+Now an important result comes out.
+\begin{figure}
+	\centering
+\begin{tikzpicture}
+\begin{axis}[
+	samples=50,
+ %     title={Test Axis},
+	axis x line=middle,
+	axis y line=middle,
+	xtick={1,2,3},
+	xticklabels={{$\hat\mu-\sigma_{\hat\mu}$},{$\hat\mu$},{$\hat\mu+\sigma_{\hat\mu}$}},
+	ytick={0,1,2},
+	yticklabels={{$0$},{$\chi^2_\textup{min}$},{$\chi^2_\textup{min}$+1}},
+	xlabel={$\mu$},
+	ylabel={$\chi^2(\mu)$},
+%	enlargelimits=.05,
+]
+	\addplot+[
+		%name path global=one,
+		domain={-.1:4.1},%
+		mark=none%
+	] {(x-2)^2 + 1 };
+
+%	\addplot [name path global=two, red, domain={.5:3.5},opacity=.4] {2};
+%	\path [draw,name intersections={of=one and two, by={A,B}}];
+	
+	% to force axis in the origin
+	\addplot [ red, domain={.5:3.5},opacity=.0] {0};
+
+
+%	\addplot [name path global=three, black, domain={0:2}, dashed,opacity=.4] {1};
+%	\path [draw,name intersections={of=one and three, by={C}}];
+
+\end{axis}
+
+% draw projections
+\coordinate (O); % set (O)=(0,0)
+%\foreach \p in {A,B} {
+%	\path[draw=black, dashed] (\p) -- (\p|-O);
+%}
+%	\path[draw=black,dashed,opacity=.4] (C) -- (C|-O);
+
+\end{tikzpicture}
+	\caption{Plot of $\chi^2(\mu)$ with contour line at $\chi^2_\textup{min} + 1$.}
+	\label{fig:chiSquareIntervalStuff}
+
+\end{figure}
+By substituting the expression for the variance on $\hat\mu$ into the expansion~\eqref{eq:chiSquareExpansion} one sees that
+\begin{equation}
+\chi^2(\hat\mu\pm\sigma_{\hat{\mu}} ) = \chi^2(\hat\mu) + \frac{(\hat\mu\pm\sigma_{\hat\mu}-\hat\mu)^2}{\sigma_{\hat\mu}^2} = \chi^2_\textup{min} + 1.
+\end{equation}
+As it's shown in figure~\ref{fig:chiSquareIntervalStuff}, the value of $\mu$ such that $\chi^2(\mu) = \chi^2_{\textup{min}} + 1$ is \emph{always} \SI{1}{\ensuremath{\sigma_{\hat\mu}}} far away from $\hat\mu$.
+
+
+\Ex{%
+Given a set of measures $\Set{x_i\pm\sigma_i}_{i=1}^N$, one has that $\sigma_{\hat\mu} < \sigma_i$ for each $i = \Set{1,\dots,N}$.
+Moreover, if there is one index $j$ such that $\sigma_j \ll \sigma_i$ for each $i\neq j$, then this measure will dominate mean and variance.
+}
+
+	\subsection{Generalization to correlated measurements}
+
+The joint \ac{pdf} for $N$ Gau\ss{}ian-distributed correlated measurements is
+\begin{equation}
+f_x(\vec{x}) = \frac{\eu^{-\transpose{(\vec{x}-\vec{\mu})}V^{-1}(\vec{x}-\vec{\mu})/2}}{\sqrt{(2\pi)^n\det V}}
+\end{equation}
+where $\vec{\mu} = (\mu,\dots,\mu)$.
+We define
+\begin{equation}
+\chi^2(\mu) \coloneqq \transpose{(\vec{x}-\vec{\mu})}V^{-1}(\vec{x}-\vec{\mu})
+\end{equation}
+so now we can impose that the first derivative with respect to $\mu$ vanishes to obtain
+\begin{equation}
+\hat\mu = 
+\frac{\sum_{i,j}(V^{-1})_{ij}x_j}{\sum_{i,j}(V^{-1})_{ij}}.
+\end{equation}
+Again, one can derive the variance from the error propagation or using
+\begin{equation}
+\sigma^2_{\hat\mu} = \frac{1}{\dfrac{1}{2} \deriv[2]{}{\mu}\chi^2\bigg\rvert_{\hat\mu}} = \frac{1}{\sum_{i,j} (V^{-1})_{ij}}   = V_{\hat\mu}.
+\end{equation}
+
+\Th[Gau\ss{}-Markov]{%
+$\hat\mu\pm\sigma_{\hat\mu}$ is a zero-bias estimate with minimum variance.
+}
+
+
+		\section{Fitting function parameters using \acs{ls} method}
+
+Fitting functions parameters is the most important application of the \ac{ls} method.
+To achieve it, a change of notation is needed.
+
+
+A set of $n$ data $\Set{y_i\pm\sigma_i}_{i=1}^n$ is given.
+The goal is to find the best estimate for unknown parameters $\transpose{\vec{\theta}} \coloneqq (\theta_1,\dots,\theta_m)$ of the model function $y = f(x;\vec{\theta})$ that describes data.
+
+
+As an assumption, the $y_i$ are independent, Gau\ss{}ian-distributed \acp{rv} and for every value of $x$, the model function $y=f(x;\vec{\theta})$ predicts the $y$ value.
+
+
+The array of means is given by $\vec{f}(\vec{\theta}) \coloneqq (f(x_1;\vec{\theta}),\dots,f(x_n;\vec{\theta}))$ with uncorrelated uncertainties $\vec{\sigma}\coloneqq (\sigma_1,\dots,\sigma_n)$.
+The values of $\vec{x}\coloneqq (x_1,\dots,x_n)$ which correspond to $\vec{y}$ are assumed to be known exactly.
+
+
+The joint \ac{pdf} for \vec{y} is
+\begin{equation}
+\begin{aligned}
+f_{y}(\vec{y}) &= \prod_{i=1}^n \frac{1}{\sqrt{2\pi}\,\sigma_i}
+\exp\qp[\bigg]{%
+-\frac{1}{2} \tp[\bigg]{%
+\frac{y_i - f(x_i;\vec{\theta})}{\sigma_i}
+}^2
+}\\
+&=
+ \tp[\bigg]{%
+\prod_{i=1}^n
+\frac{1}{\sqrt{2\pi}\,\sigma_i}
+}
+\exp\qp[\bigg]{%
+-\frac{1}{2} \sum_{i=1}^n\chi^2_i(\vec{\theta})
+}.
+\end{aligned}
+\end{equation}
+The best estimate for \vec{\theta} is obtained by minimizing
+\begin{equation}
+\chi^2(\vec{\theta}) \coloneqq\sum_{i=1}^n\chi^2_i(\vec{\theta}).
+\end{equation}
+This will lead to solving $m$ normal equations (recall $m$ is the number of free parameters) of the form
+\begin{equation}\label{eq:NormEqs}
+0 = \pderiv{\chi^2}{\theta_j}\bigg\rvert_{\vec{\theta}=\hat{\vec{\theta}}}
+=
+-2
+\sum_{i=1}^n \frac{y_i - f(x_i;\vec{\theta})}{\sigma_i^2}\,\pderiv{}{\theta_j}f(x_i;\vec{\theta})\bigg\rvert_{\vec{\theta} =\hat{\vec{\theta}}},
+\qquad
+\forall j\in\Set{1,\dots,m}.
+\end{equation}
+
+
+Now we need to specialize: the form of the model function $f(x;\vec{\theta})$ determines the method to work out the solution.
+
+			\paragraph{Linear case}
+The model is linear in the parameters $\theta_i$ i.e.~it has the form
+\begin{equation}
+f(x;\vec{\theta}) = \sum_{i=1}^m \theta_ia_i(x),
+\end{equation}
+where $\Set{a_i(x)}_{i=1}^m$ is a set of linearly independent functions.
+In this case, the normal equations~\eqref{eq:NormEqs} can be solved in a closed form.
+
+
+\Ex{%
+The function $f(x;\vec{\theta}) = \theta_1 +\theta_2x+\theta_3 \sqrt{x} + \theta_4\ln x$ is linear in the parameters whereas $g(x;\vec{\theta}) = \theta_1 + \sin(x+\theta_2)$ is not, even though it looks easier.
+A possible approach for $g$ could be a Taylor expansion at first order in $\theta_2$ provided that there is some reason to assume the parameter is small enough.
+}
+
+			\paragraph{Non-linear case}
+The model function is \emph{not} linear in its parameters $\vec{\theta}$.
+Sometimes it's possible to linearize the function and step back to the previous case but, in general, a solution can be obtained only by numerical methods.
+
+		\subsection{\acs{ls} method for linear model functions}
+
+In what follows, only the linear case will be considered.
+We'll allow correlated measures so that
+\begin{equation}
+f_y (\vec{y}) = \frac{1}{\sqrt{(2\pi)^n\det V}}\exp
+\qp[\bigg]{%
+-\frac{1}{2}\transpose{(\vec{y} - \vec{f}(\vec{\theta}))}V_y^{-1}(\vec{y} - \vec{f}(\vec{\theta}))
+}.
+\end{equation}
+Since $f$ is linear in its parameters, we can define the matrix
+\begin{equation}\label{eq:linearMatDefinition}
+f(x_i;\vec{\theta}) = \sum_{j=1}^m \theta_ja_j(x_i) \eqqcolon (A\vec{\theta})_i,
+\end{equation}
+where $A = \Set{A_{ij}} \coloneqq \Set{a_j(x_i)}$ is an $(n\x m)$-matrix.
+Moreover, from equation~\eqref{eq:linearMatDefinition} one can derive
+\begin{equation}
+A_{ij} = \pderiv{}{\theta_j}f(x;\vec{\theta})\bigg\rvert_{%x=
+x_i}.
+\end{equation}
+The $\chi^2$ now reads
+\begin{equation}\label{eq:ChiSquareFunctionLinear}
+\chi^2(\vec{\theta}) = \transpose{(\vec{y} - A\vec{\theta})}V_y^{-1}(\vec{y} - A\vec{\theta}).
+\end{equation}
+The best estimate for the parameters will be such that
+\begin{equation}
+\V \chi^2\rvert_{\hat{\vec{\theta}}} = 0.
+\end{equation}
+
+
+Recall from the matrix calculus that
+\begin{equation}
+\pderiv{\transpose{\vec{x}}\vec{y}}{\vec{x}} = 
+\pderiv{\transpose{\vec{y}}\vec{x}}{\vec{x}} = \vec{y}
+\end{equation}
+and that for a symmetric matrix
+\begin{equation}
+\pderiv{\transpose{\vec{x}}S\vec{x}}{\vec{x}} = 2S\vec{x}.
+\end{equation}
+In these formulas, neither \vec{y} nor $A$ depend on $\vec{x}$.
+
+
+Hence
+\begin{equation}
+\begin{aligned}
+\chi^2(\vec{\theta})
+&= \transpose{(\vec{y} - A\vec{\theta})}(V_y^{-1}\vec{y} -V_y^{-1}A\vec{\theta}) \\
+&= \transpose{\vec{y}}V_y^{-1}\vec{y} - \transpose{\vec{\theta}}\transpose{A}V_y^{-1}\vec{y}
+-\transpose{\vec{y}}V_y^{-1}A\vec{\theta} + \transpose{\vec{\theta}}\transpose{A} V_y^{-1} A\vec{\theta}
+\end{aligned}
+\end{equation}
+Now we'll use the fact that $V_y^{-1}$ is symmetric so $\transpose{(V_y^{-1})}=V_y^{-1}$ and the properties of the scalar product $\transpose{\vec{y}}V_y^{-1}A\vec{\theta} = \transpose{\vec{\theta}}\transpose{A}V_y^{-1}\vec{y}$.
+So evaluating the derivative with respect to the free parameters
+\begin{equation}
+0 = \V \chi^2(\vec{\theta})\rvert_{\hat{\vec{\theta}}} = -2 \transpose{A}V_y^{-1} \vec{y} + 2 (\transpose{A}V_y^{-1}A)\hat{\vec{\theta}},
+\end{equation}
+where it's worth noting that $\transpose{A}V_y^{-1}A$ is a symmetric $(m\x m)$-matrix.
+From here it's easy to see that, assuming that $\transpose{A}V_y^{-1}A$ is invertible,
+\begin{equation}
+\hat{\vec{\theta}} = (\transpose{A}V_y^{-1}A)^{-1} \transpose{A}V_y^{-1}\vec{y}
+\eqqcolon B\vec{y}
+\end{equation}
+is the best estimator for the function parameters.
+We get that the parameters $\hat{\vec{\theta}}$ are a \emph{linear} function of collected data $\vec{y}$ and $B$ is a $(m\x n)$-matrix.
+
+
+The uncertainties for the parameters can be evaluated using the error propagation $V_{\hat{\theta}} = J V_y\transpose{J}$.
+The components of the Jacobian matrix are
+\begin{equation}
+J_{ij} = \pderiv{\hat{\theta}_i}{y_j} = B_{ij},
+\end{equation}
+thus we have that $J=B$ and
+\begin{equation}
+\begin{aligned}
+V_{\hat{\theta}}
+&= B V_y\transpose{B}\\
+&= (\transpose{A}V_y^{-1}A)^{-1} \transpose{A}V_y^{-1}V_y\transpose{[(\transpose{A}V_y^{-1}A)^{-1} \transpose{A}V_y^{-1}]}\\
+&= (\transpose{A}V_y^{-1}A)^{-1} (\transpose{A}V_y^{-1}A) (\transpose{A}V_y^{-1}A)^{-1} \\
+&= (\transpose{A}V_y^{-1}A)^{-1}.
+\end{aligned}
+\end{equation}
+
+
+From equation~\eqref{eq:ChiSquareFunctionLinear}, where the linearity property of the function $f(x_i;\vec{\theta}) = A \vec{\theta}$ has already been used, one can see that $\chi^2$ is quadratic in the parameters $\vec{\theta}$ so that the second-order expansion
+\begin{equation}
+\chi^2(\vec{\theta}) = 
+\chi^2(\hat{\vec{\theta}}) + \frac{1}{2}\sum_{i,j=1}^m \pderiv{^2\chi^2}{\theta_i\de\theta_j}\bigg\rvert_{\hat{\vec{\theta}}} (\theta_i - \hat\theta_i) (\theta_j - \hat\theta_j)
+\end{equation}
+holds \emph{exactly}.
+Here the first order derivative vanishes in $\hat{\vec{\theta}}$ and derivatives of order greater than two vanish as well.
+Substituting the expansion in the joint \ac{pdf} for $\vec{y}$
+\begin{equation}
+f_y(\vec{y}) \propto \eu^{\transpose{(\vec{\theta} - \hat{\vec{\theta}})} W (\vec{\theta} - \hat{\vec{\theta}})/2},
+\end{equation}
+we see that $W = V_{\hat\theta}^{-1}$ so
+\begin{equation}
+W_{ij} =  \frac{1}{2}\pderiv{^2\chi^2}{\theta_i\de\theta_j}\bigg\rvert_{\hat{\vec{\theta}}} = (V_{\hat\theta}^{-1})_{ij}.
+\end{equation}
+Again the equation $\chi^2(\vec{\theta}) = \chi^2(\hat{\vec{\theta}}) + 1$ implicitly defines a contour which corresponds to intervals $\hat\theta_i \pm \sigma_{\hat{\theta}_i}$, i.e.~to one \ac{sd} deviation departures from the best \ac{ls} estimates.
+In this case, the contours are hyperellipsoids.
+
+
+
+In the non-linear case the $\chi^2(\vec{\theta})$ function can be approximated by a Taylor expansion around its minimum $\chi^2_\textup{min}$ up to the second order.
+This will lead to an approximate value for the uncertainties $V_{\hat\theta}$.
+However in this case the contour lines defined by $\chi^2(\vec{\theta}) = \chi^2_\textup{min} + 1$ will \emph{not} be elliptical anymore.
+
+
+In both cases the volume of the region enclosed in the contour line defined by the equation $\chi^2(\vec{\theta}) = \chi^2_\textup{min} + 1$ reflects the statistical uncertainty of the fitted parameters.
+\begin{table}
+	\centering
+\caption{Probabilities (i.e.~confidence levels) of the \SI{1}{\ensuremath{\sigma}} region for different numbers of parameters $m$.}
+\label{tab:ConfLevelLSestimate}
+\begin{tabular}{>$r<$ S}
+\toprule
+m &{\ensuremath{P} (\si{\percent})}\\
+\midrule
+1 	&68.3\\
+2	&39.4\\
+3	&19.9\\
+\bottomrule
+\end{tabular}
+\end{table}
+As the table~\ref{tab:ConfLevelLSestimate} shows, this volume depends on the number of free parameters $m$.
+
+	\section{\acl{gof}}
+
+In the derivation of the \ac{ls} method we assumed that the model described data.
+Now we are left with the question <<does the model describe data?>>
+Here is clear that \ac{gof} and parameter estimation are indeed \emph{logically separate} things.
+%However the advantage of the \ac{ls} method is that it automatically gives 
+
+		\subsection{\acl{gof} with $\chi^2$}
+
+Let's start by remarking that the $\chi^2$-statistics is a ``number which is calculated from the data'' and it's \emph{different} from the $\chi^2$-\ac{pdf}.
+The $\chi^2$-statistic is a \ac{rv} itself and is, as a function of the parameters,
+\begin{equation}
+\chi^2(\vec{\theta}) = \transpose{(\vec{y} - \vec{f}(\vec{\theta}))}V_y^{-1}(\vec{y} - \vec{f}(\vec{\theta})).
+\end{equation}
+Thus, $\chi^2_\textup{min}$ is a measure for the total  agreement of model with data when:
+\begin{enumerate}[(i)]
+	\item
+The \ac{rv} $Y$ is Gau\ss{}ian-distributed with known variance matrix $V_y$;
+	\item
+The model function $\vec{f}(x;\vec{\theta})$ is linear in the parameters $\vec{\theta}$;
+	\item
+The model actually describes data.
+\end{enumerate}
+Under these conditions $\chi^2_\textup{min}$ is also distributed according to a $\chi^2$-\ac{pdf} with a number of \ac{dof} equal to $n-m\eqqcolon d$.
+Since $E[\chi^2] = d$ we can define the reduced $\chi^2$ as
+\begin{equation}
+\chi^2_\textup{red} \coloneqq \frac{\chi^2_\textup{min}}{d}.
+\end{equation}
+There are again three cases:
+\begin{itemize}
+	\item
+If $\chi^2_\textup{red} \simeq 1$ then everything is as expected and everybody is happy.
+	\item
+If $\chi^2_\textup{red} \ll 1$ then the fit is better than expected.
+In this case there is no evidence against the model function (unless one is in over-fitting regime) but it can be due to overestimated errors or good luck---as a last resort.
+	\item
+If $\chi^2_\textup{red} \gg 1$ then the fit is worse than expected.
+This may depend on several reasons: first of all it could be a reason to doubt about some of the model hypothesis.
+Anyway, it could also be due  to underestimated errors as well as bad measurements.
+As a last resort, again, one could just claim it's bad luck.
+\end{itemize}
+
+
+
+The \emph{significance level}\index{significance level} is given by $P(\chi^2 > \chi^2_\textup{obs})$ e.g.~if $P(\chi^2 > \chi^2_\textup{obs}) = \num{.2}$ it means that, provided that the true function is the model function, after repeating the experiment many times in \SI{20}{\percent} of cases the value of the $\chi^2$ will be greater than $\chi^2_\textup{obs}$.
+A test based on the $P$-value can only reject hypothesis after defining a certain threshold which, in principle, is arbitrary.
+A common choice is to fix this value to \SI{1}{\percent} or \SI{5}{\percent}.
+
+
+
+The $P$-value is heavily based on the knowledge of the matrix $V_y$ therefore underestimated errors or uncorrecr treatment of correlations can cause large $\chi^2$.
+\begin{figure}
+	\centering
+\color{red}
+plot figures
+\caption{Two data sets with different $y_i$ but same $\sigma_i$ are shown. They've got the same weighted mean \num{.38\pm.05} i.e.~the $\chi^2$ parabola is simply shifted with the same curvature.}
+	\label{fig:ChiSquareMindBlow}
+\end{figure}
+It's also worth noting that, as the figure~\ref{fig:ChiSquareMindBlow} shows, a small value for the $\chi^2_\textup{min}$ \emph{does not mean} that the parameters have been estimated with small uncertainties.
+In fact $V_{\hat{\theta}} = (\transpose{A}V_u^{-1}A)^{-1}$, where $A_{ij} = a_j(x_i)$, is \emph{independent} on the measured $y_k$.
+The statistical uncertainties are given by the change of $\chi^2$ when the parameters are moved from the best estimates so they don't depend on $\chi^2_\textup{min}$.
+
+
+The value of the $\sigma_{\hat\theta_i}$ for the estimator $\hat\theta_i$ is a measure of how widely the estimator would spread if the experiment is repeated many times.
+If the model function \emph{does not} describe the data, $\hat\theta_i$ might be significantly different from the true value!
+Therefore a small $\sigma_{\hat\theta_i}$ is not sufficient to infer that the uncertainty on the parameter $\theta_i$ is small.
+
+
+
+The \ac{gof} tells whether data are consistent {\color{red}with having been drown} from specific distribution: it compares the model to all the possible ways a random data might fluctuate.
+On the other hand, the parameter estimation finds which, out of a set of hypothesis, is the most consistent with data.
+
+\begin{figure}
+\color{red}figure
+\end{figure}
+%For instance, in the figure~\ref{fig:ChiSquareDIfferentGoF}
+
+
+As the number $d$ of \acp{dof} grows the \ac{pdf} for $\chi^2_\textup{red}$ becomes closer and closer to a Gau\ss{}ian distribution centered around \num{1}.
+\begin{figure}
+	\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=.9\columnwidth,
+xlabel=$\tilde\chi^2$,
+ylabel=$f_{\tilde\chi^2}(\tilde\chi^2)$,
+samples=100,
+smooth
+]
+	\addplot+[domain={.1:3},mark=none] { exp( - .5 * x) / sqrt(2 * pi * x ) }; \addlegendentry{\SI{1}{\acs{dof}}}
+	\addplot+[domain={0:3},mark=none] { exp( - x ) }; \addlegendentry{\SI{2}{\acsp{dof}}}
+%	\addplot+[domain={0:3}] { 7.4338504839698796 * (x^(1.5)) * exp( - 2.5 * x )) }; \addlegendentry{\SI{5}{\acsp{dof}}}
+	\addplot+[domain={0:3},mark=none] { 130.20833333333 * (x^(4)) * exp( - 5 * x ) }; \addlegendentry{\SI{10}{\acsp{dof}}}
+	\addplot+[domain={0:3},mark=none] { 1.46014285845959 * (10^22) * (x^(49)) * exp( - 50 * x ) }; \addlegendentry{\SI{100}{\acsp{dof}}}
+\end{axis}
+\end{tikzpicture}
+	\caption{The $\tilde\chi^2$-distribution plot with different number of \acp{dof}.}
+	\label{fig:RedChiSquareDistro}
+\end{figure}
+Using the general expression for $f_{\chi^2}(\chi^2;n)$ given in equation~\eqref{eq:manyChiSphere} and the fact that $\ud\tilde\chi^2=\ud(\chi^2\!/n) = (\ud\chi^2)/n$ it's easy to derive the \ac{pdf} for the reduced $\chi^2$
+\begin{equation}
+f_{\tilde\chi^2}(\tilde\chi^2;n) = \biggl(\frac{n\tilde\chi^2}{2}\biggr)^{n/2} \frac{\eu^{-n\tilde\chi^2\!/2}}{\tilde\chi^2\Gamma(n/2)}.
+\end{equation}
+Figure~\ref{fig:RedChiSquareDistro} shows the plot of $f_{\tilde\chi^2}$ for some value of the number of \acp{dof}.
+As $n$ grows, the distribution becomes more and more peaked around \num{1} so the values of $\chi^2\!/n$ which correspond to the same significance level move closer to \num{1} with increasing number of \acp{dof}.
+\begin{equation}\label{eq:ProbChiSquareGeneral}
+%\begin{aligned}
+P(\tilde\chi^2>\tilde\chi^2_\textup{obs}) 
+%= \int_{\tilde\chi^2_\textup{obs}}^\infty f_{\tilde\chi^2}(\tilde\chi^2;n)\ud(\tilde\chi^2)%\\
+=\int_{\tilde\chi^2_\textup{obs}}^\infty \biggl(\frac{n\tilde\chi^2}{2}\biggr)^{n/2} \frac{\eu^{-n\tilde\chi^2\!/2}}{\tilde\chi^2\Gamma(n/2)}\ud(\tilde\chi^2)%\\
+= \int_{n\tilde\chi^2_\textup{obs}/2}^\infty \frac{x^{(n-2)/2}\eu^{-x}\ud x}{\Gamma(n/2)}.
+\end{equation}
+Now we'll assume $n$ is even and greater than or equal to \num{2} so that $n/2-1$ is integer and greater than or equal to \num{0}.
+Under these hypothesis the integral can be written as
+\begin{equation*}
+P(\tilde\chi^2>\tilde\chi^2_\textup{obs})  =
+\abs*{\deriv[n/2-1]{}{\alpha}\int_{x_\textup{obs}}^\infty\frac{\eu^{-\alpha x} \!\ud x}{\Gamma(n/2)}}_{\alpha=1}
+= \frac{1}{\Gamma(n/2)}\abs*{\deriv[n/2-1]{}{\alpha}\frac{\eu^{-\alpha x_\textup{obs}}}{\alpha}}_{\alpha=1},
+\end{equation*}
+where the parameter $\alpha$ is assumed to be positive and $x_\textup{obs} \coloneqq n\tilde \chi^2_\textup{obs}/2$.
+Hence
+\begin{equation*}
+\begin{aligned}
+P(\tilde\chi^2>\tilde\chi^2_\textup{obs})
+&= \frac{1}{\Gamma(n/2)}
+\abs*{\sum_{k=0}^{n/2-1}{n/2-1 \choose k}
+\tp*{\deriv[n/2-(k+1)]{}{\alpha}\eu^{-\alpha x_\textup{obs}}}
+\tp*{\deriv[k]{}{\alpha}\frac{1}{\alpha}}
+}_{\alpha=1}\\
+&= \frac{1}{\Gamma(n/2)}
+\abs*{\sum_{k=0}^{n/2-1}{n/2-1 \choose k}
+%\tp*{\frac{\chi^2_\textup{obs}}{2}}
+x_\textup{obs}^{n/2-(k+1)}\eu^{-\alpha x_\textup{obs}}
+\frac{(-1)^kk!}{\alpha^{k+1}}
+}_{\alpha=1}\\
+&= \frac{1}{\Gamma(n/2)}
+\abs*{\sum_{k=0}^{n/2-1}\frac{(n/2-1)!}{ (n/2 - (k+1))!}
+%\tp*{\frac{\chi^2_\textup{obs}}{2}}
+x_\textup{obs}^{n/2-(k+1)}
+(-1)^k
+}\\
+&=
+\abs*{
+\sum_{k=0}^{n/2-1}\frac{(-1)^kx_\textup{obs}^{n/2-(k+1)}}{(n/2 - (k+1))!}
+%\tp*{\frac{\chi^2_\textup{obs}}{2}}
+}.
+\end{aligned}
+\end{equation*}
+It's convenient to change the index introducing $m\coloneqq n/2-(k+1)$, which will run from $n/2-1$ to $0$.
+The index $m$ can again be renamed after $k$ so, plugging in back the value for $x_\textup{obs}$, we get
+\begin{equation}
+P(\tilde\chi^2>\tilde\chi^2_\textup{obs})
+=
+\abs*{(-1)^{n/2-1}
+\sum_{k=0}^{n/2-1}\frac{(-1)^k}{k!}
+\tp*{\frac{\chi^2_\textup{obs}}{2}}^{k}
+}
+=
+\sum_{k=0}^{n/2-1}\frac{n^k}{k!}
+\tp*{-\frac{\tilde \chi^2_\textup{obs}}{2}}^{k}.
+\end{equation}
+If $\tilde\chi^2_\textup{obs} = 0$ then we recover the proper normalization, i.e.~$P(\tilde\chi^2 > 0) = 1$.
+When $n\to\infty$ (recall that $n$ is even) the result is
+\begin{equation}
+\lim_{n\to\infty}P(\tilde\chi^2>\tilde\chi^2_\textup{obs}) = \eu^{-\chi^2_\textup{obs}/2},
+\end{equation}
+which is no longer a function of $n$.
+
+
+When $n$ is odd, one can again start from the general formula~\eqref{eq:ProbChiSquareGeneral}.
+Defining, as before, $x_\textup{obs} \coloneqq n\tilde\chi^2_\textup{obs}/2$ and writing $m -1/2\coloneqq n/2-1$ such that now $m$ is a natural number and if $n=1$ then $m=0$ one can see that (recall $\Gamma(n/2) = \Gamma(m+1/2)$)
+\begin{equation}
+P(\tilde\chi^2>\tilde\chi^2_\textup{obs}) = \frac{f(m,x_\textup{obs})}{\Gamma(m+1/2)}.
+\end{equation}
+This function is such that $f(m,0) = 1$ and $\lim_{x_\textup{obs}\to\infty}f(m,x_\textup{obs}) = 0$.
+Now we'll find a recursive formula for $f(m,x_\textup{obs})$
+\begin{equation}
+\begin{aligned}
+f(m;x_\textup{obs})
+&=  \int_{x_\textup{obs}}^\infty x^{m-1/2}\eu^{-x}\!\ud x\\
+&= -x^{m-1/2}\eu^{-x}\big\rvert_{x_\textup{obs}}^\infty - \biggl(m-\frac{1}{2}\biggr) \int_{x_\textup{obs}}^\infty x^{(m-1)-1/2}\eu^{-x}\!\ud x\\
+&= x_\textup{obs}^{m-1/2}\eu^{-x_\textup{obs}}- \biggl(m-\frac{1}{2}\biggr) f(m-1,x_\textup{obs}).
+\end{aligned}
+\end{equation}
+Now we note that
+\begin{equation}
+\begin{aligned}
+f(0;x_\textup{obs})
+&=  \int_{x_\textup{obs}}^\infty \frac{\eu^{-x}}{\sqrt{x}}\ud x
+=  \int_{\sqrt{x_\textup{obs}}}^\infty \eu^{-y^2}\!\ud y
+= \frac{1}{2}\biggl(\int_\R - \int_{\sqrt{x_\textup{obs}}}^{\sqrt{x_\textup{obs}}}\biggr) \eu^{-y^2}\!\ud y\\
+&= \frac{\sqrt{\pi}}{2} - \int_0^{\sqrt{x_\textup{obs}}}\eu^{-y^2}\!\ud y
+=  \frac{\sqrt{\pi}}{2}(1-\erf(\sqrt{x_\textup{obs}}))
+\end{aligned}
+\end{equation}
+
+[TODO: finish this]
+
+
+The distribution of $P(\chi^2 > \chi^2_\textup{obs})$ is uniform if the model describes data \emph{and} the errors are distributed according to a Gau\ss{}ian.
+\begin{figure}
+	\centering
+\begin{tikzpicture}
+\begin{axis}[
+xlabel = {$P(\tilde\chi^2>\tilde\chi^2_\textup{obs})$},
+ylabel = {Relative frequency}
+]
+	\addplot+ [mark=none] table {probChiSquareLaplace.dat};\label{curve:laplace}\addlegendentry{Laplace}
+	\addplot+ [mark=none] table {probChiSquareGauss.dat};\addlegendentry{Gau\ss{}}
+%\addplot[domain=0:240] {70.1}
+\end{axis}
+\end{tikzpicture}
+	\caption{Data errors for the blue curve (\ref{curve:laplace}) are distributed according to a Laplacian distribution~\eqref{eq:laplacianDistribution}.}
+	\label{fig:chiSquareProbNonFlat}
+\end{figure}
+In real-life experiments it happens that
+\begin{enumerate}[i.]
+	\item
+Data are a mixture of signal and background processes;
+	\item
+Measures are not distributed according to a Gau\ss{}ian.
+\end{enumerate}
+For these reasons, the $\chi^2$-probability distribution often looks like the one shown in figure~\ref{fig:chiSquareProbNonFlat} with peaks in correspondence of the values \num{0} and \num{1}.
+In the figure the model indeed described data but errors where generated according to a Laplacian distribution
+\begin{equation}\label{eq:laplacianDistribution}
+L(x;\mu,b) \coloneqq \frac{\eu^{-\abs{x-\mu}/b}}{2b}.
+\end{equation}
+
+
+
+In general the $\chi^2$-probability distribution will look like the one plotted in figure~\ref{fig:chiSquareProbNonFlat} where
+\begin{itemize}
+	\item
+The first peak in $P = 0$ corresponds to $\tilde\chi^2\gg1$.
+This may be due to
+	\begin{enumerate}[i)]
+		\item
+Background processes which are not described by the model;
+		\item
+Bad fit (i.e.~not converged, pathological solutions\dots);
+		\item
+Subset with underestimated uncertainties.
+\end{enumerate}
+	\item
+The second peak in $P=1$, corresponding to $\tilde\chi^2\ll1$, may be due to
+	\begin{enumerate}[i)]
+		\item
+Subset with overestimated errors;
+		\item
+Processes where the model function has too many parameters, thus leading the fit process into \emph{over-fitting} regime;
+\end{enumerate}
+\end{itemize}
+
+
+
+Never rely only on $\chi^2_\textup{min}$: always perform a \ac{gof} check ``by eye''.
+\begin{itemize}
+	\item
+The plot of residuals\index{residual} $r_i \coloneqq y_i - f(x_i;\vec{\hat\theta})$ should be consistent with the zero-line;
+	\item
+The plot of pulls\index{pull}
+\begin{equation}
+p_i \coloneqq \frac{y_i - f(x_i;\vec{\hat\theta})}{\sigma_i}
+\end{equation}
+should be distributed according to a standard Gau\ss{}ian $G(x;\mu=0;\sigma = 1)$.
+\end{itemize}
+
+
+
+The $\chi^2$ is not the only \ac{gof} measure:
+\begin{itemize}
+	\item
+Kolmogorov-Smirnov;
+	\item
+Anderson-Darling;
+	\item
+Shapiro-Wilk.
+\end{itemize}
+
+		\section{\acl{ml} method}
+
+Let $X$ be a \ac{rv} which is distributed according to a known \ac{pdf} $f(x;\vec{\theta})$ with $m$ unknown parameters $\vec{\theta} = (\theta_1,\dots,\theta_m)$.
+We want to develop a general method to find the estimator $\hat{\vec{\theta}}$ given a finite data set of $n$ (with $n\ge m$, otherwise the system is undetermined) independent measures $\vec{x}\coloneqq (x_1,\dots,x_n)$.
+
+
+For every measure of $X$, i.e.~for each index $i \in\Set{1,\dots,n}$, the probability for it to lie in the interval $[x_i,x_i+\ud x_i]$, namely the probability of obtaining the value we obtained, is $f(x_i;\vec{\theta})\ud x_i$.
+Since the measures are independent by assumption, the probability for the total data set is
+\begin{equation}
+P_\textup{data}(\vec{\theta})
+= \prod_{i=1}^n f(x_i;\vec{\theta})\ud x_i
+=\biggl(\prod_{i=1}^n f(x_i;\vec{\theta}) \biggr)\biggl(\prod_{j=1}^n \ud x_j\biggr)
+\eqqcolon \lkhd(\vec{x};\vec{\theta})\biggl(\prod_{j=1}^n \ud x_j\biggr).
+\end{equation}
+The function $\lkhd(\vec{x};\vec{\theta})$ is called \emph{likelihood}\index{likelihood} and it has to be interpreted as the conditional probability of obtaining such a data set given that the model is right.
+In this case the \ac{pdf} is known so it is a probability for data given the parameters.
+
+
+Since the measures are fixed, the likelihood function is only a function of the \ac{pdf} unknown parameters.
+If $f(x;\vec{\theta})$ is the correct model function and also the parameters are correct then we expect both $P_\textup{data}(\vec{\theta})$ and $\lkhd(\vec{x};\vec{\theta})$ to be \emph{large}.
+Vice versa, if the function does not describe data and/or the parameters are far away from the true value then of $P_\textup{data}(\vec{\theta})$ and $\lkhd(\vec{x};\vec{\theta})$ are small.
+
+
+
+\paragraph{\acl{ml} principle}
+The best estimate of the parameters \vec{\theta} is given by the vector \vec{\hat\theta} which \emph{maximizes} the likelihood function, i.e.~which gives the maximum probability to obtain observed data.
+
+
+Now we're just left with the problem of solving $m$ equations
+\begin{equation}
+\V\lkhd(\vec{\theta})\big\lvert_{\vec{\theta} = \vec{\hat\theta}} = 0.
+\end{equation}
+Given that the function $\V\lkhd(\vec{\theta})$ exists, the maximum should not be located at parameters range bounds.
+If more than one local maximum exists, then the highest should be selected.
+
+
+
+
+Here it comes a word of warning: the likelihood function $\lkhd(\vec{x};\vec{\theta})$ is \emph{not} the \ac{pdf} for the parameters \vec{\theta}.
+In fact $\lkhd$ is a function of data thus a \ac{rv} itself and, as we already said, for a given fixed data set $\vec{x}$ it's a function of the only parameter vector $\vec{\theta}$.
+
+
+
+Now the \ac{ml} estimation is simply a Bayesian estimation with a \emph{flat} prior and dropping the normalization
+\begin{equation}
+P(\vec{\theta}\mid\text{data}) = \frac{P(\textup{data}\mid\vec{\theta})\,P(\vec{\theta})}{\int P(\text{data}\mid t)\,P(\vec{t})\ud \vec{t}}
+\end{equation}
+The prior $P(\vec{t})$ does not depend on its argument since it's flat, i.e.~constant, so the posterior value will be
+\begin{equation}
+P(\vec{\theta}\mid\text{data})  = \frac{P_\textup{data}(\vec{\theta})}{\int P_\textup{data}(\vec{t})\ud \vec{t}}.
+\end{equation}
+The denominator is just a normalization and it's constant as well so we are lead to the result
+\begin{equation}
+P(\vec{\theta}\mid\text{data})\propto P_\textup{data}(\vec{\theta}) \propto \lkhd(\vec{x};\vec{\theta}).
+\end{equation}
+The \ac{ml} estimate \vec{\hat\theta} corresponds to the case where observed data are the most likely measurement hence \vec{\hat\theta} is \emph{not} the most probable among all values of \vec{\theta}.
+
+
+Since numerical algorithms usually are only capable of searching for minimums, they'll try to minimize $-\lkhd$.
+
+
+{\color{red}
+Usually the values of $\lkhd$ are very small and so is the probability of obtaining exactly the observed data set.
+}
+There are a number of advantages in considering $\ln\lkhd$ instead of $\lkhd$ itself:
+\begin{enumerate}
+	\item
+First of all, since the logarithm is a monotone increasing function, if \vec{\hat\theta} maximizes $\lkhd$ it also maximizes $\ln\lkhd$;
+	\item
+The logarithm converts products in sums and exponential functions are converted in simple factors.
+\end{enumerate}
+Thus we'll use the \emph{log-likelihood}\index{log-likelihood}
+\begin{equation}
+\ln \lkhd(\vec{x};\vec{\theta}) = \sum_{i=1}^n \ln f(x_i;\vec{\theta})
+\end{equation}
+and search for its maximum.
+
+\Ex{%
+For an exponential decay of particles
+\begin{equation}
+f(t;\tau) = \frac{\eu^{-t/\tau}}{\tau},
+\end{equation}
+given a set $\Set{t_i}$ of $n$ measures of proper time
+\begin{equation}
+0
+= \deriv{}{\tau}\ln \lkhd(\vec{t};\tau)\bigg\rvert_{\hat\tau}
+= -\sum_{i=1}^n \deriv{}{\tau}\biggr(\ln \tau - \frac{t_i}{\tau}\biggr)_{\hat\tau}
+= \frac{1}{\hat\tau^2}\sum_{i=1}^n t_i-\frac{n}{\hat\tau} 
+.
+\end{equation}
+So we get an unbiased \ac{ml} estimator
+\begin{equation}
+\hat\tau = \frac{1}{n}\sum_{i=1}^n t_i.
+\end{equation}
+What happens if we consider $\lambda\coloneqq1/\tau$ instead of $\tau$ itself?
+We can think to $\lambda$ as a function of $\tau$ and apply the chain rule
+\begin{equation}
+0=
+\deriv{}{\tau} \lkhd(\lambda(\tau))\bigg\rvert_{\hat\tau}
+= \deriv{\lambda}{\tau}\bigg\rvert_{\hat\tau}\deriv{\lkhd(\lambda)}{\lambda}\bigg\rvert_{\hat\lambda}
+\end{equation}
+where $\hat\lambda \coloneqq \lambda(\hat\tau)$.
+It's clear that if the derivative of the function $\lambda$ does not vanish in $\hat\tau$ then
+\begin{equation}
+\deriv{}{\tau} \lkhd(\lambda(\tau))\bigg\rvert_{\hat\tau} = 0
+\quad\text{if and only if}\quad
+\deriv{\lkhd(\lambda)}{\lambda}\bigg\rvert_{\hat\lambda}=0.
+\end{equation}
+Thus
+\begin{equation}
+\hat\lambda = \lambda(\hat\tau) = \frac{1}{\hat\tau} = \frac{n}{\sum_i t_i} \neq \frac{1}{n}\sum_i \lambda(t_i).
+\end{equation}
+A word of warning: if $\hat\tau$ is unbiased one cannot infer that $\hat\lambda$ is unbiased as well.
+In this case, for example,
+\begin{equation}
+E[\hat\lambda] = \frac{n}{n-1}\frac{1}{\tau_\textup{true}},
+\end{equation}
+where $\tau_\textup{true}$ is the true value of the parameter $\tau$.
+We see that the estimator $\hat\lambda$ is unbiased only when $n\to\infty$ even though $\hat\tau$ is unbiased for any value of $n$.
+}
+
+	\section{Extended \acs{ml}}
+
+Often the number $n$ of events is itself a \ac{rv} distributed according to a Poisson distribution with mean $\nu$.
+In such cases, the experiment results in a measure of both $n$ and the data set $\vec{x}$.
+\Ex{%
+In \ac{hep} $n$ is related to the total cross-section of the process by $\nu = \sigma_\textup{tot}L\epsilon$ where $L$ is the \emph{luminosity} and $\epsilon$ the efficiency.
+The differential cross-section is related to the distribution of kinetic variables $X$, i.e.~to the data set $\vec{x}$.
+}
+
+
+We define the \emph{extended likelihood function}\index{extended likelihood}\index{likelihood!extended} as
+\begin{equation}
+\lkhd(\vec{\theta},\nu;\vec{x},n) \coloneqq \frac{\nu^n\eu^{-\nu}}{n!}\prod_{i=1}^n f(x_i;\vec{\theta}).
+\end{equation}
+It is just a ``normal'' likelihood function with a Poisson pre-factor which accounts for the probability of finding $n$ events given an expected rate of $\nu$.
+
+
+If $\nu$ does not depend on the parameters set $\vec{\theta}$ then
+\begin{equation}
+0 = \pderiv{}{\nu}\ln\lkhd\bigg\rvert_{\hat\nu} = \frac{n}{\hat\nu}-1
+\end{equation}
+so $\hat\nu = n$ and the derivatives with respects to the parameters $\theta_i$ give the same estimators as the usual \ac{ml} method.
+The situation remains essentially unchanged and quantities which depend on both $\nu$ and $\vec{\theta}$ will inherit some of their uncertainty from $\nu$.
+
+
+
+If $\nu$ is a function of the rest of parameters $\vec{\theta}$ then
+\begin{equation}
+\ln\lkhd(\vec{\theta}; \vec{x}, n) = n \ln \nu(\vec{\theta}) - \nu (\vec{\theta})+
+\sum_{i=1} ^ n \ln f(x_i; \vec{\theta}) + \textup{constant}.
+\end{equation}
+In this expression, terms which are independent on $\vec{\theta}$ have been dropped since they don't contribute in the derivatives.
+In this case, the inclusion of the Poisson term in the likelihood function is not trivial since the estimator \vec{\hat\theta} will now exploit information both from $n$ and $\vec{x}$.
+A smaller variance, compared to the ordinary \ac{ml} method, will affect the estimator $\vec{\hat\theta}$.
+
+
+	\section{Uncertainty for the \acs{ml} estimators}
+
+There are several ways to obtain the uncertainty which affects the \ac{ml} estimators:
+\begin{enumerate}[i.]
+	\item
+We may calculate the variance of the estimator directly but we would obtain a closed form only for very simple cases;
+	\item
+A general numerical method is a Monte Carlo simulation, which is applicable also in very difficult cases.
+It consists in simulating a huge number of experiments and get the variance from the distribution of \ac{ml} estimates;
+	\item
+Derivation using Rao-Cramér-Fréchet inequality and the Fisher information for unbiased estimators \vec{\hat\theta} thus leading to
+\begin{equation}
+\frac{1}{\hat{\sigma}^2_{\hat{\theta}_i}} = -\pderiv[2]{}{\theta_i}\ln\lkhd\bigg\rvert_{\vec{\hat\theta}}
+\end{equation}
+or, more generally
+\begin{equation}
+(\hat V^{-1})_{ij} = - \pderiv{^2\!\ln\lkhd}{\theta_i\!\de\theta_j}\bigg\rvert_{\vec{\hat\theta}}.
+\end{equation}
+	\item
+A graphical method is possible for a single parameter $\theta$.
+First, let's consider a Taylor expansion of $-\ln\lkhd(\theta)$ around its minimum $\hat\theta$
+\begin{equation}
+\mathcal{F}(\theta) \coloneqq -\ln \lkhd(\theta)
+= \mathcal{F}(\hat\theta) + \frac{1}{2}\deriv[2]{\mathcal{F}}{\theta}\bigg\rvert_{\hat\theta}(\theta-\hat\theta)^2 
++ \mathcal{O}(\theta-\hat\theta)^3.
+\end{equation}
+Now we can exponentiate the expression and get a Gau\ss{}ian approximation for the likelihood function
+\begin{equation}\label{eq:GaussLikApprox}
+\lkhd(\theta) \simeq \eu^{-\mathcal{F}(\hat\theta)}\eu^{-\mathcal{F}^{\prime\prime}\mid_{\hat\theta} (\theta-\hat\theta)^2\!/2}
+\propto \eu^{-(\theta-\hat\theta)^2\!/2\sigma_{\hat\theta}^2}
+\end{equation}
+where the first factor is just a constant and can be dropped and $\sigma^2_{\hat\theta}\coloneqq (1/\mathcal{F}^{\prime\prime})_{\hat\theta}$.
+If we truncate the Taylor expansion to the second order, the likelihood function becomes approximately a Gau\ss{}ian and the function $\mathcal{F}$ is approximately a parabola with vertex in $(\hat\theta,\mathcal{F}(\hat\theta))$.
+%Since we dropped the first term in the expression~\eqref{eq:GaussLikApprox} then we can assume the vertex to be in $(\hat\theta,0)$.
+
+
+{\color{red}
+%We can see that in this approximation, the $[\hat\theta - n\sigma_{\hat\theta},\hat\theta + n\sigma_{\hat\theta}]$
+In this approximation
+\begin{equation}
+\mathcal{F}(\hat\theta \pm n\sigma^2_{\hat\theta}) \simeq \mathcal{F}(\hat\theta) + \frac{n^2}{2}.
+\end{equation}
+so the $[\hat\theta - n\sigma_{\hat\theta},\hat\theta + n\sigma_{\hat\theta}]$ intervals are approximately matching with the contour levels $\mathcal{F}(\hat\theta) + n^2\!/2$.
+Since higher order terms in $\theta-\hat\theta$ have been neglected, the more $n$ increases the worse the correspondence will grow.
+}
+
+
+For small values of $n$, the function $\ln\lkhd$ is usually asymmetric so the contour level $-\ln\lkhd + 1/2$ gives asymmetric errors $\sigma_{\pm}$.
+In general this interval doesn't even correspond to the \SI{68}{\percent} confidence level for the estimated value~\cite{Cowan}.
+
+
+The extension of this method to an array of $m$ free parameters is straightforward using the $\chi^2$.
+\end{enumerate}
+
+	\section{\acs{ml} method and \ac{gof}}
+
+The \ac{ml} method does not provide any \ac{gof} measure: $\lkhd_\textup{max}$ is not a \ac{gof} measure.
+There are several approaches such, for example, the Monte Carlo one.
+
+It consists in simulating a huge number of experiments and taking the \ac{ml} estimate from real data as ``true'' value.
+Thus a \ac{pdf} for $\lkhd_\textup{max}$ is obtained and $P(\lkhd_\textup{max} < \lkhd_\textup{max}^\textup{obs})$ can be evaluated, i.e.~a measure of the probability to get deviations worse than the ones observed if the experiment is repeated many times is given.
+
+This method is similar to the $P$-value for the $\chi^2$-distribution.
+
+\begin{figure}
+\begin{tikzpicture}
+\begin{axis}
+%% DOESN'T WORK!!
+
+%	\addplot+[name path=A,domain=0:4] { x*x * exp( - .5 * x * x)} ;
+
+%	\addplot [name path=A] {2 * x};
+%	\addplot [name path=B] {x};
+%	\addplot [gray] fill between [of=A and B];
+	
+%	\path[name path=B] (1,0) -- (2,0);
+%	\addplot fill between [of={A and B}];
+%(\pgfkeysvalueof{/pgfplots/xmin},0) -- (\pgfkeysvalueof{/pgfplots/xmax},0);
+
+%	\addplot[orange] fill between [of=A and B, soft clip={domain=3:5}];
+\end{axis}
+\end{tikzpicture}
+\end{figure}•
+
+
+
+	\cleardoublepage
+	\nocite{*}
+	\phantomsection
+	\addcontentsline{toc}{chapter}{\bibname}
+	\printbibliography
+
+	\cleardoublepage
+	\printindex
+\end{document}
+
