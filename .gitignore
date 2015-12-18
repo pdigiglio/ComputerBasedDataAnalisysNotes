@@ -1,0 +1,18 @@
+# Ignore LaTeX output files
+*.log
+*.out
+*.aux
+*.fls
+*.ind
+*.idx
+*.ilg
+*.fdb_latexmk
+*.pdf
+*.dvi
+*.toc
+*.bbl
+*.blg
+*.bcf
+*.acn
+*.ist
+*.run.xml
