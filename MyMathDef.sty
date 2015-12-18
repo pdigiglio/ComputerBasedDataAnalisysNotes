@@ -1,0 +1,149 @@
+% MyMathDef.sty/
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{MyMathDef}[19/09/2011 v0.1 Alcune definizioni matematiche]
+
+\usepackage{amsmath,amscd,amssymb} % commenta "amscd,amssymb" se vuoi usare garamond
+\usepackage{mathrsfs, amsthm} % per il comando \mathscr{}
+\usepackage{mathtools, bm} 		% bold math, per il neretto matematico: comando \bm
+\usepackage{cancel} % per le semplificazioni
+
+%\usepackage{bbm}
+\usepackage{braket, array, xfrac}%, breqn}
+%\usepackage{mathabx}	%doppio integrale chiuso
+%\usepackage{kmath}
+\usepackage[version = 3]{mhchem}
+
+% ######################################
+%
+% Colonne per la matematica
+%
+% ######################################
+\newcolumntype{L}{>{$}l<{$}}
+\newcolumntype{C}{>{$}c<{$}}
+\newcolumntype{R}{>{$}r<{$}}
+% ######################################
+%
+% Richiede i seguenti pacchetti:
+%
+% amsmath, amssymb, amsthm (per le definizioni di teoremi)
+% mathtools, bm (bold math, per il neretto matematico: comando \bm)
+% ######################################
+
+% definisco la funzione \abs{}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+% definisco la funzione \norma{}
+\DeclarePairedDelimiter{\norma}{\lVert}{\rVert}
+% norma operatoriale
+\newcommand{\nop}[1]{%
+\ensuremath{%
+\left\vert\mkern-1mu\left\vert\mkern-1mu\left\vert #1\right\vert\mkern-1mu\right\vert\mkern-1mu\right\vert%
+}%
+} 
+
+% Per evidenziare le formule
+\definecolor{mycolor}{rgb}{.9, .9, 1}
+\newcommand*\mygraybox[1]{\colorbox{mycolor}{#1}}
+\usepackage{empheq}
+\empheqset{box=\mygraybox}
+
+\DeclarePairedDelimiter{\tp}{(}{)}
+\DeclarePairedDelimiter{\qp}{[}{]}
+\DeclarePairedDelimiter{\gp}{\{}{\}}
+\DeclarePairedDelimiter{\Angle}{\langle}{\rangle}
+
+% Algebra
+\DeclareMathOperator{\Span}{Span}
+\DeclareMathOperator{\Spam}{Spam}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\diag}{diag}
+% matrice trasposta
+%\newcommand{\ltrans}[1]{{\vphantom{#1}}^{\textup{t}}{#1}}
+
+%operatori differenziali
+\newcommand{\V}{\mathop{}\!\nabla}
+\newcommand{\lap}{\ensuremath{\V^2}}
+
+\newcommand{\grad}{\V}
+\newcommand{\rot}{\V\x}
+\newcommand{\di}{\V\cdot}
+
+% operatori differenziali in lettere
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\DeclareMathOperator{\Di}{div}
+
+% dalembertiano
+\newcommand{\dal}{\ensuremath{\mathop{}\!\Box}}
+
+% insiemi numerici
+\newcommand{\numberset}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\N}{\numberset{N}}
+\newcommand{\Z}{\numberset{Z}}
+\newcommand{\Q}{\numberset{Q}}
+\newcommand{\R}{\numberset{R}}
+\newcommand{\I}{\numberset{I}}
+\newcommand{\E}{\numberset{E}}
+
+\newcommand{\Co}{\numberset{C}}
+\newcommand{\C}[2][]{\ensuremath{\mathcal{C}^{#1}(#2)}}
+
+% funzione indicatrice
+\newcommand{\1}{\ensuremath{\mathbbm{1}}}
+
+% scorciatoie
+\newcommand{\seq}{\ensuremath{\subseteq}}		% incluso uguale
+\newcommand{\s}{\ensuremath{\subset}}			% incluso
+\newcommand{\sneq}{\ensuremath{\subsetneq}}		% incluso non uguale
+\newcommand{\sm}{\ensuremath{\setminus}}			% sottrazione tra insiemi
+\newcommand{\0}{\ensuremath{\varnothing}}		% insieme vuoto
+%\newcommand{\de}{\ensuremath{\partial}}
+\newcommand{\ci}{\ensuremath{\circ}}				% "composto"
+\newcommand{\x}{\ensuremath{\times}}
+% definisco la "d" di differenziale
+\newcommand{\ud}{\mathop{}\!\mathrm{d}}
+\newcommand{\de}{\mathop{}\!\mathrm{\partial}}
+\newcommand{\uD}{\mathop{}\!\Delta}
+
+\renewcommand{\vec}[1]{\ensuremath{\bm{{#1}}}}					% stile per il vettore/punto n-dimensionale
+\newcommand{\ver}[1]{\ensuremath{\mathbf{{\tilde{#1}}}}}
+
+\newcommand{\tc}{\ensuremath{\colon}}			% tale che ":"
+
+% definizione di stili
+\theoremstyle{definition}
+\newtheorem{dne}{Definizione}[chapter]
+\newcommand{\Dne}[2][]{\begin{dne}[#1]#2\end{dne}}
+
+\theoremstyle{plain}
+\newtheorem{teor}{Teorema}[chapter]
+\newcommand{\Th}[2][]{\begin{teor}[#1]#2\end{teor}}
+\newtheorem{thesis}{Tesi}[chapter]
+\newtheorem*{thesis*}{Tesi} % with no numbers
+\newtheorem{lemma}[teor]{Lemma}
+\newcommand{\Lemma}[2][]{\begin{lemma}[#1]#2\end{lemma}}
+\newtheorem{cor}[teor]{Corollario}
+\newcommand{\Cor}[2][]{\begin{cor}[#1]#2\end{cor}}
+\newtheorem{prin}{Principio}[chapter]
+\newcommand{\Princ}[2][]{\begin{prin}[#1]#2\end{prin}}
+\newtheorem{prop}{Proposizione}[chapter]
+\newcommand{\Prop}[2][]{\begin{prop}[#1]#2\end{prop}}
+\newtheorem{leg}{Legge}[chapter]
+\newcommand{\Legge}[2][]{\begin{leg}[#1]#2\end{leg}}
+\newtheorem{hp}{Ipotesi}[chapter]
+\newtheorem{regola}{Regola}[chapter]
+
+\theoremstyle{remark}
+\newtheorem{oss}{Osservazione}[chapter]
+\newcommand{\Oss}[2][]{\begin{oss}[#1]#2\end{oss}}
+\newtheorem{nne}{Notazione}[chapter]
+\newcommand{\Nne}[2][]{\begin{nne}[#1]#2\end{nne}}
+\newtheorem{nota}{Nota}[chapter]
+\newcommand{\Nota}[2][]{\begin{nota}[#1]#2\end{nota}}
+\newtheorem{ex}{Example}[chapter]
+\newcommand{\Ex}[2][]{\begin{ex}[#1]#2\end{ex}}
+\newtheorem{esercizio}{\underline{Esercizio}}[chapter]
+\newcommand{\Es}[2][]{\begin{esercizio}[#1]\textit{#2}\end{esercizio}}
+
+\newcommand{\Dim}[2][Dimostrazione]{\begin{proof}[#1]#2\end{proof}}
