@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+\begin{axis}[
+	smooth,%
+	xlabel=$x$,
+	ylabel=$f(x)$
+]
+	\addplot+ [mark=none,domain={-6:10}] { ( exp(-x*x/2)/sqrt(2 * pi) + .5 * exp(-(x-4)*(x-4)/2)/sqrt(2 * pi) ) / 1.5 };
+\end{axis}
+\end{tikzpicture}

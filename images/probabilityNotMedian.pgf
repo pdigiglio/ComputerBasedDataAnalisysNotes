@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+\begin{axis}[
+	xlabel = $x$,
+	ylabel = $f_X(x)$
+]
+\addplot+ [mark = none] gnuplot [raw gnuplot] {
+set samples 200;
+max ( x, y ) = x > y ? x : y;
+g( x, k ) = max( 0, - abs( 2 * x + k * 4) + 1 );
+f(x) = ( x > 0 ) ? g( x, -1 ) : g( x, 1 );
+plot [-3:3] f(x);
+};
+\end{axis}
+\end{tikzpicture}

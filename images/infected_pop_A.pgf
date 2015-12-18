@@ -1,0 +1,45 @@
+\begin{tikzpicture}
+
+\tikzstyle{level 1}=[sibling distance = 30mm]
+\tikzstyle{level 2}=[sibling distance = 13mm]
+
+\begin{scope}[
+	auto=left,
+	every node/.style={
+		ellipse,
+%		draw,
+		inner sep=1.5pt
+	},
+	level distance= 25mm
+]
+	\node (start) {Population $A$}
+		child {
+			node (ph) {\num{.6}}
+				child { node (p-h) {\num{.57}} }
+				child { node (p+h) {\num{.03}} }
+		}
+	child {
+		node (phb) {\num{.4}}
+			child { node (p-hb) {\num{.008}} }
+			child { node (p+hb) {\num{.392}} }
+	};
+\end{scope}
+
+\begin{scope}[
+	color=black!60,%
+	every node/.style={
+		anchor = south,
+		sloped
+	}
+]
+	\path (start) -- node {$P(h)$} (ph);
+	\path (ph) -- node {$P(-\mid h)$} (p-h);
+	\path (ph) -- node [anchor=south] {$P(+\mid h)$} (p+h);
+
+	\path (start) -- node [anchor=south] {$P(\bar{h})$} (phb);
+
+	\path (phb) -- node {$P(-\mid \bar{h})$} (p-hb);
+	\path (phb) -- node [anchor=south] {$P(+\mid \bar{h})$} (p+hb);
+\end{scope}
+
+\end{tikzpicture}

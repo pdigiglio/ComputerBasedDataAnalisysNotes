@@ -1,0 +1,10 @@
+\begin{tikzpicture}
+\begin{axis}[%
+	xlabel=$\theta$,
+	x unit = degree,
+	ylabel=$\sigma_\textup{tot}f(\theta)$,
+	smooth
+]
+\addplot+ [mark=none,domain={0:180}] {3*(1+cos(x)*cos(x))/8};
+\end{axis}
+\end{tikzpicture}

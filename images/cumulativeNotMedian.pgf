@@ -1,0 +1,8 @@
+\begin{tikzpicture}
+\begin{axis}[
+	xlabel = $x$,
+	ylabel = $F_X(x)$
+]
+\addplot+ [mark = none] table [x index=0, y index = 1] {data/cumulativeNotMedian.dat};
+\end{axis}
+\end{tikzpicture}
