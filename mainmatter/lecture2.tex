@@ -1,0 +1,244 @@
+\chapter{Lecture 2}
+\section{What is statistics?}
+
+Statistics can be defined in several ways:
+\begin{itemize}
+	\item
+		The science of learning from or making sense out of data;
+	\item
+		The science of uncertainty;
+	\item
+		The language of experimental sciences.
+\end{itemize}
+The founding work was by Jakob Bernoulli~\cite{bernoulli}.
+
+\subsection{Randomness}
+Many processes have a random nature as, for example, a coin toss.
+Although Classical Physics is in principle capable of predicting the outcome of the toss, the randomness lies in the initial condition which are not known with infinite precision. 
+
+
+Similarly in the classical description of a gas it's impossible to know the initial conditions for all the particles so a statistical description has to be used.
+
+
+In Quantum Mechanics, physical laws are \emph{intrinsically} probabilistic thus the randomness is not only due to our lack of knowledge.
+Both our ``ignorance'' and the intrinsic randomness lead to uncertainty in the measurement.
+What we need is a way to quantify uncertainties using probability concepts.
+
+
+\section{Some basics concepts}
+
+An \emph{outcome}\index{outcome} is one of the possible result of an experiment and it's unique.
+Each trial of an experiment gives exactly one outcome.
+
+
+The \emph{sample space}\index{sample space} is the set of \emph{all} the possible outcomes.
+
+\Ex{
+	We'll now list some sample spaces:
+	\begin{itemize}
+		\item
+			For a coin toss $S=\Set{\text{Head},\text{Tail}}$;
+		\item
+			For a 6-faces rolling dice $S=\Set{\text{digits on upper surface}} = \Set{1,2,\dots,6}$;
+		\item
+			For a calorimeter $S=\Set{\text{energy of measured particle}} = [E_\textup{min}, E_\textup{max}] \s\R$.
+\end{itemize}}
+
+
+An \emph{event}\index{event} is a set of outcomes which satisfies certain conditions and for which the probability is assigned: it's a subset of the sample space $S$.
+An event happened when the outcome of an experiment is an element of the element.
+
+
+\Ex{Let's say that the outcome of rolling a dice is $X=2$, then all the events $\Set{2}$, $\Set{X \text{ even}}$, $\Set{X > 1 }$ and so on happened.}
+
+
+The \emph{event space}\index{event!space} is the set of all the subsets of the sample space.
+For a coin toss, for example $\Sigma = \Set{\0,\Set{\text{H}},\Set{\text{T}}, S}$ where $\0$ is the null set corresponding to the \emph{impossible event}\index{event!impossible} and $S$ is the whole sample space i.e.~the \emph{sure event}\index{event!sure}.
+
+\section{Definition of probability}
+
+Here the Kolmogorov axioms (1933) follow.
+
+Consider an event space $\Sigma$ and two element $A,B\in\Sigma$ with underlying sample space $S$, then
+\begin{enumerate}
+	\item
+		$P(A) \in \R$ and $P(A) \ge 0$ for each $A\in\Sigma$ i.e.~for each $A\seq S$;
+	\item
+		To fix the normalization, the probability of the sure event is $P(S) = 1$;
+	\item
+		If $A$ and $B$ are \emph{disjoint}\index{disjoint events}, namely $A\cap B = \0$, then $P(A\cup B) = P(A) + P(B)$ is the probability for either $A$ \emph{or} $B$ to happen.
+\end{enumerate}
+From these axioms, the probability of an event can be interpreted as its area normalized to the area of the whole sample space
+\begin{equation}\label{eq:interpretationProbabilityArea}
+	P(A) = \frac{\abs{A}}{\abs{S}}.
+\end{equation}
+Moreover it follows that:
+\begin{enumerate}
+	\item
+		Since $S = S\cup\0$ and $S\cap\0 = \0$ we have $P(\0) + P(S) = P(\0)  +1 = 1$ so $P(\0) = 0$; 
+	\item\label{point:two}
+		For each $A\in\Sigma$ the space $S$ can be built up as $S = A \cup \bar{A}$ where $\bar{A}$ is $A$'s complement into $S$ and $ A \cap \bar{A} = \0$ so $P(\bar{A}) = 1 - P(A)$.
+	\item
+		From the point~\ref{point:two}, since every probability is greater or equal to zero, it follows that for each $A\in\Sigma$ we have $0\le P(A) \le 1$;
+	\item
+		If $A \seq B$ then $B = A\cup (B\sm A)$ and $A\cap (B\sm A)=\0$ so $P(A)\le P(A) + P(B\sm A) = P(B)$;
+	\item
+		If $A\cap B \neq \0$ then $A\cup B$ can be written as $A \cup(B\sm A)$.
+		In this way the sets $A$ and $B\sm A$ are disjoint and their union gives $A\cup B$ so
+		\begin{equation}\label{eq:sumProbNotDisjointIntermediate}
+			P(A\cup B) = P(A) + P(B\sm A).
+		\end{equation}
+		Now $B\sm A = B \sm(A\cap B)$ thus $B = (B\sm A) \cup (A\cap B)$ where again $(B\sm A) \cap (A\cap B) = \0$ and 
+		$P(B) = P(B\sm A) + P(A\cap B)$.
+		We can use this last relation and perform a substitution in the~\eqref{eq:sumProbNotDisjointIntermediate} to obtain
+		\begin{equation}
+			P(A\cup B) = P(A) + P(B) - P(A\cap B).
+		\end{equation}
+		Subtracting the probability (i.e.~the area) of $A\cap B$ avoids double-counting the area of the intersection.
+\end{enumerate}
+
+\subsection{Conditional probability}
+\label{sec:condProb}
+
+We call $P(A\mid B)$ the probability for the event $A\in\Sigma$ to happen \emph{given that} another event $B\in\Sigma$ happened.
+This is like constraining the sample space to the event $B$, in fact $P(B\mid B) = 1$ so $B$ now is the sure event
+\begin{equation}\label{eq:cond_prob}
+	P(A\mid B) =\frac{P(A\cap B)}{P(B)}\quad\text{if } B\neq \0
+\end{equation}
+if $B = \0$ then $P(A\mid B) = 0$.
+\begin{figure}
+	\centering
+	\begin{venndiagram2sets}[%
+			labelNotAB={$S$}
+		]
+		\fillACapB
+	\end{venndiagram2sets}
+	\caption{If the probability on $S$ is uniform, the conditional probability~\eqref{eq:cond_prob} is the ratio between the area of the intersection $A\cap B$ and the area of $B$.}
+	\label{fig:cond_prob}
+\end{figure}
+To understand this formula we can refer to figure~\ref{fig:cond_prob}, where all the outcomes of the sample space have the same (uniform) probability, and to the interpretation given by equation~\eqref{eq:interpretationProbabilityArea}.
+The probability of $A \cap B$ is the ratio between the area of the gray set and the whole sample space $S$, which is normalized to \num{1}.
+To restrict the sample space to the event $B$ we must divide by its relative area with respect to $S$, namely $P(B)$.
+
+
+From this it follows that $P(A\mid S) = P(A)$ and $P(A\mid B) \ge P(A\cap B)$.
+
+
+
+
+Two events are said to be \emph{statistically independent} if their joint probability can be written as the product of their single probabilities, namely
+\begin{equation}
+	P(A\cap B) = P(A)\,P(B)
+\end{equation}
+i.e.~if and only if $P(A\mid B) = P(A)$.
+This means that the occurrence of $B$ does not effect the probability of the event $A$ but it \emph{does not} mean the event are disjoint.
+However, if $A$ and $B$ are disjoint events their conditional probability vanishes since $A\cap B = \0$.
+\Ex{%
+	Let us consider $A\coloneqq\Set{6 \text{ in first trial}}$, $B\coloneqq\Set{6 \text{ in second trial}}$ and 
+	$C\coloneqq\Set{\text{sum of first and second trial is }8}$ in rolling twice a dice.
+	Then the events $A$ and $B$ are independent among each other but $A$ and $C$ are not.%
+}
+
+\section{Interpretation of probability}
+
+The previous axiomatic definition of probability gives a mathematical framework but it does not say what these probabilities mean and how to assign them.
+
+\subsection{Frequentist interpretation}
+
+This is an empirical interpretation: the most common.
+Given $N$ identical trials of an experiment, be $N_A$ the number of occurrences of the event $A$, then $P(A)$ is defined in terms of the \emph{relative frequency}\index{relative freq.~of occurrence} of occurrence as
+\begin{equation}\label{eq:freq_prob}
+	P(A)\coloneqq \lim_{N\to\infty}\frac{N_A(N)}{N},
+\end{equation}
+where the dependence of $N_A$ on $N$ has been explicitly indicated.
+In this way, the probability is defined \emph{after} the outcomes for the experiment are known so we can talk about \emph{objective posterior probability}\index{objective posterior probability}.
+
+\subsubsection{Issues}
+
+\begin{itemize}
+	\item
+		The $\lim_{N\to\infty}$ is mathematically not well-defined: in practice only a finite number of experiments can be performed so the question is how fast the sequence~\eqref{eq:freq_prob} converges?
+	\item
+		This procedure does \emph{not} define how to assign probabilities to events which are intrinsically not repeatable.
+		For instance the probability that the Higgs boson exists or that $\SI{510.997}{\kilo\electronvolt\per \ensuremath{c}\squared}\le m_e \le\SI{510.999}{\kilo\electronvolt\per \ensuremath{c}\squared}$ are not known.
+		The probabilities for these events are either \num{1} or \num{0} and they do not depend on  repetition of experiments.
+\end{itemize}
+
+Thus in the frequentist approach probabilities are associated only with data, i.e.~repeatable experiments.
+So in this framework only statements about data can be made and questions like <<how probable is the theory given the data?>> cannot be answered.
+
+\section{Bayes' theorem}
+
+This theorem relates the conditional probabilities $P(A\mid B)$ and $P(B\mid A)$.
+Since $P(A\mid B)\,P(B) = P(A\cap B) = P(B\cap A) = P(B\mid A)\,P(A)$ one gets
+\begin{equation}\label{eq:bayes_theorem}
+	P(A\mid B) = \frac{P(B\mid A)\,P(A)}{P(B)}.
+\end{equation}
+The quantity $P(A)$ is called \emph{prior probability}\index{prior probability}.
+
+\subsection{Law of total probability}
+
+Let's partition the sample space $S$ into pairwise disjoint subset (i.e.~events) $A_i$ such that $\cup_{i=1} A_i = S$ and $A_i\cap A_j = \0$ when $i\neq j$.
+Then, given $B\in\Sigma$ (i.e.~$B\seq S$)
+\begin{equation}
+	\begin{aligned}
+		P(B)
+		&= P(B\cap S) = P(B\cap (\cup_{i=1} A_i) )= P( \cup_{i=1}[B\cap A_i] )\\
+  &=\sum_iP(B\cap A_i) - \sum_{i\neq j} P([B\cap A_i]\cap[B\cap A_j])\\
+  &=\sum_iP(B\cap A_i) - \sum_{i\neq j} P(B\cap [A_i\cap A_j])\\
+  &=\sum_iP(B\cap A_i) - \sum_{i\neq j} P(B\cap \0)\\
+  &=\sum_iP(B\cap A_i) =\sum_iP(B\mid A_i)\,P(A_i).
+	\end{aligned}
+\end{equation}
+So the Bayes' theorem~\eqref{eq:bayes_theorem} can be written as 
+\begin{equation}
+	P(A\mid B) = \frac{P(B\mid A)\,P(A)}{\sum_iP(B\mid A_i)\,P(A_i)}.
+\end{equation}
+With the simplest partition of $S$, which is $S=A\cup\bar A$, the previous formula reads
+\begin{equation}
+	P(A\mid B) = \frac{P(B\mid A)\,P(A)}{P(B\mid A)\,P(A) + P(B\mid \bar A)\,P(\bar A)}.
+\end{equation}
+\Ex{%
+	In rolling a dice
+	\begin{equation}
+		P(3\mid\text{num.~is odd}) = \frac{1/6}{1/2} = \frac{1}{3},
+	\end{equation}
+	while
+	\begin{equation}
+		\begin{aligned}
+			P(\text{odd}\mid 3)
+			&\overset{\text{\eqref{eq:cond_prob}}}{=} \frac{1/6}{1/6} = 1 \\
+   &\overset{\text{\eqref{eq:bayes_theorem}}}{=} \frac{P(3\mid \text{odd})\,P(\text{odd})}{P(3)} = \frac{(1/3)(1/2)}{1/6} = 1.
+		\end{aligned}
+	\end{equation}%
+}
+
+\Ex{%
+	In virology we need a test for some virus and we know that
+	\begin{itemize}
+		\item
+			The false negative rate is \SI{2}{\percent}, i.e.~the specificity is \SI{98}{\percent};
+		\item
+			The false positive rate is \SI{5}{\percent}, i.e.~the sensitivity is \SI{95}{\percent};
+		\item
+			The population $A$ has \num{e4} people and \SI{40}{\percent} of them are infected.
+	\end{itemize}
+	Let's call $h$ the healthy people and $\bar h$ the  infected ones.
+
+	\begin{figure}[]
+		\centering
+		\subfloat[][Population $A$.]{%
+			\input{images/infected_pop_A.pgf}
+		}\qquad
+		\subfloat[][Population $B$.]{%
+			\input{images/infected_pop_B.pgf}
+		}
+		\caption{}
+
+	\end{figure}
+
+
+	(finish example)
+}
+
+

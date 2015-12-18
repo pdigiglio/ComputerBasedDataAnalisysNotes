@@ -1,0 +1,263 @@
+
+\chapter{Lecture 7}
+\section{}
+
+You cannot prove any causal relation between \acp{rv} with a non vanishing correlation coefficient $\rho$.
+Moreover, in general, the value of $\rho$ depends on your sample selection.
+
+If there is a linear correlation in your data and you take a wider range of values you in general get a higher value for $\rho$.
+This may lead to mistakes if you consider a too narrow range.
+
+\section{Some \acsp{pdf}}
+
+Let's start with discrete distributions.
+
+\subsection{Discrete \acsp{pdf}}
+
+\paragraph{Combinatory}
+It's about sequences of objects.
+There are two general cases or flavors of sequences:
+\begin{itemize}
+	\item
+		Order matters: permutations
+	\item
+		Order doesn't matter: combinations
+\end{itemize}
+
+Example: Sequences of letters $\Set{a,b,c}$ and $\Set{c,b,a}$ are same combinations but distinct permutations.
+
+We have four cases
+\begin{description}
+	\item[Permutations with repetitions]
+		Pick $k$ objects from a set of $n$ and put the objects back (such that you can again pick them in the next step).
+		The number of permutations is $n^k$.
+
+		Example: Consider \SI{1}{byte} = \SI{8}{bits} and you get $2^8 = 256$ permutations.
+
+	\item[Permutations without repetitions]
+
+
+		Pick again $k$ objects out of $n$ and do \emph{not} put them back.
+		The number of permutations without repetitions must be smaller than the number of permutations with repetitions.
+
+		Example: Pick \num{4} cards out of a deck of \num{52}.
+		At the first try you can choose between \num{52} cards; at the second try you have only \num{51} cards left and so on.
+		In this case you have $52\cdot51\cdot50\cdot49 = 52!/48! = \num{6797400}$ different permutations.
+
+		This can be generalized to get that the number of permutations in this case is $n!/(n-k)!$.
+
+	\item[Combination without repetitions]
+
+		Pick $k$ objects out of $n$ and do \emph{not} put them back (remember that in this case the order is irrelevant).
+		Using the previous results, one gets that the number of combinations is
+		\begin{equation}
+			\frac{n!}{(n-k)!}\frac{1}{k!} \eqqcolon {n \choose k }.
+		\end{equation}
+		This can be easily understood as the number of permutations without repetitions with a correction which takes into account the number of possible permutations of $k$ elements.
+		Dividing by $k!$ all the different permutations (which in this case are regarded as degeneracies) are counted only once, as it should be.
+
+	\item[Combinations with repetitions]
+
+		Pick $k$ objects out of $n$ and put them back.
+		The number of combinations is
+		\begin{equation}
+			\frac{(n+k+1)!}{(n-1)!}\frac{1}{k!} ={ n + k + 1 \choose k}
+		\end{equation}
+		(Interpretation)
+\end{description}
+
+\subsection{Binomial distribution}
+
+Consider and experiment with only two possible outcomes (like yes or not). 
+
+Quality control: success/failure
+
+Coin Toss: head/tail
+
+Particle detector: hit/no hit
+
+Particle decays: particle decays into a particular final state/all the rest
+
+
+In any of these cases, the outcome is a \emph{Bernoulli \ac{rv}}\index{Bernoulli RV} that takes only two values which can be identified by $\Set{0,1}$.
+Moreover, the following two assumptions have to be satisfied
+\begin{itemize}
+	\item
+		The probability for the outcomes are constant: $p(x) \equiv p = 1-p(\bar{x})$.
+	\item
+		Perform our experiment $n$ times and all tries are independent.
+\end{itemize}
+The question is: what is the probability to observe $k$ successes (with $k\le n$)?
+Two terms contribute in the probability:
+\begin{enumerate}
+	\item
+		The probability for specific outcome with $k$ successes is $p^k(1-p)^{n-k}$;
+	\item
+		A normalization factor taking into account the combinations without repetitions. %$( n k )$
+\end{enumerate}
+At the end one gets the \emph{binomial distribution}
+\begin{equation}\label{eq:BinomDistribution}
+	B(k;n,p) = {n\choose k}p^k(1-p)^{n-k},
+\end{equation}
+where $n$ and $0 \le p\le 1$ are parameters.
+
+\paragraph{Normalization}
+The normalization of the~\eqref{eq:BinomDistribution} comes from the Newton's formula
+\begin{equation}
+	(a+b)^n = \sum_{k=0}^n {n\choose k} a^k b^{n-k}.
+\end{equation}
+Applying this relation to the equation~\eqref{eq:BinomDistribution} we obtain
+\begin{equation}
+	\sum_{k=0}^n B(k;n,p) =
+	\sum_{k=0}^n {n\choose k}p^k(1-p)^{n-k}
+	= (p + (1-p))^n = 1.
+\end{equation}
+
+
+About the parameter $p$, let's notice that
+\begin{equation*}
+	\begin{aligned}
+		\int_0^1 (1-x)^{n-k}x^k\!\ud x 
+		&= \frac{(1-x)^{n-k} x^{k+1}}{k}\bigg\rvert_0^1 +\frac{n-k}{k}\int_0^1 x^{k+1}(1-x)^{n-k-1}\!\ud x\\
+  &=\frac{n-k}{k}\int_0^1 x^{k+1}(1-x)^{n-k-1}\!\ud x\\
+  &=\dots\\
+  &= \frac{(n-k)!}{(n-1)(n-2)\dots(k+1)k}\int_0^1 x^n\!\ud x\\
+  &=\frac{n-k}{n(n-1)\dots k} \\
+  &= \frac{(n-k)!\,k!}{n!}.
+	\end{aligned}
+\end{equation*}
+So integrating the distribution~\eqref{eq:BinomDistribution} with respect to the probability we get again that it's normalized, namely
+\begin{equation}
+	\int_0^1B(k;n,p)\ud p = 1.
+\end{equation}
+
+
+\paragraph{Mean} The expectation value of the \ac{rv} $k$ is given by
+\begin{equation}
+	\begin{aligned}
+		E[k] &= \sum_{k=0}^n k\,P(k;n,p) = \sum_{k=0}^n k \frac{n!}{(n-k)!k!}p^k(1-p)^{n-k} \\
+	   &= 0 + \sum_{k=1}^n k \,\frac{n!}{(n-k)!k!}\,p^k(1-p)^{n-k} \\
+	&= np\sum_{k=1}^n \frac{(n-1)!}{(n-k)!(k-1)!}\,p^{k-1}(1-p)^{n-k} \\
+ &= np\sum_{k=0}^{n-1} \frac{(n-1)!}{(n-k - 1)!k!}\,p^{k}(1-p)^{n-k - 1} \\
+ &= np\sum_{k=0}^{n-1} P(k, n-1,p) = np
+	\end{aligned}
+\end{equation}
+where the last step is justified by the normalization.
+
+\paragraph{Variance}
+The variance is defined as $V[k] = E[k^2] - (E[k])^2$.
+Since the second term is already known from the mean, the problem is just evaluating the first one:
+\begin{equation}
+	\begin{aligned}
+		E[k^2] &= np\sum_{k=1}^n k \,\frac{(n-1)!}{(n-k)! (k-1)!}\,p^{k-1}(1-p) ^{n - k}\\
+		 &= np\sum_{k=0}^{n-1} (k + 1) \,\frac{(n-1)!}{(n-k - 1)! k!}\,p^{k}(1-p) ^{n - k-1}\\
+   &= np\sum_{k=0}^{n-1} (k + 1) \,P(k;n-1,p)\\
+   &= np  + np \sum_{k=1}^{n-1} k\, P(k;n-1,p)\\
+   &=np[( n - 1 )p + 1 ]
+	\end{aligned}
+\end{equation}
+Substituting the result one gets $V[k] = np(1-p) = \sigma_k^2$.
+
+
+
+Remark: if $p=1/2$ then you get a symmetric distribution when plotted, for $n$ constant.
+
+
+Remark: if I fix $p \equiv 1/2$, the more $n$ grows, the more the distribution resembles a Gaussian one.
+
+\subsection{Multi-binomial distribution}
+
+It's just an extension when the experiments has $m\ge2$ outcomes with probabilities ${p_1,\dots,p_m}$ such that $p_1 + \dots + p_m = 1$.
+One wonders the probability to get after $n$ trials $k_i$ outcomes of the $i$-th value.
+
+\begin{equation}
+	P(k_1,\dots,k_m; n, p_1,\dots,p_m) = n! \prod_i\frac{p_i^{k_i}}{k_i!}
+\end{equation}
+As in the Binomial distribution case, one gets $E[k_i] = np_i$ and $V[k_i] = np_i(1-p_i)$.
+In this case it's possible to evaluate
+\begin{equation}
+	\cov[k_i,k_j] \underset{i\neq j}{=} - n p_ip_j.
+\end{equation}
+The minus sign does have a meaning: it arises because as $k_i$ increases, $k_j$ must decrease since the sum of all the $k_p$ values is bounded to be the number of tries $n$.
+
+
+Now, let's assume $p_i + p_j = 1$ for index $i$ and $j$ given.
+We can evaluate the (linear) correlation  coefficient
+\begin{equation}
+	\rho_{ij} = \frac{\cov[k_i,k_j]}{\sqrt{V[k_i]\,V[k_j]}} =
+	\frac{-n p_ip_j}{\sqrt{n^2p_ip_j(1-p_i)(1-p_j)}}.
+\end{equation}
+Using the relation $p_i = 1-p_j$ the expression reads
+\begin{equation}
+	\rho_{ij} = \frac{-n p_j(1-p_j)}{\sqrt{n^2 p_j^2(1-p_j)^2} }\equiv -1.
+\end{equation}
+This means that the \acp{rv} $k_i$ and $k_j$ are perfectly anti-correlated; as a matter of fact in this case the relation $k_i + k_j = n$ holds.
+
+Remark: a negative sign in the covariance means that an increasing of $k_i$ requires $k_j$ to decrease since $k_1+\dots+k_m= n$.
+
+Example: The $k_i$'s can represent a histogram with $m$ bins and $n$ total entries where all entries are independent.
+
+
+\subsection{Poisson distribution}
+
+The Poisson distribution is one of the most important in Particle Physics (at least in the discrete sector).
+It represents the probability of observing $k$ events in a fixed time (or space or whatever; that's just a rate) interval, provided that ``there is no memory'': events occur independently of the time since last event with average rate $\lambda$.
+
+The expression is
+\begin{equation}
+	P(k;\lambda) = \frac{\lambda^k \eu^{-\lambda}}{k!}.
+\end{equation}
+
+\paragraph{Derivation} We'll see that this is a special case of the Binomial distribution.
+
+On average $\lambda$ events in a time interval $t$ are expected.
+Let's divide the time interval $t$ into $n$ intervals $\delta t = t/n$ so that the probability for one event in $\delta t$ shrinks as well to $\delta p = \lambda \,\delta t/t = \lambda/n$.
+
+If the event rate is low, the probability for more than one event in $\delta t$ is negligible.
+With this assumption we are turning the problem into a binary one: $n$ trials each with two discrete case (event or not).
+So we can describe our experiment using the Binomial distribution
+\begin{equation}
+	P(k;\lambda) = \lim_{n\to\infty} {n\choose k} \delta p^k( 1  - \delta p)^{n - k}
+	= \lim_{n\to \infty} \frac{n!}{(n-k)!}\frac{1}{k!}\biggr(\frac{\lambda}{n}\biggl)^k\biggr(1-\frac{\lambda}{n}\biggl)^{n-k}
+\end{equation}
+To evaluate this limit one can can calculate it step by step.
+The first term is
+\begin{equation}
+	\frac{n!}{(n-k)!} = n(n-1)\dots(n-k+1) \thicksim n^k.
+\end{equation}
+The last term can be expressed as a power of the Euler number
+\begin{equation}
+	\biggr(1-\frac{\lambda}{n}\biggl)^{n-k} = \biggr(1-\frac{\lambda}{n}\biggl)^{\lambda n/\lambda} \biggr(1-\frac{\lambda}{n}\biggl)^{-k} \thicksim \eu^{-\lambda} 1^{-k} = \eu^{-\lambda}.
+\end{equation}
+
+
+Putting together all the terms, one obtains the desired result
+\begin{equation}
+	P(k;\lambda) = \frac{\lambda^k \eu^{-\lambda}}{k!}.
+\end{equation}
+
+Basically this means that the Poisson distribution is the Binomial distribution in the limit in which $n\to\infty$ and at \emph{same} time $\delta p \to 0$ while the product $\lambda = n\,\delta p$ remains finite and constant.
+
+
+Example: 
+%Poisson distribution is one of the most important distributions in Particle Physics
+Let's look at the particle detected by a detector in a finite time interval~$t$.
+I have a constant particle flux $\phi$ (otherwise $\lambda$ changes), a constant efficiency of the detector $\epsilon$ and a dead time $\tau$ sufficiently small, i.e.~$\phi\tau\ll1$.\footnote{The dead time is?}
+
+Example:
+Poisson distribution describes the number of interactions of a particle beam in a thin foil.
+
+Example:
+Number of entries in a histogram if data are taken over a fixed time interval.
+
+Example:
+Poisson distribution is \emph{not} applicable to describe the decay of  a small amount of radioactive material in a time interval $t \gtrsim \tau$.
+This is because the event rate is no more constant since the sample is changing remarkably.
+
+Example:
+Poisson distribution is \emph{not} applicable to describe the number of interactions of a low-intensity beam in a thick foil.
+The rareness of events is violated here since the probability of interaction with the foil gets large and the rate depends on the position in the foil.
+
+Example:
+Poisson distribution is \emph{not} applicable when the dead time is high because the assumption of independence between events is violated.
+The second event is not independent from the first if it falls into dead time.

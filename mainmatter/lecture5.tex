@@ -1,0 +1,324 @@
+
+\chapter{Lecture 5}
+
+\section{\acl{cdf}}
+
+A \ac{cdf}, be it $F(x)$, describes the probability that the value of the \ac{rv} $X$ with associated \ac{pdf} $f_X(x)$ lies in the range $(-\infty,x]$, namely
+\begin{equation}\label{eq:cdf}
+	F(x) = P(X\le x) = \int_{-\infty}^x f_X(t)\ud t.
+\end{equation}
+From the Fundamental Theorem of Integral Calculus, any \ac{cdf} is continuous and non-decreasing.
+The equation~\eqref{eq:cdf} allows to give an alternative definition of \ac{pdf} as
+\begin{equation}
+	f_X(x)\coloneqq \deriv{}{x}F(x).
+\end{equation}
+Moreover, since it is a probability, it has to be normalized in such a way that
+\begin{equation}
+	\lim_{x\to\infty}F(x) = 1.
+\end{equation}
+From the equation~\eqref{eq:cdf} is also clear that $\lim_{x\to-\infty}F(x) = 0$.
+Lastly, let's notice that
+\begin{equation}
+	P(X\in[a,b]) = \int_a^b f_X(t)\ud t = \biggl(\int_{-\infty}^b - \int_{-\infty}^a\biggr) f_X(t)\ud t = F(b) - F(a).
+\end{equation}
+
+\section{Basic terms to characterize \acsp{pdf}}
+\subsection{Mode}
+
+The \emph{mode}\index{mode} is the most probable value among the ones the \ac{rv} can assume, i.e.~it's the maximum of its \ac{pdf}.
+The mode is not unique, e.g.~as an extreme case one can think at the constant distribution.
+
+
+Sometimes \acp{pdf} have more than one maximum so the mode in a narrow sense is the global maximum; the mode in the wider sense is a local maximum.
+\begin{figure}
+	\centering
+	\input{images/multi_modal_PDF.pgf}
+	\caption{Example of bimodal distribution.}
+	\label{fig:multiModalPDF}
+\end{figure}
+In the latter case the \ac{pdf} is said to be \emph{multimodal}, like the one shown in figure~\ref{fig:multiModalPDF}.
+
+
+\subsection{Expectation value}
+
+The expectation value (or \emph{mean}\index{mean}) of a distribution is defined (for continuous \acp{pdf}) as
+\begin{equation}
+	\mu\coloneqq E[x]\coloneqq \int_\R t\,f_X(t)\ud t.
+\end{equation}
+In the discrete case, using the equation~\eqref{eq:ProbMassWithDeltaDirac}, the integral just becomes a summation with the index labeling all the possible outcomes
+\begin{equation}
+	E[x] \coloneqq \sum_j x_j\phi_X(x_j).
+\end{equation}
+In a certain sense, evaluating the mean of a distribution looks like evaluating its ``center of mass''.
+
+
+It's worth remarking the fact that $E$ is a \emph{functional}: it takes a function $g\colon\R\to\R$ as input and gives back a real number $E[g]$.
+Thus $E[x]$ is \emph{not} a function of $x$ but an operator applied to the function $g(x) \coloneqq x$.
+
+
+The expectation value is a linear operator since it is defined in terms of an integral, which is linear itself.
+Hence, given two functions $f,g\colon \R\to\R$ and two constants $a,b\in\R$ one has that 
+\begin{equation}
+	E[af + b g] = aE[f] + bE[g]
+\end{equation}
+but in general
+\begin{equation}
+	E[fg]\neq E[f]\,E[g],
+\end{equation}
+since, as we saw in section~\ref{sec:condProb}, the equality holds only if the \acp{rv} $f$ and $g$ are independent among each other.
+If this is the case, their joint \ac{pdf} can be factorized in a product of two functions depending on a single argument and the integral can be split in the product of integrals, namely
+\begin{equation}
+	\begin{aligned}
+		E[fg]
+		&= \int_\R f(t)\,g(k)\,\psi_{fg}(t,k)\ud t\ud k\\
+		&\overset{\text{indep.}}{=} \int_\R f(t)\,g(k)\,\phi_{f}(t)\,\gamma_g(k)\ud t\ud k\\
+  &= \int_\R f(t)\,\phi_{f}(t)\ud t\int_\R g(k)\,\gamma_g(k)\ud k\\
+  &= E[f]\,E[g].
+	\end{aligned}
+\end{equation}
+Anyway, \emph{this is not always the case!}
+
+
+\subsection{Median}
+
+The \emph{median}\index{median} it's the value that separates the lower and higher halves of the \ac{pdf}, i.e.~is defined as the value of the \ac{rv} such that
+\begin{equation}
+	F(m) = \int_{-\infty}^m f_X(t)\ud t \coloneqq \frac{1}{2}.
+\end{equation}
+The median is not always uniquely defined.
+\begin{figure}
+	\centering
+
+	\subfloat[][\ac{pdf}.]{%
+		\input{images/probabilityNotMedian.pgf}%
+	}
+
+	\subfloat[][\acs{cdf}.]{%
+		\input{images/cumulativeNotMedian.pgf}%
+	}
+
+	\caption{Example of \ac{pdf} where the median is not uniquely defined.}
+	\label{fig:exampleNotMedian}
+\end{figure}
+In figure~\ref{fig:exampleNotMedian} a function non negative whose integral is normalized to $1$ is shown: it's formally a \ac{pdf}.
+Its median is not defined since $F(x) = 1/2$ for all values of $x\in[-3/2,3/2]$.
+
+
+
+
+For a \ac{pdf} which is symmetric about its mean $\mu$, median and mean coincide since
+\begin{equation}
+	F(m) = \int_{-\infty}^m f_X(x)\ud x = \frac{1}{2} = \frac{1}{2}\int_\R f_X(x)\ud x = \frac{2}{2}\int_{-\infty}^\mu f_X(x)\ud x = F(\mu).
+\end{equation}
+If the \ac{cdf} is invertible (namely, the values of $x$ such that $f_X(x) = 0$ are a discrete set) then $m=\mu$.\footnote{In the case of the figure~\ref{fig:exampleNotMedian} the set of points in which the \ac{pdf} vanishes are not a discrete set but $[-3,-5/2]\cup[-3/2,3/2]\cup[5/2,3]$.}
+
+
+\subsection{Variance}
+
+The \emph{variance}\index{variance} is defined as the expectation value of the function $g(x) \coloneqq (x-E[x])^2$ so
+\begin{equation}
+	\begin{aligned}
+		V[x] \coloneqq E[(x-E[x])^2] &= E[x^2 - 2E[x]\,x - (E[x])^2 ] \\
+							   &= E[x^2] - 2(E[x])^2 + (E[x])^2\\
+		  &= E[x^2] - (E[x])^2,
+	\end{aligned}
+\end{equation}
+where the linearity property of the operator $E$ and the fact that $E[x]$ is constant have been used to work out the final result.
+
+
+The variance represents a sort of ``variation'' of the \ac{rv} around the mean.
+As a matter of facts, one can define the \ac{sd}\index{standard deviation} $\sigma$ of the distribution which measures the width or the spread of the \ac{pdf}.
+
+There are other measures for the \ac{pdf} spread such as the \ac{fwhm} which is the width of the distribution at half of its maximum value.
+
+\Ex{%
+	The Gau\ss{}ian distribution with \ac{sd} $\sigma$ is
+	\begin{equation}
+		f(x) = \frac{\eu^{-(x-\mu)^2\!/2\sigma^2}}{\sqrt{2\pi}\,\sigma}.
+	\end{equation}
+	Its maximum is located at $x=\mu$ and $f(\mu) = 1/\sqrt{2\pi}\,\sigma$.
+	One can check that $f(x) = f(\mu)/2$ when $x=\mu\pm\sigma\sqrt{2\log 2}$ so its \ac{fwhm} is $2\sigma\sqrt{2\log 2}\simeq \SI{2.354820045}{\ensuremath{\sigma}}$.
+}
+
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				samples=70,
+				xlabel=$z\coloneqq(x-\mu)/\sigma$,
+				ylabel={$\sqrt{2\pi}\,f(z) = \eu^{-z^2\!/2}$},
+				smooth,
+				axis x line=middle,
+				axis y line=left
+			]
+			\addplot+[%
+				name path global=one,
+				mark=none,%
+				domain={-4:4}%
+			] {exp( - .5 * x * x ) };
+
+			\addplot+[%
+				name path global=two,%
+				mark=none,%
+				domain={-2.5:2.5},%
+				opacity=.4
+			] { .5 };% \addlegendentry{ $f(0)/2$}
+
+
+			%	\path [%
+			%		draw,%
+			%		name intersections={%
+			%			of=one and two,%
+			%			by={A,B}%
+			%		}%
+			%	];
+		\end{axis}
+		% draw projections
+		%\coordinate (O); % set (O)=(0,0)
+		%\foreach \p in {A,B} {
+		%	\path[draw=black, dashed] (\p) -- (\p|-O);
+		%}
+	\end{tikzpicture}
+	\caption{Gau\ss{}ian \ac{fwhm}.}
+
+\end{figure}
+
+\subsection{Higher momenta}
+
+The mean and the variance are the lowest terms in the series of \emph{momenta}\index{momentum}
+\begin{equation}\label{eq:momenta}
+	m_n \coloneqq \int_\R (t-c)^n f_X(t)\ud t.
+\end{equation}
+
+If $c=0$ the quantities~\eqref{eq:momenta} are called \emph{algebraic momenta}\index{algebraic momentum} and $m_n = E[x^n]$, e.g.~for $n = 1$ one recovers the mean $m_1 = E[x] = \mu$.
+
+If $c = E[x]$, then the $m_n$ are said \emph{central momenta}\index{central momentum}  and $m_n = E[(x-E[x])^n]$.
+By definition, for $n=1$ the central momentum \emph{always} vanishes since
+\begin{equation}
+	m_1 = E[(x-E[x])] = E[x]-E[x] \equiv 0.
+\end{equation}
+Then, for $n=2$, one recovers the variance $m_2 = E[(x-E[x])^2] = V[x]$ and the third central momentum $m_3 = E[(x-E[x])^3]$ is called \emph{skewness}\index{skewness}.
+The skewness is a measure of the \ac{pdf} asymmetry: it is zero for a distribution which is symmetric around the mean $E[x]$ (e.g.~the Gau\ss{}ian one).
+Lastly, the fourth central momentum $m_4 = E[(x-E[x])^4]$ is called \emph{kurtosis}\index{kurtosis} and it's a measure for the ``peakness'' of the \ac{pdf}.
+
+
+As a remark, it's worth saying that each \ac{pdf} is \emph{uniquely} determined by its momenta.
+
+\section{Estimators}
+
+In general the true momenta of a \ac{pdf} are not known and have to be estimate from the set of observed data.
+For this reason, certain rules to obtain such estimate have to be defined: such rules are called \emph{estimators}\index{estimator}.
+Since an estimator is a function of data, it is itself a \ac{rv}.
+
+
+What one wants to obtain at the end is a meaningful estimate for the true values of momenta thus a set of criteria have to be satisfied by a good estimator.
+Be $\hat a$ the estimator and $a$ the true value for the momentum.
+Given a certain set of $N$ data, $\hat a$ has to satisfy the following requirements:
+\begin{description}
+	\item[Consistency] The estimator has to be \emph{consistent}\index{consistency}, i.e.~when the sample grows its value should get closer and closer to the true value:
+		\begin{equation}
+			\lim_{N\to\infty}\hat{a} = a;
+		\end{equation}
+
+	\item[Unbiasness\index{unbiasness}] The expectation value for the estimator should be the true value of the momentum, i.e.~$E[\hat a] = a$;
+
+	\item[Efficiency] The estimator has to be \emph{efficient}\index{efficiency}, i.e.~its \ac{pdf} should have a ``small'' variance;
+
+	\item[Robustness] Also, the estimator should be insensitive to tails in the data distributions of false data, i.e.~it should be \emph{robust}\index{robustness}.
+
+\end{description}
+
+
+An unbiased estimator for the true mean $\mu$ is the \emph{sample mean}\index{sample mean} defined as
+\begin{equation}\label{eq:SV}
+	\mean{x} \coloneqq \frac{1}{N}\sum_{i=1}^N x_j.
+\end{equation}
+To estimate the variance, one can use the \emph{sample variance}\index{sample variance}
+\begin{equation}
+	\hat \sigma^2 \coloneqq \frac{1}{N}\sum_{j=1}^N(x_j - \mu)^2,
+\end{equation}
+which holds only if the true value of the mean is known.
+If this is not the case, \emph{unbiased sample variance}\index{unbiased!sample variance} has to be used:
+\begin{equation}\label{eq:SVbessel}
+	\hat\sigma^2 \coloneqq \frac{1}{N-1}\sum_{j=1}^N(x_j - \mean{x})^2.
+\end{equation}
+The $N-1$ in the denominator is called \emph{Bessel correction} and accounts for the fact that there are only $N-1$ independent \acsp{dof} since \mean{x} has been estimated from data.
+Moreover, the~\eqref{eq:SVbessel} when only one measure is given is an undetermined form $0/0$ and this reflects the fact that the variance cannot be known with only one data point; the~\eqref{eq:SV} for one measure would give a null variance, which is absurd.
+
+\section{Functions of \acsp{rv}}
+
+We now consider a function $y(x)$ of a \ac{rv} $X$ with associated \ac{pdf} $f_X(x)$.
+The function $y(x)$ is itself a \ac{rv} $Y$ thus it has an associated \ac{pdf} as well.
+How to determine $f_Y(y)$?
+Let's consider the simplest case in which an unique inverse function for $y$ exists.
+
+
+What one should impose is the conservation of probability
+\begin{equation}
+	f_Y(y)\abs{\ud y} = P(Y\in[y,y+\ud y]) = P( X\in[x,x+\ud x]) = f_X(x)\abs{\ud x}.
+\end{equation}
+The absolute values for $\ud x$ and $\ud y$ account for the fact that an increase in $x$ may result in a decrease in $y$ and the probability must be non-negative.
+Also, since by hypothesis the inverse function of $y$ is unique, one can express $x$ as $x(y)$ so
+\begin{equation}
+	f_Y(y) = f_X(x(y))\abs[\bigg]{\deriv{}{y}x(y)}.
+\end{equation}
+The expectation value for $Y$ is 
+\begin{equation}
+	E[y] =
+	\int_\R y\,f_Y(y)\ud y =
+	\int_\R y\,f_X(x(y))\,\abs[\bigg]{\deriv{x}{y}}\ud y
+	= \int_\R y(x)\,f_X(x)\ud x
+	= E[y(x)]
+\end{equation}
+and its variance is
+\begin{equation}
+	V[y] %= E[(y -E[y])^2] 
+	= \int_\R (y-E[y])^2 f_Y(y)\ud y
+	=\int_\R (y(x)-E[y(x)])^2 f_X(x)\ud x
+	= V[y(x)].
+\end{equation}
+
+\section{Multivariate distributions}
+
+The multivariate distributions are $2$-dimensional \acp{pdf} which describe the outcomes of experiments characterized by two \acp{rv} $X$ and $Y$.
+
+Let's call $A$ the event $X\in[x,x + \ud x]$, $B$ the event $Y \in [y,y+\ud y]$ and $f(x,y)$ the \emph{joint \ac{pdf}}\index{joint \acs{pdf}} for $X$ and $Y$ so that
+\begin{equation}
+	P(A\cap B) = f(x,y)\ud x\ud y
+\end{equation}
+is the probability for the event $A$ and the event $B$ to occur.
+If one wants to evaluate the probability for $X$ and $Y$ to lie in finite intervals
+\begin{equation}
+	\int_a^b\ud x\int_c^d\ud y\,f(x,y) = P(X\in[a,b]\text{ and }Y \in [c,d]).
+\end{equation}
+The normalization is again such that
+\begin{equation}
+	\int_\R\ud x\int_\R\ud y\,f(x,y) = 1.
+\end{equation}
+The expectation value for $X$ is defined as
+\begin{equation}
+	E[x] \coloneqq \int_\R\ud x\int_\R x\,f(x,y)\ud y
+\end{equation}
+and its variance as
+\begin{equation}
+	V[x]\coloneqq \int_\R\ud x\int_\R (x-E[x])\,f(x,y)\ud y.
+\end{equation}
+Analogous formulas hold for $Y$.
+
+\subsection{Marginal \acs{pdf}}
+
+The marginal \ac{pdf} is a \ac{pdf} for a  subset of \acs{rv}.
+
+
+The ansatz is that
+\begin{equation}
+	P(A) = \sum_i P(A\cap B_i)
+	= \sum_i f(x,y_i) \ud x \ud y\to
+	\ud x\int f(x,y)\ud y.
+\end{equation}
+So the marginal \ac{pdf} $f_X(x)$ for the \ac{rv} $X$ is
+\begin{equation}
+	f_X(x) \coloneqq \int f(x,y)\ud y.
+\end{equation}•
+

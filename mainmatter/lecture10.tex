@@ -1,0 +1,242 @@
+
+\chapter{Lecture 10}
+
+We start from the general expression for a two-variables $x$ and $y$, correlated, Gau\ss{}ian distribution
+\begin{equation}
+	f(x,y) = \frac{1}{2\pi\sqrt{1-\rho^2}\,\sigma_x\sigma_y}\exp\gp*{-\frac{1}{2(1-\rho^2)}
+		\qp*{\left(\frac{x-\mu_x}{\sigma_x}\right)^2+
+			\left(\frac{y-\mu_y}{\sigma_y}\right)^2
+	-2\rho\,\frac{x-\mu_x}{\sigma_x}\,\frac{x-\mu_x}{\sigma_x}}}
+\end{equation}
+The exponent defines an error ellipse.
+
+
+We want to prepare to the generalization to an $n$-variables distribution so we switch to using matrix.
+Let's define a \emph{covariance} (or \emph{error}) matrix
+\begin{equation}
+	V\coloneqq 
+	\begin{pmatrix}
+		E(x-\mu_x)^2	&E(x-\mu_x)(y-\mu_y)\\
+		E(y-\mu_y)(x-\mu_x) & E(y-\mu_y)^2
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		\sigma_x^2	&\rho_{xy}\sigma_x\sigma_y\\
+		\rho_{xy}\sigma_x\sigma_y &\sigma_y^2
+	\end{pmatrix}.
+\end{equation}
+This is a positive-semidefinite matrix and it's symmetric.\footnote{When one diagonalizes it, he obtains a matrix with variances (which are non-negative) on the diagonal.}
+
+What we actually need is the inverse of this matrix.
+We know $\det V  = \sigma_x^2\sigma_y^2(1-\rho_{xy }^2)$ and this is good because something similar appears in the Gau\ss{}ian distribution.
+\begin{equation}
+	\frac{1}{\det V}
+	\begin{pmatrix}
+		\sigma_y^2	&-\rho_{xy}\sigma_x\sigma_y\\
+		-\rho_{xy}\sigma_x\sigma_y &\sigma_x^2
+	\end{pmatrix}
+	=
+	\frac{1}{1-\rho_{xy}^2}
+	\begin{pmatrix}
+		1/\sigma_x^2	&-\rho_{xy}/\sigma_x\sigma_y\\
+		-\rho_{xy}/\sigma_x\sigma_y &1/\sigma_y^2
+	\end{pmatrix}
+\end{equation}
+Since we have got a matrix, we need a vector so we define the \emph{discrepancy} vector $\vec{x'}^t = (x-\mu_x,y-\mu_y)$.
+Thus
+\begin{equation}
+	\vec{x'}^tV^{-1}\vec{x'} = 
+	\frac{\vec{x'}^t}{1-\rho_{xy}^2}
+	\begin{pmatrix}
+		x'/\sigma_x^2-\rho_{xy}y'/\sigma_x\sigma_y\\
+		-\rho_{xy}x'/\sigma_x\sigma_y + y'/\sigma_y^2
+	\end{pmatrix}
+	=
+	\frac{1}{1-\rho_{xy}^2}
+	\left(
+		\frac{x'^2}{\sigma_x^2} + \frac{y'^2}{\sigma_y^2} - 2 \frac{\rho_{xy}y'x'}{\sigma_x\sigma_y}
+	\right).
+\end{equation}
+So we come to an expression
+\begin{equation}
+	f(x,y) = \frac{\eu^{-\vec{x'}^tV^{-1}\vec{x'}\!/2}}{2\pi\sqrt{\det V}}.
+\end{equation}
+
+
+\section{Generalization to arbitrarily many (finite) variables}
+
+We are now ready to extend our results from the two-dimensional case to $n$ dimensions.
+We have $n$ correlated, Gau\ss{}ian distributed \acp{rv} $\vec{x}^t \coloneqq(x_1,\dots,x_n)$. with means $\vec{\mu}^t\coloneqq (\mu_1,\dots,\mu_n)$ and \acp{sd} $\sigma^t \coloneqq (\sigma_1,\dots,\sigma_n)$.
+The Gau\ss{}ian distribution becomes
+\begin{equation}
+	f(\vec{x}) = \frac{\eu^{(\vec{x}-\vec{\mu})^tV^{-1}(\vec{x}-\vec{\mu})/2}}{\sqrt{(2\pi)^n\det V}},
+\end{equation}
+where now the covariance $(n\x n)$-matrix is defined as
+\begin{equation}
+	V = \Set{E[x_i'x_j']} = \Set{\cov[x_i,x_j]}=
+	\begin{pmatrix}
+		\sigma_1^2	&\dots 	&\rho_{1n}\sigma_1\sigma_n\\
+					  &\ddots		&\vdots \\
+	   & &\sigma_n^2
+	\end{pmatrix}.
+\end{equation}
+this is again a symmetric, positive semi-definite matrix.
+
+
+Now we can define the \emph{correlation} matrix\index{correlation matrix}\index{correlation!matrix}
+\begin{equation}
+	\rho\coloneqq 
+	\begin{pmatrix}
+		1/\sigma_1 & &0\\
+			 &\ddots & \\
+		0 & &1/\sigma_n
+	\end{pmatrix}
+	V
+	\begin{pmatrix}
+		1/\sigma_1 & &0\\
+			 &\ddots & \\
+		0 & &1/\sigma_n
+	\end{pmatrix}
+	= \sqrt{\diag (V^{-1}) }\, V \sqrt{\diag (V^{-1})}.
+\end{equation}
+This matrix can be seen as a covariance matrix referred to the standardized variables $x_i/\sigma_i$.
+To see this, let's call $\vec{z} \coloneqq \sqrt{\diag V^{-1}}\,(\vec{x}-\vec{\mu})$ and let's observe that
+\begin{equation}
+	\ud\vec{z} = \det(\sqrt{\diag V^{-1} })\ud\vec{x} = \sqrt{(\det V)^{-1}}\ud \vec{x}.
+\end{equation}
+So
+\begin{equation}
+	f_z(\vec{z}) = \frac{\eu^{-\transpose{\vec{z}} \rho ^{-1} \vec{z}/2}}{\sqrt{(2\pi)^n}},
+\end{equation}
+where
+\begin{equation}
+	\rho =
+	\begin{pmatrix}
+		1	& 	&\rho_{1n} \\
+	   &\ddots{} 	 & \\
+		\rho_{1n}	&  &1
+	\end{pmatrix}•
+\end{equation}•
+
+
+
+Now define again $\chi^2 \coloneqq\vec{x'}^tV^{-1}\vec{x'}$ so that $f(\vec{x}) = f_0\,\eu^{-\chi^2\!/2}$.
+The equation $\chi^2 = \textup{constant}$ defines hyper-ellipses contours of $f(\vec{x})$ such that $\chi = 1,4,\dots$ corresponds to $\SI{1}{\sigma},\SI{2}{\sigma},\dots$ contours.
+We can use a coordinate transformation to the principal axis of the hyper-ellipsoid, i.e.~diagonalize $V$ and hence $V^{-1}$ and obtain uncorrelated variables.
+
+\section{Error propagation for $n$-dim.~functions}
+
+We have again $n$ correlated, Gau\ss{}ian distributed \acp{rv} $\vec{x}^t \coloneqq(x_1,\dots,x_n)$. with means $\vec{\mu}^t\coloneqq (\mu_1,\dots,\mu_n)$ and \acp{sd} $\sigma^t \coloneqq (\sigma_1,\dots,\sigma_n)$.
+
+
+We want to evaluate the uncertainty that affect a function $\vec{y}\colon \R^n\to\R^m$ such that $\vec{y}(\vec{x})^t = (y_1(\vec{x}),\dots,y_m(\vec{x}))$.
+The argument is still based on a Taylor expansion of the function $\vec{y}(\vec{x})$ around the mean $\vec{\mu} = E[\vec{x}]$: we just have to consider all the possible derivatives of $y_i$ with respect to $x_j$.
+This is done using the Jacobian matrix of the function
+\begin{equation}
+	\vec{y}(\vec{x}) = \vec{y}(\vec{\mu}) + J|_{\vec{\mu}}\vec{x'} + \dots{}
+	\quad
+	\text{with }
+	J\coloneqq
+	\begin{pmatrix}
+		\pderiv{y_1}{x_1} &\dots &\pderiv{y_1}{x_n}\\
+		\vdots &\ddots &\\
+		\pderiv{y_m}{x_1} & &\pderiv{y_m}{x_n}\\
+	\end{pmatrix}.
+\end{equation}
+If we neglect terms of order $\abs{\vec{x'}}^2$ and higher then $E[\vec{y}(\vec{x})] = \vec{y}(E[\vec{x}])$ since $E[\vec{x'}] = 0$ and $J$ is evaluated in the point $\vec{\mu}$ (hence constant).
+In terms of indexes
+\begin{equation}
+	y_i - E[y_i] = \sum_{k=1}^n\pderiv{y_i}{x_k}(x_k - \mu_k).
+\end{equation}
+
+
+We want to know $\cov[y_i,y_j]$ (which includes also $\sigma_{y_k}^2$ when $y_i = y_j \eqqcolon y_k$)
+\begin{equation}
+	\begin{aligned}
+		\cov[y_i,y_j]
+		&= E[(y_i - E[y_i])(y_j - E[y_j])] \\
+  &= E\left[ \sum_{k=1}^n\pderiv{y_i}{x_k}(x_k - \mu_k) \sum_{n=1}^n\pderiv{y_j}{x_n}(x_n - \mu_n)\right] \\
+  &= \sum_{k=1}^n\sum_{n=1}^n\pderiv{y_i}{x_k}\pderiv{y_j}{x_n} E[(x_k - \mu_k)(x_n - \mu_n)]\\
+  &= \sum_{k=1}^n\sum_{n=1}^n\pderiv{y_i}{x_k}\pderiv{y_j}{x_n} \cov[x_k,x_n]\\
+  &= (J\rvert_\mu) V_x \transpose{(J\rvert_\mu)}.
+	\end{aligned}
+\end{equation}
+
+The $J$ matrix is not squared: in general it's rectangular.
+By doing $V_y = JV_xJ^t$ we switch from an $n\x n$ matrix to an $m\x m$ one.
+
+Caveat:
+\begin{description}
+	\item[Truncation of Taylor expansion] leads to a Bias estimate of errors: non linearity is difficult to handle.
+		The extent of the bias depends on the nature of the function.
+		Typically one can use a Monte Carlo simulation (or other uncertainty-propagation methods) to estimate errors for highly non-linear functions.
+\end{description}
+
+Anyway, the first thing we should pay attention is correlation before minding non-linear correlations.
+
+\section{Statistical and systematic uncertainties}
+
+Till now we had the assumption that repeated measurements under the same conditions give identical and independent results.
+In the ``real word'' repeated measurement lead to slightly different results which vary randomly.
+This is due to slightly changing in experimental initial condition (in most of the cases, you don't know them).
+Moreover, imprecise measurement can be due to resolution issues.
+
+
+From the \ac{clt} we know that the statistical uncertainty decreases with the number of experiments as $1/\sqrt{n}$ so the precision increases with $n$.
+
+
+Systematic uncertainties are uncertainties in estimating systematic effects or caused by neglecting them: they are \emph{not} the systematic effects themselves!
+
+
+Example: Systematic uncertainty are mostly given by
+
+\begin{itemize}
+	\item
+		Calibrations and corrections;
+	\item
+		Detector efficiency and resolution are estimated by Monte Carlo simulations so you have to know how much you have to trust the model in your simulation and anyway you'll always have a statistical uncertainty;
+	\item
+		Typically you use histograms and the way you choose binning may influence your results (even if this should not);
+	\item
+		Theoretical inputs: particle masses, widths, branching ratios, model functions, parametrization and so on.
+\end{itemize}
+
+These are just examples for \emph{known} source of systematic uncertainties so there should be also some \emph{unknown} (and unsuspected) sources.
+To find the latter you repeat analysis in different form (even the way in which you analyze data can affect your results).
+
+Example:
+\begin{itemize}
+	\item
+		Analysis of subsets of data;
+	\item
+		Change event selection (this may be used to evaluate the effect of the background noise), fit ranges,\dots{}
+	\item
+		change analysis methods and see if you obtain the same results with different parametrization,  fittings\dots
+\end{itemize}
+There is no general recipe: look for impossibilities.
+
+
+
+Typical strategies to estimate systematic uncertainties from sources $s_i$ on a quantity $x$:
+\begin{itemize}
+	\item
+		Either you take two extreme assumptions for the value of $s_i$ (this depends on the experiment: i.e.~particle masses).
+		Then you assume your true value lies between these values and use a uniform distribution $\sigma_{s_i} = \Delta s_i/\sqrt{12}$.
+	\item
+		Or you take several (many) assumptions for $s_i$ and repeat the calculations of $x$ then you evaluate $\sigma_x$ from the spread of the $x$ values.
+\end{itemize}
+Of course these are not exclusive approaches!
+
+
+
+\subsection{Combination of uncertainty}
+
+Typically, statistical and systematical uncertainties are independent among each other.
+If it is the case, $x$ can be written as a two-component $x_\sigma + x_s$ where $x_\sigma$ fluctuates with statistical uncertainty and  $x_s$ fluctuates with systematic uncertainty.
+\begin{equation}
+	V[x] = V[x_\sigma] + V[x_s] + 2 \cov[x_\sigma,x_s] = \sigma^2 + s^2.
+\end{equation}
+This is valid \emph{only} if $E[x_\sigma x_s] = E[x_\sigma]\,E[x_s]$.
+
+So uncertainties from independent sources add up quadratically and this also holds for different independent sources of systematical errors.
+
