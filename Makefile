@@ -38,29 +38,24 @@ endif
 OPTIONS=-$(format) -shell-escape
 
 # Track data file in data/ folder
-dataFolder = $(wildcard data/*.tab)
+dataFolder   = $(wildcard data/*.tab)
 # Track data file in backmatter/ folder
-backFolder  = $(wildcard backmatter/*.tex)
-backFolder += $(wildcard backmatter/*.bib)
+backFolder   = $(wildcard backmatter/*.tex)
+backFolder  += $(wildcard backmatter/*.bib)
 # Track data file in frontmatter/ folder
-frontFolder = $(wildcard frontmatter/*.tex)
+frontFolder  = $(wildcard frontmatter/*.tex)
 # Track data file in mainmatter/ folder
-mainFolder = $(wildcard mainmatter/*.tex)
+mainFolder   = $(wildcard mainmatter/*.tex)
 # Track data file in config/ folder
 configFolder = $(wildcard config/*.tex)
 # Track data file in fig/ folder
-figFolder = $(wildcard fig/*.tex)
+figFolder    = $(wildcard fig/*.tex)
 
 MAIN=notes
 $(MAIN).$(format): $(MAIN).tex AUTHORS $(dataFolder) $(backFolder) $(frontFolder) $(mainFolder) $(configFolder) $(figFolder) Makefile
 	@echo "`tput bold`$(LaTeX)`tput sgr0`"\
 		"`tput setaf 1`$(OPTIONS)`tput sgr0`"\
 		"`tput setaf 2`$<`tput sgr0`"
-	@echo $(dataFolder)
-	@echo $(backFolder)
-	@echo $(frontFolder)
-	@echo $(mainFolder)
-	@echo $(configFolder)
 	@$(LaTeX) $(OPTIONS) $< -f
 
 clean:
