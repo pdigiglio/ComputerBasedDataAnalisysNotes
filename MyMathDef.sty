@@ -1,12 +1,27 @@
-% MyMathDef.sty/
+% MyMathDef.sty -- Some useful mathematical definition
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{MyMathDef}[19/09/2011 v0.1 Alcune definizioni matematiche]
+\ProvidesPackage{MyMathDef}[12.22.2015 -- Some useful mathematical definitions]
 
-\usepackage{amsmath,amscd,amssymb} % commenta "amscd,amssymb" se vuoi usare garamond
-\usepackage{mathrsfs, amsthm} % per il comando \mathscr{}
-\usepackage{mathtools, bm} 		% bold math, per il neretto matematico: comando \bm
-\usepackage{cancel} % per le semplificazioni
+% ---------------------------------------------------------------------------------------
+% Load ams* packages
+\usepackage{
+  amsmath,
+  amscd,  % Comment this out to use garamond (font)
+  amssymb %  ''      '' 
+  amsthm  % To define theorem-like environments
+}
+%----------------------------------------------------------------------------------------
+\usepackage{
+  mathtools, % Defines symbols like '\coloneqq'
+  bm,        % Defines the 'bold math', i.e. the \bm command
+  mathrsfs   %  Support for using RSFS fonts in math, e.g. the \mathscr command
+}
+%----------------------------------------------------------------------------------------
+\usepackage{
+  cancel % Simplifications in formulae
+}
+
 
 %\usepackage{bbm}
 \usepackage{braket, array, xfrac}%, breqn}
