@@ -17,3 +17,5 @@
 *.ist
 *.run.xml
 *-blx.bib
+*-plot.gnuplot
+*-plot.table
