@@ -1,0 +1,15 @@
+% Declare some delimiter 
+
+% Absolute value (i.e. modulus |-|)
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+% Norm ||-||
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% Operatorial norm |||-|||
+% TODO Fix this as it's ugly!!
+\newcommand{\nop}[1]{%
+\ensuremath{%
+\left\vert\mkern-1mu\left\vert\mkern-1mu\left\vert #1\right\vert\mkern-1mu\right\vert\mkern-1mu\right\vert%
+}%
+} 

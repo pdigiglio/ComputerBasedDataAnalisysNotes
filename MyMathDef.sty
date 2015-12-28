@@ -1,32 +1,30 @@
 % MyMathDef.sty -- Some useful mathematical definition
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{MyMathDef}[12.22.2015 -- Some useful mathematical definitions]
+\ProvidesPackage{MyMathDef}%[12/22/2015 - Some useful mathematical definitions]
 
 % ---------------------------------------------------------------------------------------
 % Load ams* packages
-\usepackage{
-  amsmath,
-  amscd,  % Comment this out to use garamond (font)
-  amssymb %  ''      '' 
-  amsthm  % To define theorem-like environments
-}
+\usepackage{amsmath}
+\usepackage{amscd}   % Comment this out to use garamond (font)
+\usepackage{amssymb} %  ''      '' 
+\usepackage{amsthm}  % To define theorem-like environments
 %----------------------------------------------------------------------------------------
-\usepackage{
-  mathtools, % Defines symbols like '\coloneqq'
-  bm,        % Defines the 'bold math', i.e. the \bm command
-  mathrsfs   %  Support for using RSFS fonts in math, e.g. the \mathscr command
-}
+\usepackage{mathtools} % Defines symbols like '\coloneqq'
+\usepackage{bm}        % Defines the 'bold math', i.e. the \bm command
+\usepackage{mathrsfs}  %  Support for using RSFS fonts in math, e.g. the \mathscr command
 %----------------------------------------------------------------------------------------
-\usepackage{
-  cancel % Simplifications in formulae
-}
+\usepackage{cancel} % Simplifications in formulae
+\usepackage{braket} % For \Set, \bra, \ket and so on
+\usepackage{array}  % For 'tables' in math environment
+\usepackage{xfrac}  % For nice in-line fractions with \sfrac{}{}
+
+% Load operator definitions
+\input{operatorDef.tex}
+% Load delimiters (i.e. \abs, \norma)
+\input{delimiterDef.tex}
 
 
-%\usepackage{bbm}
-\usepackage{braket, array, xfrac}%, breqn}
-%\usepackage{mathabx}	%doppio integrale chiuso
-%\usepackage{kmath}
 \usepackage[version = 3]{mhchem}
 
 % ######################################
@@ -45,52 +43,21 @@
 % mathtools, bm (bold math, per il neretto matematico: comando \bm)
 % ######################################
 
-% definisco la funzione \abs{}
-\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-% definisco la funzione \norma{}
-\DeclarePairedDelimiter{\norma}{\lVert}{\rVert}
-% norma operatoriale
-\newcommand{\nop}[1]{%
-\ensuremath{%
-\left\vert\mkern-1mu\left\vert\mkern-1mu\left\vert #1\right\vert\mkern-1mu\right\vert\mkern-1mu\right\vert%
-}%
-} 
 
 % Per evidenziare le formule
-\definecolor{mycolor}{rgb}{.9, .9, 1}
-\newcommand*\mygraybox[1]{\colorbox{mycolor}{#1}}
-\usepackage{empheq}
-\empheqset{box=\mygraybox}
+%\definecolor{mycolor}{rgb}{.9, .9, 1}
+%\newcommand*\mygraybox[1]{\colorbox{mycolor}{#1}}
+%\usepackage{empheq}
+%\empheqset{box=\mygraybox}
 
 \DeclarePairedDelimiter{\tp}{(}{)}
 \DeclarePairedDelimiter{\qp}{[}{]}
 \DeclarePairedDelimiter{\gp}{\{}{\}}
 \DeclarePairedDelimiter{\Angle}{\langle}{\rangle}
 
-% Algebra
-\DeclareMathOperator{\Span}{Span}
-\DeclareMathOperator{\Spam}{Spam}
-\DeclareMathOperator{\sgn}{sgn}
-\DeclareMathOperator{\tr}{tr}
-\DeclareMathOperator{\diag}{diag}
 % matrice trasposta
 %\newcommand{\ltrans}[1]{{\vphantom{#1}}^{\textup{t}}{#1}}
 
-%operatori differenziali
-\newcommand{\V}{\mathop{}\!\nabla}
-\newcommand{\lap}{\ensuremath{\V^2}}
-
-\newcommand{\grad}{\V}
-\newcommand{\rot}{\V\x}
-\newcommand{\di}{\V\cdot}
-
-% operatori differenziali in lettere
-\DeclareMathOperator{\Grad}{grad}
-\DeclareMathOperator{\Rot}{rot}
-\DeclareMathOperator{\Di}{div}
-
-% dalembertiano
-\newcommand{\dal}{\ensuremath{\mathop{}\!\Box}}
 
 % insiemi numerici
 \newcommand{\numberset}[1]{\ensuremath{\mathbb{#1}}}
@@ -116,10 +83,6 @@
 %\newcommand{\de}{\ensuremath{\partial}}
 \newcommand{\ci}{\ensuremath{\circ}}				% "composto"
 \newcommand{\x}{\ensuremath{\times}}
-% definisco la "d" di differenziale
-\newcommand{\ud}{\mathop{}\!\mathrm{d}}
-\newcommand{\de}{\mathop{}\!\mathrm{\partial}}
-\newcommand{\uD}{\mathop{}\!\Delta}
 
 \renewcommand{\vec}[1]{\ensuremath{\bm{{#1}}}}					% stile per il vettore/punto n-dimensionale
 \newcommand{\ver}[1]{\ensuremath{\mathbf{{\tilde{#1}}}}}
