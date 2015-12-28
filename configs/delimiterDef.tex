@@ -13,3 +13,12 @@
 \left\vert\mkern-1mu\left\vert\mkern-1mu\left\vert #1\right\vert\mkern-1mu\right\vert\mkern-1mu\right\vert%
 }%
 } 
+
+% Parentheses 
+
+\DeclarePairedDelimiter{\roundBrackets}{(}{)}
+\DeclarePairedDelimiter{\squareBrackets}{[}{]}
+\DeclarePairedDelimiter{\curlyBrackets}{\{}{\}}
+\DeclarePairedDelimiter{\angleBrackets}{\langle}{\rangle}
+
+\newcommand{\mean}[1]{\ensuremath{\angleBrackets*{#1}}}
