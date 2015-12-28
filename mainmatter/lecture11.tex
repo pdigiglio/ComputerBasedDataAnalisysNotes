@@ -157,10 +157,11 @@ In this way
 
 The joint \ac{pdf} is (no correlation terms appears because \acp{rv} are independent)
 \begin{equation}
-	f_x(x_1,x_2) = \frac{1}{2\pi\,\sigma_1\sigma_2}\exp\qp*{
-		-\frac{(x_1-\mu_1)^2}{2\sigma_1^2}
-		-\frac{(x_2-\mu_2)^2}{2\sigma_2^2}
-	}.
+  f_x(x_1,x_2) = \frac{1}{2\pi\,\sigma_1\sigma_2}%
+  \exp\squareBrackets*{%
+	-\frac{(x_1-\mu_1)^2}{2\sigma_1^2}
+	-\frac{(x_2-\mu_2)^2}{2\sigma_2^2}
+  }.
 \end{equation}
 Now, define $\chi^2_i(x_i)\coloneqq (x_i-\mu_i)^2\!/\sigma_i^2$ for $i=1,2$ and hence the quantity $\chi^2(x_1,x_2) \coloneqq \chi^2_1(x_1) + \chi^2_2(x_2)$, which is a measure of the distance between the observed values $(x_1^\textup{obs},x_2^\textup{obs})$ and the means $(\mu_1,\mu_2)$.
 Again, the equation $\chi^2 = \text{const.}$~defines contour lines in the $(x_1,x_2)$ planes which correspond to ellipses.
@@ -458,22 +459,22 @@ The values of $\vec{x}\coloneqq (x_1,\dots,x_n)$ which correspond to $\vec{y}$ a
 
 The joint \ac{pdf} for \vec{y} is
 \begin{equation}
-	\begin{aligned}
-		f_{y}(\vec{y}) &= \prod_{i=1}^n \frac{1}{\sqrt{2\pi}\,\sigma_i}
-		\exp\qp[\bigg]{%
-			-\frac{1}{2} \tp[\bigg]{%
-				\frac{y_i - f(x_i;\vec{\theta})}{\sigma_i}
-			}^2
-		}\\
-		&=
-		\tp[\bigg]{%
-			\prod_{i=1}^n
-			\frac{1}{\sqrt{2\pi}\,\sigma_i}
-		}
-		\exp\qp[\bigg]{%
-			-\frac{1}{2} \sum_{i=1}^n\chi^2_i(\vec{\theta})
-		}.
-	\end{aligned}
+  \begin{aligned}
+	f_{y}(\vec{y}) &= \prod_{i=1}^n \frac{1}{\sqrt{2\pi}\,\sigma_i}
+	\exp\squareBrackets[\bigg]{%
+	  -\frac{1}{2} \roundBrackets[\bigg]{%
+		\frac{y_i - f(x_i;\vec{\theta})}{\sigma_i}
+	  }^2
+	}\\
+	&=
+	\roundBrackets[\bigg]{%
+	  \prod_{i=1}^n
+	  \frac{1}{\sqrt{2\pi}\,\sigma_i}
+	}
+	\exp\squareBrackets[\bigg]{%
+	  -\frac{1}{2} \sum_{i=1}^n\chi^2_i(\vec{\theta})
+	}.
+  \end{aligned}
 \end{equation}
 The best estimate for \vec{\theta} is obtained by minimizing
 \begin{equation}
@@ -516,7 +517,7 @@ In what follows, only the linear case will be considered.
 We'll allow correlated measures so that
 \begin{equation}
 	f_y (\vec{y}) = \frac{1}{\sqrt{(2\pi)^n\det V}}\exp
-	\qp[\bigg]{%
+	\squareBrackets[\bigg]{%
 		-\frac{1}{2}\transpose{(\vec{y} - \vec{f}(\vec{\theta}))}V_y^{-1}(\vec{y} - \vec{f}(\vec{\theta}))
 	}.
 \end{equation}
@@ -761,25 +762,25 @@ Hence
 		P(\tilde\chi^2>\tilde\chi^2_\textup{obs})
 		&= \frac{1}{\Gamma(n/2)}
 		\abs*{\sum_{k=0}^{n/2-1}{n/2-1 \choose k}
-			\tp*{\deriv[n/2-(k+1)]{}{\alpha}\eu^{-\alpha x_\textup{obs}}}
-			\tp*{\deriv[k]{}{\alpha}\frac{1}{\alpha}}
+			\roundBrackets*{\deriv[n/2-(k+1)]{}{\alpha}\eu^{-\alpha x_\textup{obs}}}
+			\roundBrackets*{\deriv[k]{}{\alpha}\frac{1}{\alpha}}
 		}_{\alpha=1}\\
 		&= \frac{1}{\Gamma(n/2)}
 		\abs*{\sum_{k=0}^{n/2-1}{n/2-1 \choose k}
-			%\tp*{\frac{\chi^2_\textup{obs}}{2}}
+			%\roundBrackets*{\frac{\chi^2_\textup{obs}}{2}}
 			x_\textup{obs}^{n/2-(k+1)}\eu^{-\alpha x_\textup{obs}}
 			\frac{(-1)^kk!}{\alpha^{k+1}}
 		}_{\alpha=1}\\
 		&= \frac{1}{\Gamma(n/2)}
 		\abs*{\sum_{k=0}^{n/2-1}\frac{(n/2-1)!}{ (n/2 - (k+1))!}
-			%\tp*{\frac{\chi^2_\textup{obs}}{2}}
+			%\roundBrackets*{\frac{\chi^2_\textup{obs}}{2}}
 			x_\textup{obs}^{n/2-(k+1)}
 			(-1)^k
 		}\\
 		&=
 		\abs*{
 			\sum_{k=0}^{n/2-1}\frac{(-1)^kx_\textup{obs}^{n/2-(k+1)}}{(n/2 - (k+1))!}
-			%\tp*{\frac{\chi^2_\textup{obs}}{2}}
+			%\roundBrackets*{\frac{\chi^2_\textup{obs}}{2}}
 		}.
 	\end{aligned}
 \end{equation*}
@@ -790,11 +791,11 @@ The index $m$ can again be renamed after $k$ so, plugging in back the value for 
 	=
 	\abs*{(-1)^{n/2-1}
 		\sum_{k=0}^{n/2-1}\frac{(-1)^k}{k!}
-		\tp*{\frac{\chi^2_\textup{obs}}{2}}^{k}
+		\roundBrackets*{\frac{\chi^2_\textup{obs}}{2}}^{k}
 	}
 	=
 	\sum_{k=0}^{n/2-1}\frac{n^k}{k!}
-	\tp*{-\frac{\tilde \chi^2_\textup{obs}}{2}}^{k}.
+	\roundBrackets*{-\frac{\tilde \chi^2_\textup{obs}}{2}}^{k}.
 \end{equation}
 If $\tilde\chi^2_\textup{obs} = 0$ then we recover the proper normalization, i.e.~$P(\tilde\chi^2 > 0) = 1$.
 When $n\to\infty$ (recall that $n$ is even) the result is
