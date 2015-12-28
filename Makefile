@@ -48,6 +48,7 @@ frontFolder  = $(wildcard frontmatter/*.tex)
 mainFolder   = $(wildcard mainmatter/*.tex)
 # Track data file in config/ folder
 configFolder = $(wildcard config/*.tex)
+configFolder+= $(wildcard config/*.sty)
 # Track data file in fig/ folder
 figFolder    = $(wildcard fig/*.tex)
 
