@@ -21,6 +21,14 @@
 % Diagonal matrix
 \DeclareMathOperator{\diag}{diag}
 
+% Transposed matrix
+\newcommand{\leftTranspose}[1]{\ensuremath{%
+  {\vphantom{#1}}^{\textup{t}}{#1}%
+}}%
+\newcommand{\transpose}[1]{\ensuremath{%
+  {#1}^{\mathrm{ \mathsmaller T }}
+}}%
+
 % ---------------------------------------------------------------------------------------
 % DIFFERENTIAL OPERATORS
 
