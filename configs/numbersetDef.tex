@@ -1,0 +1,28 @@
+% Declare some common number-sets
+
+% Style of the number-sets
+\newcommand{\numberset}[1]{\ensuremath{\mathbb{#1}}}
+
+% Natural
+\newcommand{\N}{\numberset{N}}
+% Integer
+\newcommand{\Z}{\numberset{Z}}
+% Rational
+\newcommand{\Q}{\numberset{Q}}
+% Real
+\newcommand{\R}{\numberset{R}}
+% Irrational
+\newcommand{\I}{\numberset{I}}
+% Complex
+\newcommand{\Co}{\numberset{C}}
+
+% Continuous functions over an interval
+\newcommand{\C}[2][]{%
+  \ensuremath{%
+	\mathcal{C}^{#1}\roundBrackets*{#2}%
+  }%
+}
+
+% Euclidean space (?)
+\newcommand{\E}{\numberset{E}}
+

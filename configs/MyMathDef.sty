@@ -1,7 +1,13 @@
 % MyMathDef.sty -- Some useful mathematical definition
 
-\NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{MyMathDef}%[12/22/2015 - Some useful mathematical definitions]
+%\NeedsTeXFormat{LaTeX2e}
+%\ProvidesPackage{MyMathDef}%[12/22/2015 - Some useful mathematical definitions]
+
+% TODO Detects what's my working directory
+%\usepackage[
+%  abspath,
+%  realmainfile=false,
+%]{currfile}
 
 % ---------------------------------------------------------------------------------------
 % Load ams* packages
@@ -20,11 +26,14 @@
 \usepackage{xfrac}  % For nice in-line fractions with \sfrac{}{}
 
 % Load operator definitions
-\input{configs/operatorDef.tex}
+\input{config/operatorDef.tex}
 % Load delimiters (i.e. \abs, \norma)
 \input{configs/delimiterDef.tex}
 % Load constants
 \input{configs/constantDef.tex}
+% Load number-sets
+\input{configs/numbersetDef.tex}
+
 
 
 \usepackage[version = 3]{mhchem}
@@ -54,17 +63,6 @@
 
 
 
-% insiemi numerici
-\newcommand{\numberset}[1]{\ensuremath{\mathbb{#1}}}
-\newcommand{\N}{\numberset{N}}
-\newcommand{\Z}{\numberset{Z}}
-\newcommand{\Q}{\numberset{Q}}
-\newcommand{\R}{\numberset{R}}
-\newcommand{\I}{\numberset{I}}
-\newcommand{\E}{\numberset{E}}
-
-\newcommand{\Co}{\numberset{C}}
-\newcommand{\C}[2][]{\ensuremath{\mathcal{C}^{#1}(#2)}}
 
 % funzione indicatrice
 \newcommand{\1}{\ensuremath{\mathbbm{1}}}
