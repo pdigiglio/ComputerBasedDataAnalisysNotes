@@ -47,10 +47,11 @@ frontFolder  = $(wildcard frontmatter/*.tex)
 # Track data file in mainmatter/ folder
 mainFolder   = $(wildcard mainmatter/*.tex)
 # Track data file in config/ folder
-configFolder = $(wildcard config/*.tex)
-configFolder+= $(wildcard config/*.sty)
+configFolder = $(wildcard configs/*.tex)
+configFolder+= $(wildcard configs/*.sty)
 # Track data file in fig/ folder
-figFolder    = $(wildcard fig/*.tex)
+figFolder    = $(wildcard images/*.tex)
+figFolder    = $(wildcard images/*.pgf)
 
 MAIN=notes
 $(MAIN).$(format): $(MAIN).tex AUTHORS $(dataFolder) $(backFolder) $(frontFolder) $(mainFolder) $(configFolder) $(figFolder) Makefile
