@@ -35,7 +35,7 @@ else
 #endif
 endif
 
-OPTIONS=-$(format) -shell-escape
+OPTIONS=-$(format) -shell-escape -recorder
 
 # Track data file in data/ folder
 dataFolder   = $(wildcard data/*.tab)
