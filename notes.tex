@@ -1,7 +1,7 @@
 \documentclass[
 	10pt,
 	draft
-]{scrreprt}
+]{scrbook}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[german,english]{babel}
@@ -101,26 +101,15 @@
 \date{}
 
 \begin{document}
-
+\frontmatter
 \maketitle
-
-\begin{acronym}[FWHM]
-	\acro{rv}[RV]{Random Variable}
-	\acro{pdf}[PDF]{Probability Density Function}
-	\acro{cdf}[CDF]{Cumulative Distribution Function}
-	\acro{sd}[SD]{Standard Deviation}
-	\acro{pdg}[PDG]{Particle Data Group}
-	\acro{clt}[CLT]{Central Limit Theorem}
-	\acro{dof}[DOF]{Degree of Freedom}
-	\acro{fwhm}[FWHM]{Full Width of Half Maximum}
-	\acro{ls}[LS]{Least Squares}
-	\acro{ml}[ML]{Maximum Likelihood}
-	\acro{gof}[GoF]{Goodness of Fit}
-	\acro{hep}[HEP]{High Energy Physics}
-\end{acronym}
 
 \tableofcontents
 
+\cleardoublepage
+\input{frontmatter/acronyms.tex}
+
+\mainmatter
 \input{mainmatter/lecture02.tex}
 \input{mainmatter/lecture04.tex}
 \input{mainmatter/lecture05.tex}
@@ -132,14 +121,13 @@
 
 
 
+\backmatter
+\cleardoublepage
+\nocite{*}
+\phantomsection
+\addcontentsline{toc}{chapter}{\bibname}
+\printbibliography
 
-	\cleardoublepage
-	\nocite{*}
-	\phantomsection
-	\addcontentsline{toc}{chapter}{\bibname}
-	\printbibliography
-
-	\cleardoublepage
-	\printindex
+\cleardoublepage
+\printindex
 \end{document}
-
