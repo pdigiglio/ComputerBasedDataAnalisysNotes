@@ -1,16 +1,18 @@
 \begin{tikzpicture}
-\begin{axis}%[ybar interval]
-[
+\begin{axis}[
+%	ybar interval,
+	xlabel = {Outcome $x$},
+	ylabel = {$\phi(x) = P(x)$},
+  ]
+%[
 %	xtick={1./6.},
 %  	ytick={\pgfmathparse{1./6.}}, %doesn't work
-]
+%]
 \addplot+[
 	ybar,
 	fill,
 	mark = none,
-	%bar width=14pt
-	xlabel = {outcome $x$},
-	ylabel = {\phi(x) = P(x)}
+	bar width=18pt
 ] coordinates {
 (1,1/6)%
 (2,1/6)%
